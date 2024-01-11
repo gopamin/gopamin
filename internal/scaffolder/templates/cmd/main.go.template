@@ -1,0 +1,17 @@
+package main
+
+import (
+	"fmt"
+	"os"
+
+	"{{.ProjectName}}/configs"
+)
+
+func init() {
+	configs.LoadEnv()
+}
+
+func main() {
+	projectName := os.Getenv("PROJECT_NAME")
+	fmt.Println(projectName)
+}
