@@ -8,4 +8,4 @@ build:
 	go build -o gopamin ./cmd/main.go
 
 install: 
-	go install ./cmd/main.go
+	go install ./cmd/gopamin/gopamin.go

@@ -36,11 +36,10 @@ func New(projectName, projectType string) {
 	fileGenerator(projectPath, "license", project)
 	fileGenerator(projectPath, "load-env", project)
 	fileGenerator(projectPath, "dockerfile", project)
-
-	boilerplateSelector(projectPath, projectType, project)
 	initGit(projectPath)
 	initGoMod(projectName, projectPath)
 	goGetPackages(projectPath, []string{"github.com/joho/godotenv"})
+	boilerplateSelector(projectPath, projectType, project)
 }
 
 func boilerplateSelector(path, projectType string, p Project) {
