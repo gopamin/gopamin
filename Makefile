@@ -1,5 +1,6 @@
+.PHONY: run
 run:
-	go run ./cmd/main.go
+	go run ./cmd/gopamin/gopamin.go $(filter-out $@,$(MAKECMDGOALS))
 
 test:
 	go test
@@ -9,3 +10,6 @@ build:
 
 install: 
 	go install ./cmd/gopamin/gopamin.go
+
+%:
+	@:
