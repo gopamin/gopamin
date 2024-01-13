@@ -13,6 +13,9 @@ var loadEnv []byte
 //go:embed templates/env.template
 var env []byte
 
+//go:embed templates/dockerignore.template
+var dockerIgnore []byte
+
 //go:embed templates/dockerfile.template
 var dockerFile []byte
 
@@ -48,6 +51,10 @@ func gitIgnoreTemplate() ([]byte, string) {
 	return gitIgnore, ".gitignore"
 }
 
+func dockerIgnoreTemplate() ([]byte, string) {
+	return dockerIgnore, ".dockerignore"
+}
+
 func makefileTemplate() ([]byte, string) {
 	return makeFile, "Makefile"
 }
@@ -62,13 +69,14 @@ func loadEnvTemplate() ([]byte, string) {
 
 func templateMapper() map[string]func() ([]byte, string) {
 	return map[string]func() ([]byte, string){
-		"main":       mainTemplate,
-		"readme":     readmeTemplate,
-		"gitignore":  gitIgnoreTemplate,
-		"makefile":   makefileTemplate,
-		"env":        envTemplate,
-		"load-env":   loadEnvTemplate,
-		"license":    licenseTemplate,
-		"dockerfile": dockerFileTemplate,
+		"main":         mainTemplate,
+		"readme":       readmeTemplate,
+		"gitignore":    gitIgnoreTemplate,
+		"makefile":     makefileTemplate,
+		"env":          envTemplate,
+		"load-env":     loadEnvTemplate,
+		"license":      licenseTemplate,
+		"dockerfile":   dockerFileTemplate,
+		"dockerignore": dockerIgnoreTemplate,
 	}
 }

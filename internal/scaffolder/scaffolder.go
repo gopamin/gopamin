@@ -7,6 +7,8 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+
+	"github.com/fatih/color"
 )
 
 type Project struct {
@@ -31,6 +33,7 @@ func New(projectName, projectType string) {
 
 	fileGenerator(projectPath, "readme", project)
 	fileGenerator(projectPath, "gitignore", project)
+	fileGenerator(projectPath, "dockerignore", project)
 	fileGenerator(projectPath, "makefile", project)
 	fileGenerator(projectPath, "env", project)
 	fileGenerator(projectPath, "license", project)
@@ -96,6 +99,8 @@ func fileGenerator(path string, fileType string, p Project) {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+
+	color.Green(fileName + " created")
 }
 
 func executeCommand(name string, args []string, dir string) error {
