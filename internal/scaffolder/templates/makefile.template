@@ -2,7 +2,7 @@ run:
 	go run ./cmd/main.go
 
 docker-build:
-	docker build -t {{.ProjectName}} .
+	docker build -t {{.ProjectName}}-image .
 
 docker-run:
-	docker run --env-file ./.env --name {{.ProjectName}} {{.ProjectName}}
+	docker run --env-file ./.env --name {{.ProjectName}}-container {{.ProjectName}}-image
