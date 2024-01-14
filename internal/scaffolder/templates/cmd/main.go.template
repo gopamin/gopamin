@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"{{.ProjectName}}/configs"
+	"{{.Name}}/configs"
 )
 
 func init() {
