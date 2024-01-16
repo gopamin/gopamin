@@ -1,0 +1,126 @@
+package databases
+
+import (
+	"database/sql"
+	"fmt"
+	"log"
+	"os"
+
+	_ "github.com/go-sql-driver/mysql"
+)
+
+const tableName = "users"
+
+type MySQL interface {
+	CreateTable()
+	InsertRow(name string)
+	UpdateRow(id int, newName string)
+	DeleteRow(id int)
+	FetchRows() ([]map[string]interface{}, error)
+}
+
+type connection struct {
+	db *sql.DB
+}
+
+func New() MySQL {
+	databaseName := os.Getenv("DB_DATABASE")
+	databasePassword := os.Getenv("DB_PASSWORD")
+	databaseUsername := os.Getenv("DB_USERNAME")
+	databasePort := os.Getenv("DB_PORT")
+	databaseHost := os.Getenv("DB_HOST")
+
+	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", databaseUsername, databasePassword, databaseHost, databasePort, databaseName))
+	if err != nil {
+		log.Fatal(err)
+	}
+	db.SetConnMaxLifetime(0)
+	db.SetMaxIdleConns(50)
+	db.SetMaxOpenConns(50)
+
+	s := &connection{db: db}
+
+	return s
+}
+
+func (s *connection) CreateTable() {
+	query := fmt.Sprintf("CREATE TABLE IF NOT EXISTS %s (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50))", tableName)
+	_, err := s.db.Exec(query)
+	if err != nil {
+		log.Fatalf(fmt.Sprintf("error creating table: %v", err))
+	}
+}
+
+func (s *connection) InsertRow(name string) {
+	query := fmt.Sprintf("INSERT INTO %s (name) VALUES (?)", tableName)
+	_, err := s.db.Exec(query, name)
+	if err != nil {
+		log.Fatalf(fmt.Sprintf("error inserting data: %v", err))
+	}
+}
+
+func (s *connection) UpdateRow(id int, newName string) {
+	query := fmt.Sprintf("UPDATE %s SET name = ? WHERE id = ?", tableName)
+	_, err := s.db.Exec(query, newName, id)
+	if err != nil {
+		log.Fatalf(fmt.Sprintf("error updating data: %v", err))
+	}
+}
+
+func (s *connection) DeleteRow(id int) {
+	query := fmt.Sprintf("DELETE FROM %s WHERE id = ?", tableName)
+	_, err := s.db.Exec(query, id)
+	if err != nil {
+		log.Fatalf(fmt.Sprintf("error deleting data: %v", err))
+	}
+}
+
+func (s *connection) FetchRows() ([]map[string]interface{}, error) {
+	query := fmt.Sprintf("SELECT * FROM %s", tableName)
+	rows, err := s.db.Query(query)
+	if err != nil {
+		log.Fatalf(fmt.Sprintf("error fetching data: %v", err))
+		return nil, err
+	}
+	defer rows.Close()
+
+	columns, err := rows.Columns()
+	if err != nil {
+		log.Fatalf(fmt.Sprintf("error getting columns: %v", err))
+		return nil, err
+	}
+
+	var result []map[string]interface{}
+
+	for rows.Next() {
+		values := make([]interface{}, len(columns))
+		for i := range columns {
+			values[i] = new(interface{})
+		}
+
+		if err := rows.Scan(values...); err != nil {
+			log.Fatalf(fmt.Sprintf("error scanning rows: %v", err))
+			return nil, err
+		}
+
+		entry := make(map[string]interface{})
+		for i, col := range columns {
+			entry[col] = *(values[i].(*interface{}))
+		}
+
+		result = append(result, entry)
+	}
+
+	return result, nil
+}
+
+func ConvertToReadableValue(value interface{}) interface{} {
+	switch v := value.(type) {
+	case []uint8:
+		return string(v)
+	case int64:
+		return int(v)
+	default:
+		return v
+	}
+}

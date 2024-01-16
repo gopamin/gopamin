@@ -32,14 +32,10 @@ $ gopamin version
 If you got the current version correctly in the previous step, now you can create a new project by running the following command:
 
 ```text
-$ gopamin create
+$ gopamin new -h
 ```
 
-Basically, you don't need to pass any flags for creating new project simply because the `create` command provides you with a wizard which walks you through the process of creating different types of Go projects.
-
-## How to Get Boilerplates without Installing This Tool
-
-If you have difficulty installing the Gopamin CLI tool or for any reason you're not interested in installing it, you can refer to the [examples](https://github.com/gopamin/cli/blob/master/examples) folder and download whatever boilerplate you're looking for.
+The above command show the help on how to use different flags to scaffold different types of projects.
 
 ## Possible Project Types
 

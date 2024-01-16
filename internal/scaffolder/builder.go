@@ -28,7 +28,14 @@ var buildersMap = map[string]builderFactory{
 		return webAppBuilderFactory(p)
 	},
 	"microservice": func(p *Project) boilerplateBuilder {
-		webAppBuilderFactory := microserviceBuilderMap[p.Platform]
-		return webAppBuilderFactory(p)
+		microserviceBuilderFactory := microserviceBuilderMap[p.Platform]
+		return microserviceBuilderFactory(p)
 	},
+}
+
+func dbSelector(p *Project) {
+	databaseBuilderFactory := databaseBuilderMap[p.Database]
+	builder := databaseBuilderFactory(p)
+	director := &director{builder: builder}
+	director.construct()
 }

@@ -4,35 +4,35 @@ import (
 	_ "embed"
 )
 
-//go:embed files/configs/load-env.template
+//go:embed files/configs/load-env.tmpl
 var helloWorldLoadEnv []byte
 
 func HelloWoldLoadEnvTemplate() ([]byte, string) {
 	return helloWorldLoadEnv, "configs/load-env.go"
 }
 
-//go:embed files/env.template
+//go:embed files/env.tmpl
 var helloWorldEnv []byte
 
 func HelloWorldEnvTemplate() ([]byte, string) {
 	return helloWorldEnv, ".env"
 }
 
-//go:embed files/makefile.template
+//go:embed files/makefile.tmpl
 var helloWorldMakefile []byte
 
 func HelloWorldMakefileTemplate() ([]byte, string) {
 	return helloWorldMakefile, "Makefile"
 }
 
-//go:embed files/readme.template
+//go:embed files/readme.tmpl
 var helloWorldReadme []byte
 
 func HelloWorldReadmeTemplate() ([]byte, string) {
 	return helloWorldReadme, "README.md"
 }
 
-//go:embed files/cmd/main.go.template
+//go:embed files/cmd/main.tmpl
 var helloWorldMain []byte
 
 func HelloWorldMainTemplate() ([]byte, string) {

@@ -63,12 +63,11 @@ type httpBuilder struct {
 }
 
 func (h *httpBuilder) build() {
-	fileGenerator("api-http-readme", h.project)
-	fileGenerator("api-http-makefile", h.project)
-	fileGenerator("api-http-env", h.project)
-
-	fileGenerator("api-http-load-env", h.project)
-	fileGenerator("api-http-main", h.project)
+	fileGenerator([]string{"api-http-readme"}, h.project)
+	fileGenerator([]string{"api-http-makefile"}, h.project)
+	fileGenerator([]string{"api-http-env"}, h.project)
+	fileGenerator([]string{"api-http-load-env"}, h.project)
+	fileGenerator([]string{"api-http-main"}, h.project)
 	fmt.Printf("%v project created successfully", h.project.Name)
 }
 

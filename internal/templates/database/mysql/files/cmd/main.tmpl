@@ -1,0 +1,60 @@
+package main
+
+import (
+	"fmt"
+	"log"
+
+	"{{.Name}}/configs"
+	"{{.Name}}/internal/databases"
+)
+
+func init() {
+	configs.LoadEnv()
+}
+
+func callCreateTable(db *databases.MySQL) {
+	(*db).CreateTable()
+}
+
+func callInsertRow(db *databases.MySQL, value string) {
+	(*db).InsertRow(value)
+}
+
+func callUpdateRow(db *databases.MySQL, id int, newName string) {
+	(*db).UpdateRow(id, newName)
+}
+
+func callDeleteRow(db *databases.MySQL, id int) {
+	(*db).DeleteRow(id)
+}
+
+func callFetchData(db *databases.MySQL) {
+	data, err := (*db).FetchRows()
+	if err != nil {
+		log.Printf("Error fetching data: %v\n", err)
+
+	}
+	for _, row := range data {
+		for key, value := range row {
+			fmt.Printf("%s: %v\n", key, databases.ConvertToReadableValue(value))
+		}
+	}
+}
+
+func main() {
+	db := databases.New()
+	
+	// Step 1) After the first execution of main.go, comment out the following line
+	callCreateTable(&db)
+
+	// Step 2) Uncomment the following line to add new values to the DB
+	// callInsertRow(&db, "new name")
+
+	// Step 3) Uncomment the following line to update an existing row
+	// callUpdateRow(&db, 1, "updated name")
+
+	// Step 4) Uncomment the following line to delete a row
+	// callDeleteRow(&db, 1)
+
+	callFetchData(&db)
+}

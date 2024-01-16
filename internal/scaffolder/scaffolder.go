@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 
 	"github.com/fatih/color"
 	"github.com/gopamin/cli/internal/templates"
@@ -22,14 +23,15 @@ type Project struct {
 }
 
 func New(projectType, platform, name, database string, isClean bool) {
+	lowerCaseName := strings.ToLower(name)
 	currentDir, err := os.Getwd()
 	if err != nil {
 		fmt.Printf("Unable to get your current working directory")
 	}
 
-	projectPath := filepath.Join(currentDir, name)
+	projectPath := filepath.Join(currentDir, lowerCaseName)
 
-	err = os.Mkdir(name, 0755)
+	err = os.Mkdir(lowerCaseName, 0755)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -39,7 +41,7 @@ func New(projectType, platform, name, database string, isClean bool) {
 		Database:    database,
 		Platform:    platform,
 		IsClean:     isClean,
-		Name:        name,
+		Name:        lowerCaseName,
 		Path:        projectPath,
 		ProjectType: projectType,
 	}
@@ -53,19 +55,26 @@ func New(projectType, platform, name, database string, isClean bool) {
 }
 
 func generateProjectAgnosticFiles(p *Project) {
-	fileGenerator("gitignore", p)
-	fileGenerator("dockerignore", p)
-	fileGenerator("license", p)
-	fileGenerator("dockerfile", p)
+	fileGenerator([]string{"gitignore"}, p)
+	fileGenerator([]string{"dockerignore"}, p)
+	fileGenerator([]string{"license"}, p)
+	fileGenerator([]string{"dockerfile"}, p)
 
 	initGit(*&p.Path)
 	initGoMod(*&p.Name, *&p.Path)
 	goGetPackages(*&p.Path, []string{"github.com/joho/godotenv"})
 }
 
-func fileGenerator(fileType string, p *Project) {
+func fileGenerator(fileTypes []string, p *Project) {
 	templateMapper := templates.Mapper()
-	fileTemplate, fileName := templateMapper[fileType]()
+	var concatenatedContent string
+	var fileName string
+
+	for _, fileType := range fileTypes {
+		fileTemplate, name := templateMapper[fileType]()
+		fileName = name
+		concatenatedContent += string(fileTemplate) + "\n\n"
+	}
 
 	dir := filepath.Dir(filepath.Join(p.Path, fileName))
 	if _, err := os.Stat(dir); os.IsNotExist(err) {
@@ -87,7 +96,7 @@ func fileGenerator(fileType string, p *Project) {
 
 	template := template.Must(
 		template.New(fileName).Parse(
-			string(fileTemplate),
+			string(concatenatedContent),
 		),
 	)
 
