@@ -2,12 +2,8 @@ package scaffolder
 
 import "fmt"
 
-type apiBuilder interface {
-	build()
-}
-
 type graphqlBuilder struct {
-	project Project
+	project *Project
 }
 
 func (g *graphqlBuilder) build() {
@@ -15,7 +11,7 @@ func (g *graphqlBuilder) build() {
 }
 
 type echoBuilder struct {
-	project Project
+	project *Project
 }
 
 func (e *echoBuilder) build() {
@@ -23,7 +19,7 @@ func (e *echoBuilder) build() {
 }
 
 type chiBuilder struct {
-	project Project
+	project *Project
 }
 
 func (c *chiBuilder) build() {
@@ -31,7 +27,7 @@ func (c *chiBuilder) build() {
 }
 
 type ginBuilder struct {
-	project Project
+	project *Project
 }
 
 func (g *ginBuilder) build() {
@@ -39,7 +35,7 @@ func (g *ginBuilder) build() {
 }
 
 type fiberBuilder struct {
-	project Project
+	project *Project
 }
 
 func (f *fiberBuilder) build() {
@@ -47,7 +43,7 @@ func (f *fiberBuilder) build() {
 }
 
 type httprouterBuilder struct {
-	project Project
+	project *Project
 }
 
 func (h *httprouterBuilder) build() {
@@ -55,54 +51,52 @@ func (h *httprouterBuilder) build() {
 }
 
 type gorillaBuilder struct {
-	project Project
+	project *Project
 }
 
 func (g *gorillaBuilder) build() {
 	fmt.Printf("%v -> %v \n", g.project.ProjectType, g.project.Platform)
 }
 
-type builtInBuilder struct {
-	project Project
+type httpBuilder struct {
+	project *Project
 }
 
-func (b *builtInBuilder) build() {
-	fmt.Printf("%v -> %v \n", b.project.ProjectType, b.project.Platform)
+func (h *httpBuilder) build() {
+	fileGenerator("api-http-readme", h.project)
+	fileGenerator("api-http-makefile", h.project)
+	fileGenerator("api-http-env", h.project)
+
+	fileGenerator("api-http-load-env", h.project)
+	fileGenerator("api-http-main", h.project)
+	fmt.Printf("%v project created successfully", h.project.Name)
 }
 
-type apiDirector struct {
-	builder apiBuilder
-}
-
-func (a *apiDirector) construct() {
-	a.builder.build()
-}
-
-type apiBuilderFactory func(p Project) apiBuilder
+type apiBuilderFactory func(p *Project) boilerplateBuilder
 
 var apiBuilderMap = map[string]apiBuilderFactory{
-	"graphql": func(p Project) apiBuilder {
+	"graphql": func(p *Project) boilerplateBuilder {
 		return &graphqlBuilder{p}
 	},
-	"echo": func(p Project) apiBuilder {
+	"echo": func(p *Project) boilerplateBuilder {
 		return &echoBuilder{p}
 	},
-	"chi": func(p Project) apiBuilder {
+	"chi": func(p *Project) boilerplateBuilder {
 		return &chiBuilder{p}
 	},
-	"gin": func(p Project) apiBuilder {
+	"gin": func(p *Project) boilerplateBuilder {
 		return &ginBuilder{p}
 	},
-	"fiber": func(p Project) apiBuilder {
+	"fiber": func(p *Project) boilerplateBuilder {
 		return &fiberBuilder{p}
 	},
-	"httprouter": func(p Project) apiBuilder {
+	"httprouter": func(p *Project) boilerplateBuilder {
 		return &httprouterBuilder{p}
 	},
-	"gorilla": func(p Project) apiBuilder {
+	"gorilla": func(p *Project) boilerplateBuilder {
 		return &gorillaBuilder{p}
 	},
-	"built-in": func(p Project) apiBuilder {
-		return &builtInBuilder{p}
+	"http": func(p *Project) boilerplateBuilder {
+		return &httpBuilder{p}
 	},
 }

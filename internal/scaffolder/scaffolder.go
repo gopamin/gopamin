@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 
 	"github.com/fatih/color"
+	"github.com/gopamin/cli/internal/templates"
 )
 
 type Project struct {
@@ -20,10 +21,6 @@ type Project struct {
 	ProjectType string
 }
 
-// func (p *Project) Build() {
-// 	fmt.Printf("%+v", p)
-// }
-
 func New(projectType, platform, name, database string, isClean bool) {
 	currentDir, err := os.Getwd()
 	if err != nil {
@@ -32,11 +29,11 @@ func New(projectType, platform, name, database string, isClean bool) {
 
 	projectPath := filepath.Join(currentDir, name)
 
-	// err = os.Mkdir(name, 0755)
-	// if err != nil {
-	// 	fmt.Println(err)
-	// 	os.Exit(1)
-	// }
+	err = os.Mkdir(name, 0755)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 
 	p := Project{
 		Database:    database,
@@ -47,69 +44,27 @@ func New(projectType, platform, name, database string, isClean bool) {
 		ProjectType: projectType,
 	}
 
-	// fmt.Printf("%+v", p)
+	generateProjectAgnosticFiles(&p)
 
-	// microserviceBuilderFactory := microserviceBuilderMap[p.Platform]
-	// microserviceBuilder := microserviceBuilderFactory(p)
-	// microserviceDirector := &microserviceDirector{builder: microserviceBuilder}
-	// microserviceDirector.construct()
-
-	// apiBuilderFactory := apiBuilderMap[p.Platform]
-	// apiBuilder := apiBuilderFactory(p)
-	// apiDirector := &apiDirector{builder: apiBuilder}
-	// apiDirector.construct()
-
-	// helloWorldBuilderFactory := helloWorldBuilderMap[p.ProjectType]
-	// helloWorldBuilder := helloWorldBuilderFactory(p)
-	// helloWorldDirector := &helloWorldDirector{builder: helloWorldBuilder}
-	// helloWorldDirector.construct()
-
-	// builder := concreteBuilder{}
-	// builder.build(p)
-
-	tmpBuilderFactory := tmpBuilderMap[p.ProjectType]
-	webAppBuilder := tmpBuilderFactory(p)
-	tmpDirector := &tmpDirector{builder: webAppBuilder}
-	tmpDirector.construct()
-
-	// webAppBuilderFactory := webAppBuilderMap[p.ProjectType]
-	// webAppBuilder := webAppBuilderFactory(p)
-	// webAppDirector := &webAppDirector{builder: webAppBuilder}
-	// webAppDirector.construct()
-
-	// fileGenerator("readme", p)
-	// fileGenerator("gitignore", p)
-	// fileGenerator("dockerignore", p)
-	// fileGenerator("makefile", p)
-	// fileGenerator("env", p)
-	// fileGenerator("license", p)
-	// fileGenerator("load-env", p)
-	// fileGenerator("dockerfile", p)
-	// boilerplateSelector(p)
-	// initGit(projectPath)
-	// initGoMod(name, projectPath)
-	// goGetPackages(projectPath, []string{"github.com/joho/godotenv"})
+	builderFactory := buildersMap[p.ProjectType]
+	builder := builderFactory(&p)
+	director := &director{builder: builder}
+	director.construct()
 }
 
-func boilerplateSelector(p Project) {
-	switch p.ProjectType {
-	case "hello-world":
-		createHelloWorldBoilerplate(p)
-		return
-	default:
-		fmt.Println("Not implemented yet")
-		return
-	}
+func generateProjectAgnosticFiles(p *Project) {
+	fileGenerator("gitignore", p)
+	fileGenerator("dockerignore", p)
+	fileGenerator("license", p)
+	fileGenerator("dockerfile", p)
+
+	initGit(*&p.Path)
+	initGoMod(*&p.Name, *&p.Path)
+	goGetPackages(*&p.Path, []string{"github.com/joho/godotenv"})
 }
 
-func createHelloWorldBoilerplate(p Project) {
-	fileGenerator("main", p)
-
-	fmt.Printf("%v project created successfully", p.Name)
-}
-
-func fileGenerator(fileType string, p Project) {
-	templateMapper := templateMapper()
+func fileGenerator(fileType string, p *Project) {
+	templateMapper := templates.Mapper()
 	fileTemplate, fileName := templateMapper[fileType]()
 
 	dir := filepath.Dir(filepath.Join(p.Path, fileName))

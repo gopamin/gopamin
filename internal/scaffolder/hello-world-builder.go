@@ -2,30 +2,25 @@ package scaffolder
 
 import "fmt"
 
-type helloWorldBuilder interface {
-	build()
-}
-
 type helloWorldProjectBuilder struct {
-	project Project
+	project *Project
 }
 
 func (h *helloWorldProjectBuilder) build() {
-	fmt.Printf("%v\n", h.project.ProjectType)
+	fileGenerator("hello-world-readme", h.project)
+	fileGenerator("hello-world-makefile", h.project)
+	fileGenerator("hello-world-env", h.project)
+
+	fileGenerator("hello-world-load-env", h.project)
+	fileGenerator("hello-world-main", h.project)
+
+	fmt.Printf("%v project created successfully", h.project.Name)
 }
 
-type helloWorldDirector struct {
-	builder apiBuilder
-}
-
-func (a *helloWorldDirector) construct() {
-	a.builder.build()
-}
-
-type helloWorldBuilderFactory func(p Project) helloWorldBuilder
+type helloWorldBuilderFactory func(p *Project) boilerplateBuilder
 
 var helloWorldBuilderMap = map[string]helloWorldBuilderFactory{
-	"hello-world": func(p Project) helloWorldBuilder {
+	"hello-world": func(p *Project) boilerplateBuilder {
 		return &helloWorldProjectBuilder{p}
 	},
 }

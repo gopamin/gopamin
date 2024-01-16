@@ -1,0 +1,27 @@
+package main
+
+import (
+	"fmt"
+	"net/http"
+	"os"
+
+	"allah/configs"
+)
+
+func init() {
+	configs.LoadEnv()
+}
+
+func main() {
+	port := os.Getenv("PORT")
+	http.HandleFunc("/health", healthHandler)
+	fmt.Printf("Server is listening on :%v\n", port)
+	err := http.ListenAndServe(fmt.Sprintf(":%v", port), nil)
+	if err != nil {
+		fmt.Println("Error starting the server:", err)
+	}
+}
+
+func healthHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "OK")
+}

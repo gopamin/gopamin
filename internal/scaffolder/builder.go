@@ -1,33 +1,33 @@
 package scaffolder
 
-type tmpBuilder interface {
+type boilerplateBuilder interface {
 	build()
 }
 
-type tmpDirector struct {
-	builder tmpBuilder
+type director struct {
+	builder boilerplateBuilder
 }
 
-func (w *tmpDirector) construct() {
+func (w *director) construct() {
 	w.builder.build()
 }
 
-type tmpBuilderFactory func(p Project) tmpBuilder
+type builderFactory func(p *Project) boilerplateBuilder
 
-var tmpBuilderMap = map[string]tmpBuilderFactory{
-	"api": func(p Project) tmpBuilder {
+var buildersMap = map[string]builderFactory{
+	"api": func(p *Project) boilerplateBuilder {
 		apiBuilderFactory := apiBuilderMap[p.Platform]
 		return apiBuilderFactory(p)
 	},
-	"hello-world": func(p Project) tmpBuilder {
+	"hello-world": func(p *Project) boilerplateBuilder {
 		helloWorldBuilderFactory := helloWorldBuilderMap[p.ProjectType]
 		return helloWorldBuilderFactory(p)
 	},
-	"web-app": func(p Project) tmpBuilder {
+	"web-app": func(p *Project) boilerplateBuilder {
 		webAppBuilderFactory := webAppBuilderMap[p.ProjectType]
 		return webAppBuilderFactory(p)
 	},
-	"microservice": func(p Project) tmpBuilder {
+	"microservice": func(p *Project) boilerplateBuilder {
 		webAppBuilderFactory := microserviceBuilderMap[p.Platform]
 		return webAppBuilderFactory(p)
 	},

@@ -42,7 +42,7 @@ Available values for the "api" type are as follows:
  - fiber
  - httprouter
  - gorilla
- - built-in (The build-in Go HTTP client will be used)
+ - http (The build-in HTTP client will be used)
  - graphql
 Available values for the "microservice" type are as follows:
 - grpc 

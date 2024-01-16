@@ -2,12 +2,8 @@ package scaffolder
 
 import "fmt"
 
-type microserviceBuilder interface {
-	build()
-}
-
 type kafkaBuilder struct {
-	project Project
+	project *Project
 }
 
 func (k *kafkaBuilder) build() {
@@ -15,7 +11,7 @@ func (k *kafkaBuilder) build() {
 }
 
 type rabbitmqBuilder struct {
-	project Project
+	project *Project
 }
 
 func (r *rabbitmqBuilder) build() {
@@ -23,31 +19,23 @@ func (r *rabbitmqBuilder) build() {
 }
 
 type grpcBuilder struct {
-	project Project
+	project *Project
 }
 
 func (g *grpcBuilder) build() {
 	fmt.Printf("%v -> %v \n", g.project.ProjectType, g.project.Platform)
 }
 
-type microserviceDirector struct {
-	builder microserviceBuilder
-}
-
-func (m *microserviceDirector) construct() {
-	m.builder.build()
-}
-
-type microserviceBuilderFactory func(p Project) microserviceBuilder
+type microserviceBuilderFactory func(p *Project) boilerplateBuilder
 
 var microserviceBuilderMap = map[string]microserviceBuilderFactory{
-	"kafka": func(p Project) microserviceBuilder {
+	"kafka": func(p *Project) boilerplateBuilder {
 		return &kafkaBuilder{p}
 	},
-	"rabbitmq": func(p Project) microserviceBuilder {
+	"rabbitmq": func(p *Project) boilerplateBuilder {
 		return &rabbitmqBuilder{p}
 	},
-	"grpc": func(p Project) microserviceBuilder {
+	"grpc": func(p *Project) boilerplateBuilder {
 		return &grpcBuilder{p}
 	},
 }
