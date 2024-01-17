@@ -1,0 +1,31 @@
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+
+	"{{.Name}}/configs"
+	"{{.Name}}/internal/databases"
+)
+
+func init() {
+	configs.LoadEnv()
+}
+
+func main() {
+	redis := databases.New()
+
+	key := "name"
+	err := redis.Set(context.Background(), key, "John", 0).Err()
+	if err != nil {
+		log.Fatalf("Error setting a new value: %v", err)
+	}
+
+	val, err := redis.Get(context.Background(), key).Result()
+	if err != nil {
+		log.Fatalf("Error getting an existing value: %v", err)
+
+	}
+	fmt.Println(val)
+}

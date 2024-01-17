@@ -30,6 +30,16 @@ func (m *mongodbBuilder) build() {
 	goGetPackages(m.project.Path, []string{"go.mongodb.org/mongo-driver/mongo"})
 }
 
+type redisBuilder struct {
+	project *Project
+}
+
+func (m *redisBuilder) build() {
+	fileGenerator([]string{"redis-database"}, m.project)
+	fileGenerator([]string{"redis-docker-compose"}, m.project)
+	goGetPackages(m.project.Path, []string{"github.com/redis/go-redis/v9"})
+}
+
 type databaseBuilderFactory func(p *Project) boilerplateBuilder
 
 var databaseBuilderMap = map[string]databaseBuilderFactory{
@@ -41,5 +51,8 @@ var databaseBuilderMap = map[string]databaseBuilderFactory{
 	},
 	"mongodb": func(p *Project) boilerplateBuilder {
 		return &mongodbBuilder{p}
+	},
+	"redis": func(p *Project) boilerplateBuilder {
+		return &redisBuilder{p}
 	},
 }

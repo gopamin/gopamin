@@ -6,6 +6,7 @@ import (
 	mongodb "github.com/gopamin/cli/internal/templates/database/mongodb"
 	mysql "github.com/gopamin/cli/internal/templates/database/mysql"
 	postgres "github.com/gopamin/cli/internal/templates/database/postgres"
+	redis "github.com/gopamin/cli/internal/templates/database/redis"
 	helloWorld "github.com/gopamin/cli/internal/templates/hello-world"
 )
 
@@ -48,5 +49,12 @@ func Mapper() map[string]func() ([]byte, string) {
 		"mongodb-readme":         mongodb.MongodbReadmeTemplate,
 		"mongodb-makefile":       mongodb.MongodbMakefileTemplate,
 		"mongodb-docker-compose": mongodb.MongodbDockerComposeTemplate,
+
+		"redis-env":            redis.RedisEnvTemplate,
+		"redis-main":           redis.RedisMainTemplate,
+		"redis-database":       redis.RedisDatabaseTemplate,
+		"redis-readme":         redis.RedisReadmeTemplate,
+		"redis-makefile":       redis.RedisMakefileTemplate,
+		"redis-docker-compose": redis.RedisDockerComposeTemplate,
 	}
 }
