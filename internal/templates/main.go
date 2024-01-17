@@ -4,6 +4,7 @@ import (
 	apiHttp "github.com/gopamin/cli/internal/templates/api/http"
 	common "github.com/gopamin/cli/internal/templates/common"
 	mysql "github.com/gopamin/cli/internal/templates/database/mysql"
+	postgres "github.com/gopamin/cli/internal/templates/database/postgres"
 	helloWorld "github.com/gopamin/cli/internal/templates/hello-world"
 )
 
@@ -32,5 +33,12 @@ func Mapper() map[string]func() ([]byte, string) {
 		"mysql-readme":         mysql.MysqlReadmeTemplate,
 		"mysql-makefile":       mysql.MysqlMakefileTemplate,
 		"mysql-docker-compose": mysql.MysqlDockerComposeTemplate,
+
+		"postgres-env":            postgres.PostgresEnvTemplate,
+		"postgres-main":           postgres.PostgresMainTemplate,
+		"postgres-database":       postgres.PostgresDatabaseTemplate,
+		"postgres-readme":         postgres.PostgresReadmeTemplate,
+		"postgres-makefile":       postgres.PostgresMakefileTemplate,
+		"postgres-docker-compose": postgres.PostgresDockerComposeTemplate,
 	}
 }

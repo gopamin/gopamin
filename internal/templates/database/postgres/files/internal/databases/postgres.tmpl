@@ -1,0 +1,100 @@
+package databases
+
+import (
+	"context"
+	"fmt"
+	"log"
+	"os"
+	"strconv"
+
+	"github.com/jackc/pgx/v5"
+)
+
+const tableName = "users"
+
+type Postgres interface {
+	CreateTable()
+	InsertRow(name string)
+	UpdateRow(id int, newName string)
+	DeleteRow(id int)
+	FetchRows()
+}
+
+type connection struct {
+	db *pgx.Conn
+}
+
+func New() Postgres {
+	databaseName := os.Getenv("DB_DATABASE")
+	databasePassword := os.Getenv("DB_PASSWORD")
+	databaseUsername := os.Getenv("DB_USERNAME")
+	databaseHost := os.Getenv("DB_HOST")
+	databasePort, err := strconv.Atoi(os.Getenv("DB_PORT"))
+	if err != nil {
+		log.Fatal("Error converting DB_PORT to integer:", err)
+	}
+
+	connectionStr := fmt.Sprintf("postgres://%v:%v@%v:%d/%v",
+		databaseUsername, databasePassword, databaseHost, databasePort, databaseName)
+	db, err := pgx.Connect(context.Background(), connectionStr)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
+		os.Exit(1)
+	}
+
+	s := &connection{db: db}
+
+	return s
+}
+
+func (s *connection) CreateTable() {
+	createTableQuery := fmt.Sprintf("CREATE TABLE IF NOT EXISTS %v (id SERIAL PRIMARY KEY, name VARCHAR(100))", tableName)
+	_, err := s.db.Exec(context.Background(), createTableQuery)
+	if err != nil {
+		log.Fatal("Error creating table:", err)
+	}
+}
+
+func (s *connection) InsertRow(name string) {
+	insertQuery := fmt.Sprintf("INSERT INTO %v (name) VALUES ($1) RETURNING id", tableName)
+	var insertedID int
+	err := s.db.QueryRow(context.Background(), insertQuery, name).Scan(&insertedID)
+	if err != nil {
+		log.Fatal("Error inserting row:", err)
+	}
+
+}
+
+func (s *connection) UpdateRow(id int, newName string) {
+	updateQuery := fmt.Sprintf("UPDATE %v SET name = $1 WHERE id = $2", tableName)
+	_, err := s.db.Exec(context.Background(), updateQuery, newName, id)
+	if err != nil {
+		log.Fatal("Error updating row:", err)
+	}
+}
+
+func (s *connection) DeleteRow(id int) {
+	deleteQuery := fmt.Sprintf("DELETE FROM %v WHERE id = $1", tableName)
+	_, err := s.db.Exec(context.Background(), deleteQuery, id)
+	if err != nil {
+		log.Fatal("Error deleting row:", err)
+	}
+}
+
+func (s *connection) FetchRows() {
+	selectQuery := fmt.Sprintf("SELECT id, name FROM %v", tableName)
+	rows, err := s.db.Query(context.Background(), selectQuery)
+	if err != nil {
+		log.Fatal("Error querying rows:", err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var id int
+		var name string
+		if err := rows.Scan(&id, &name); err != nil {
+			log.Fatal("Error scanning result:", err)
+		}
+		fmt.Printf("ID: %d, Name: %s\n", id, name)
+	}
+}

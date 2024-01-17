@@ -1,7 +1,5 @@
 package scaffolder
 
-import "fmt"
-
 type mysqlBuilder struct {
 	project *Project
 }
@@ -12,12 +10,14 @@ func (m *mysqlBuilder) build() {
 	goGetPackages(m.project.Path, []string{"github.com/go-sql-driver/mysql"})
 }
 
-type mongodbBuilder struct {
+type postgresBuilder struct {
 	project *Project
 }
 
-func (m *mongodbBuilder) build() {
-	fmt.Printf("%v\n", m.project)
+func (p *postgresBuilder) build() {
+	fileGenerator([]string{"postgres-database"}, p.project)
+	fileGenerator([]string{"postgres-docker-compose"}, p.project)
+	goGetPackages(p.project.Path, []string{"github.com/jackc/pgx/v5"})
 }
 
 type databaseBuilderFactory func(p *Project) boilerplateBuilder
@@ -26,7 +26,7 @@ var databaseBuilderMap = map[string]databaseBuilderFactory{
 	"mysql": func(p *Project) boilerplateBuilder {
 		return &mysqlBuilder{p}
 	},
-	"mongodb": func(p *Project) boilerplateBuilder {
-		return &mongodbBuilder{p}
+	"postgres": func(p *Project) boilerplateBuilder {
+		return &postgresBuilder{p}
 	},
 }

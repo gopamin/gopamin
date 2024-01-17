@@ -1,0 +1,48 @@
+package main
+
+import (
+	"{{.Name}}/configs"
+	"{{.Name}}/internal/databases"
+)
+
+func init() {
+	configs.LoadEnv()
+}
+
+func callCreateTable(db *databases.Postgres) {
+	(*db).CreateTable()
+}
+
+func callInsertRow(db *databases.Postgres, value string) {
+	(*db).InsertRow(value)
+}
+
+func callUpdateRow(db *databases.Postgres, id int, newName string) {
+	(*db).UpdateRow(id, newName)
+}
+
+func callDeleteRow(db *databases.Postgres, id int) {
+	(*db).DeleteRow(id)
+}
+
+func callFetchData(db *databases.Postgres) {
+	(*db).FetchRows()
+}
+
+func main() {
+	db := databases.New()
+
+	// Step 1) Uncomment the following line to create a new table
+	// callCreateTable(&db)
+
+	// Step 2) Uncomment the following line to add new values to the DB
+	// callInsertRow(&db, "new name")
+
+	// Step 3) Uncomment the following line to update an existing row
+	// callUpdateRow(&db, 1, "updated name")
+
+	// Step 4) Uncomment the following line to delete a row
+	// callDeleteRow(&db, 1)
+
+	callFetchData(&db)
+}
