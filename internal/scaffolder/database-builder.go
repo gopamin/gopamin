@@ -40,6 +40,15 @@ func (m *redisBuilder) build() {
 	goGetPackages(m.project.Path, []string{"github.com/redis/go-redis/v9"})
 }
 
+type sqliteBuilder struct {
+	project *Project
+}
+
+func (m *sqliteBuilder) build() {
+	fileGenerator([]string{"sqlite-database"}, m.project)
+	goGetPackages(m.project.Path, []string{"github.com/mattn/go-sqlite3"})
+}
+
 type databaseBuilderFactory func(p *Project) boilerplateBuilder
 
 var databaseBuilderMap = map[string]databaseBuilderFactory{
@@ -54,5 +63,8 @@ var databaseBuilderMap = map[string]databaseBuilderFactory{
 	},
 	"redis": func(p *Project) boilerplateBuilder {
 		return &redisBuilder{p}
+	},
+	"sqlite": func(p *Project) boilerplateBuilder {
+		return &sqliteBuilder{p}
 	},
 }

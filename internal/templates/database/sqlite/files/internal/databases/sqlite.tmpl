@@ -1,0 +1,83 @@
+package databases
+
+import (
+	"database/sql"
+	"fmt"
+	"log"
+	"os"
+
+	_ "github.com/mattn/go-sqlite3"
+)
+
+const tableName = "users"
+
+type Sqlite interface {
+	CreateTable()
+	InsertRow(name string)
+	UpdateRow(id int, newName string)
+	DeleteRow(id int)
+	FetchRows()
+}
+
+type connection struct {
+	db *sql.DB
+}
+
+func New() Sqlite {
+	dburl := os.Getenv("DB_URL")
+	db, err := sql.Open("sqlite3", dburl)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	s := &connection{db: db}
+
+	return s
+}
+
+func (s *connection) CreateTable() {
+	sqlStmt := fmt.Sprintf("CREATE TABLE IF NOT EXISTS %v (id INTEGER NOT NULL PRIMARY KEY, name TEXT)", tableName)
+	_, err := s.db.Exec(sqlStmt)
+	if err != nil {
+		log.Printf("Error creating the table: %v", err)
+	}
+}
+
+func (s *connection) InsertRow(name string) {
+	_, err := s.db.Exec(fmt.Sprintf("INSERT INTO %v (name) VALUES ('%v')", tableName, name))
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func (s *connection) UpdateRow(id int, newName string) {
+	_, err := s.db.Exec(fmt.Sprintf("UPDATE %v SET name = ? WHERE id = ?", tableName), newName, id)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func (s *connection) DeleteRow(id int) {
+	_, err := s.db.Exec(fmt.Sprintf("DELETE FROM %v WHERE id = ?", tableName), id)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func (s *connection) FetchRows() {
+	rows, err := s.db.Query(fmt.Sprintf("SELECT id, name FROM %v", tableName))
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var id int
+		var name string
+		err := rows.Scan(&id, &name)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Printf("ID: %d, Name: %s\n", id, name)
+	}
+}

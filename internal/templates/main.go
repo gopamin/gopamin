@@ -7,6 +7,7 @@ import (
 	mysql "github.com/gopamin/cli/internal/templates/database/mysql"
 	postgres "github.com/gopamin/cli/internal/templates/database/postgres"
 	redis "github.com/gopamin/cli/internal/templates/database/redis"
+	sqlite "github.com/gopamin/cli/internal/templates/database/sqlite"
 	helloWorld "github.com/gopamin/cli/internal/templates/hello-world"
 )
 
@@ -56,5 +57,11 @@ func Mapper() map[string]func() ([]byte, string) {
 		"redis-readme":         redis.RedisReadmeTemplate,
 		"redis-makefile":       redis.RedisMakefileTemplate,
 		"redis-docker-compose": redis.RedisDockerComposeTemplate,
+
+		"sqlite-env":      sqlite.SqliteEnvTemplate,
+		"sqlite-main":     sqlite.SqliteMainTemplate,
+		"sqlite-database": sqlite.SqliteDatabaseTemplate,
+		"sqlite-makefile": sqlite.SqliteMakefileTemplate,
+		"sqlite-readme":   sqlite.SqliteReadmeTemplate,
 	}
 }
