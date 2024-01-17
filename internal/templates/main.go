@@ -3,6 +3,7 @@ package templates
 import (
 	apiHttp "github.com/gopamin/cli/internal/templates/api/http"
 	common "github.com/gopamin/cli/internal/templates/common"
+	mongodb "github.com/gopamin/cli/internal/templates/database/mongodb"
 	mysql "github.com/gopamin/cli/internal/templates/database/mysql"
 	postgres "github.com/gopamin/cli/internal/templates/database/postgres"
 	helloWorld "github.com/gopamin/cli/internal/templates/hello-world"
@@ -40,5 +41,12 @@ func Mapper() map[string]func() ([]byte, string) {
 		"postgres-readme":         postgres.PostgresReadmeTemplate,
 		"postgres-makefile":       postgres.PostgresMakefileTemplate,
 		"postgres-docker-compose": postgres.PostgresDockerComposeTemplate,
+
+		"mongodb-env":            mongodb.MongodbEnvTemplate,
+		"mongodb-main":           mongodb.MongodbMainTemplate,
+		"mongodb-database":       mongodb.MongodbDatabaseTemplate,
+		"mongodb-readme":         mongodb.MongodbReadmeTemplate,
+		"mongodb-makefile":       mongodb.MongodbMakefileTemplate,
+		"mongodb-docker-compose": mongodb.MongodbDockerComposeTemplate,
 	}
 }

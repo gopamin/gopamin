@@ -1,0 +1,41 @@
+package main
+
+import (
+	"{{.Name}}/configs"
+	"{{.Name}}/internal/databases"
+)
+
+func init() {
+	configs.LoadEnv()
+}
+
+func callInsertDocument(db *databases.MongoDB, value string) {
+	(*db).InsertDocument(value)
+}
+
+func callUpdateDocument(db *databases.MongoDB, id string, newName string) {
+	(*db).UpdateDocument(id, newName)
+}
+
+func callDeleteDocument(db *databases.MongoDB, id string) {
+	(*db).DeleteDocument(id)
+}
+
+func callFetchDocuments(db *databases.MongoDB) {
+	(*db).FetchDocuments()
+}
+
+func main() {
+	db := databases.New()
+
+	// Step 1) Uncomment the following line to add new values to the DB
+	// callInsertDocument(&db, "new name")
+
+	// Step 2) Uncomment the following line to update an existing document
+	// callUpdateDocument(&db, "<document_id>", "updated name")
+
+	// Step 3) Uncomment the following line to delete a document
+	// callDeleteDocument(&db, "<document_id>")
+
+	callFetchDocuments(&db)
+}

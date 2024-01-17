@@ -1,0 +1,118 @@
+package databases
+
+import (
+	"context"
+	"fmt"
+	"log"
+	"os"
+
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
+)
+
+const collectionName = "users"
+
+type MongoDB interface {
+	InsertDocument(name string)
+	GetCollection() *mongo.Collection
+	UpdateDocument(id string, newName string)
+	DeleteDocument(id string)
+	FetchDocuments()
+}
+
+type connection struct {
+	db *mongo.Client
+}
+
+func New() MongoDB {
+	host := os.Getenv("DB_HOST")
+	port := os.Getenv("DB_PORT")
+	username := os.Getenv("DB_USERNAME")
+	password := os.Getenv("DB_ROOT_PASSWORD")
+
+	mongoClient, err := mongo.Connect(context.Background(), options.Client().ApplyURI(fmt.Sprintf("mongodb://%s:%s@%s:%s", username, password, host, port)))
+	if err != nil {
+		log.Fatalln("cannot connect to MongoDB")
+	}
+
+	s := &connection{db: mongoClient}
+
+	return s
+}
+
+func (s *connection) InsertDocument(name string) {
+	newDocument := bson.M{
+		"name": name,
+	}
+	collection := s.GetCollection()
+	_, err := collection.InsertOne(context.Background(), newDocument)
+	if err != nil {
+		log.Fatal("Error inserting document:", err)
+	}
+}
+
+func (s *connection) GetCollection() *mongo.Collection {
+	database := os.Getenv("DB_NAME")
+
+	return s.db.Database(database).Collection(collectionName)
+}
+
+func (s *connection) FetchDocuments() {
+	var results []bson.M
+
+	collection := s.GetCollection()
+	cursor, err := collection.Find(context.TODO(), bson.D{})
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if err = cursor.All(context.TODO(), &results); err != nil {
+		log.Fatal(err)
+	}
+
+	for _, document := range results {
+		for _, data := range document {
+			fmt.Println(data)
+		}
+	}
+}
+
+func (s *connection) DeleteDocument(id string) {
+	collection := s.GetCollection()
+
+	objectID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		log.Fatalf("Error converting ID to ObjectId: %v", err)
+	}
+
+	collection.DeleteOne(context.TODO(), bson.D{
+		{Key: "_id", Value: objectID},
+	})
+}
+
+func (s *connection) UpdateDocument(id string, name string) {
+	objectID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		log.Fatalf("Error converting ID to ObjectId: %v", err)
+	}
+
+	_, err = s.GetCollection().UpdateOne(
+		context.TODO(),
+		bson.D{
+			{Key: "_id", Value: objectID},
+		}, bson.D{
+			{
+				Key: "$set",
+				Value: bson.D{
+					{Key: "name", Value: name},
+				},
+			},
+		},
+	)
+	if err != nil {
+		log.Fatalf("Error updating document: %v", err)
+	}
+}

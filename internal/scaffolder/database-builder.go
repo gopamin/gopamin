@@ -20,6 +20,16 @@ func (p *postgresBuilder) build() {
 	goGetPackages(p.project.Path, []string{"github.com/jackc/pgx/v5"})
 }
 
+type mongodbBuilder struct {
+	project *Project
+}
+
+func (m *mongodbBuilder) build() {
+	fileGenerator([]string{"mongodb-database"}, m.project)
+	fileGenerator([]string{"mongodb-docker-compose"}, m.project)
+	goGetPackages(m.project.Path, []string{"go.mongodb.org/mongo-driver/mongo"})
+}
+
 type databaseBuilderFactory func(p *Project) boilerplateBuilder
 
 var databaseBuilderMap = map[string]databaseBuilderFactory{
@@ -28,5 +38,8 @@ var databaseBuilderMap = map[string]databaseBuilderFactory{
 	},
 	"postgres": func(p *Project) boilerplateBuilder {
 		return &postgresBuilder{p}
+	},
+	"mongodb": func(p *Project) boilerplateBuilder {
+		return &mongodbBuilder{p}
 	},
 }
