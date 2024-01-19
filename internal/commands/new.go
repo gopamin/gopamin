@@ -54,6 +54,7 @@ Available values for the "microservice" type are as follows:
  - postgres
  - mongodb
  - sqlite
+ - dynamodb
  - redis`)
 
 	newCmd.Flags().BoolVarP(&isClean, "clean", "c", false, `For this flag, you don't need to specify any value; if interested, simply add either "--clean" or "-c" to your command (By default, it's falsy).

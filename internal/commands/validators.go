@@ -96,6 +96,7 @@ func databaseValidator() bool {
 		database == "postgres" ||
 		database == "mongodb" ||
 		database == "sqlite" ||
+		database == "dynamodb" ||
 		database == "redis" {
 		return true
 	}

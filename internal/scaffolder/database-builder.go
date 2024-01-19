@@ -30,6 +30,21 @@ func (m *mongodbBuilder) build() {
 	goGetPackages(m.project.Path, []string{"go.mongodb.org/mongo-driver/mongo"})
 }
 
+type dynamodbBuilder struct {
+	project *Project
+}
+
+func (m *dynamodbBuilder) build() {
+	fileGenerator([]string{"dynamodb-database"}, m.project)
+	fileGenerator([]string{"dynamodb-docker-compose"}, m.project)
+	goGetPackages(m.project.Path, []string{
+		"github.com/aws/aws-sdk-go-v2",
+		"github.com/aws/aws-sdk-go-v2/aws",
+		"github.com/aws/aws-sdk-go-v2/config",
+		"github.com/aws/aws-sdk-go-v2/service/dynamodb",
+	})
+}
+
 type redisBuilder struct {
 	project *Project
 }
@@ -63,6 +78,9 @@ var databaseBuilderMap = map[string]databaseBuilderFactory{
 	},
 	"redis": func(p *Project) boilerplateBuilder {
 		return &redisBuilder{p}
+	},
+	"dynamodb": func(p *Project) boilerplateBuilder {
+		return &dynamodbBuilder{p}
 	},
 	"sqlite": func(p *Project) boilerplateBuilder {
 		return &sqliteBuilder{p}

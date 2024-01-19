@@ -1,0 +1,177 @@
+package databases
+
+import (
+	"context"
+	"fmt"
+	"log"
+	"os"
+	"strconv"
+
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/credentials"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+)
+
+const tableName = "users"
+
+type DynamoDB interface {
+	CreateTable() bool
+	AddItem(id, name string)
+	RemoveItem(id string)
+	UpdateItem(id, updatedName string)
+	ScanTable()
+}
+
+type connection struct {
+	db *dynamodb.Client
+}
+
+func CreateLocalClient() DynamoDB {
+	databaseAccessKeyID := os.Getenv("DB_ACCESS_KEY_ID")
+	databaseSecretAccessKey := os.Getenv("DB_SECRET_ACCESS_KEY")
+	databaseSessionToken := os.Getenv("DB_SESSION_TOKEN")
+	databaseHost := os.Getenv("DB_HOST")
+	databaseRegion := os.Getenv("DB_REGION")
+	databasePort, err := strconv.Atoi(os.Getenv("DB_PORT"))
+	if err != nil {
+		log.Fatal("Error converting DB_PORT to integer:", err)
+	}
+
+	cfg, err := config.LoadDefaultConfig(context.TODO(),
+		config.WithRegion(databaseRegion),
+		config.WithEndpointResolver(aws.EndpointResolverFunc(
+			func(service, region string) (aws.Endpoint, error) {
+				return aws.Endpoint{URL: fmt.Sprintf("%v:%d", databaseHost, databasePort)}, nil
+			})),
+		config.WithCredentialsProvider(credentials.StaticCredentialsProvider{
+			Value: aws.Credentials{
+				AccessKeyID: databaseAccessKeyID, SecretAccessKey: databaseSecretAccessKey, SessionToken: databaseSessionToken,
+			},
+		}),
+	)
+	if err != nil {
+		panic(err)
+	}
+
+	c := &connection{db: dynamodb.NewFromConfig(cfg)}
+
+	return c
+}
+
+func (d *connection) CreateTable() bool {
+	tables, err := d.db.ListTables(context.TODO(), &dynamodb.ListTablesInput{})
+	if err != nil {
+		log.Fatal("ListTables failed", err)
+	}
+	for _, n := range tables.TableNames {
+		if n == tableName {
+			return true
+		}
+	}
+
+	_, err = d.db.CreateTable(context.TODO(), &dynamodb.CreateTableInput{
+		AttributeDefinitions: []types.AttributeDefinition{
+			{
+				AttributeName: aws.String("id"),
+				AttributeType: types.ScalarAttributeTypeS,
+			},
+		},
+		KeySchema: []types.KeySchemaElement{
+			{
+				AttributeName: aws.String("id"),
+				KeyType:       types.KeyTypeHash,
+			},
+		},
+		TableName:   aws.String(tableName),
+		BillingMode: types.BillingModePayPerRequest,
+	})
+	if err != nil {
+		log.Fatal("CreateTable failed", err)
+	}
+
+	return true
+}
+
+func (d *connection) AddItem(id, name string) {
+	item := map[string]types.AttributeValue{
+		"id":        &types.AttributeValueMemberS{Value: id},
+		"firstName": &types.AttributeValueMemberS{Value: name},
+	}
+	d.db.PutItem(context.TODO(), &dynamodb.PutItemInput{
+		TableName:           aws.String(tableName),
+		Item:                item,
+		ConditionExpression: aws.String("attribute_not_exists(PK)"), // TODO
+	})
+}
+
+func (d *connection) UpdateItem(id, updatedName string) {
+	updateExpression := "SET firstName = :updatedName"
+	expressionAttributeValues := map[string]types.AttributeValue{
+		":updatedName": &types.AttributeValueMemberS{Value: updatedName},
+	}
+
+	input := &dynamodb.UpdateItemInput{
+		TableName: aws.String(tableName),
+		Key: map[string]types.AttributeValue{
+			"id": &types.AttributeValueMemberS{Value: id},
+		},
+		UpdateExpression:          aws.String(updateExpression),
+		ExpressionAttributeValues: expressionAttributeValues,
+	}
+
+	_, err := d.db.UpdateItem(context.TODO(), input)
+	if err != nil {
+		log.Fatal("Update failed", err)
+	}
+}
+
+func (d *connection) RemoveItem(id string) {
+	input := &dynamodb.DeleteItemInput{
+		TableName: aws.String(tableName),
+		Key: map[string]types.AttributeValue{
+			"id": &types.AttributeValueMemberS{Value: id},
+		},
+	}
+
+	_, err := d.db.DeleteItem(context.TODO(), input)
+	if err != nil {
+		log.Fatal("Deletion failed", err)
+	}
+}
+
+func (d *connection) ScanTable() {
+	var items []map[string]types.AttributeValue
+
+	input := &dynamodb.ScanInput{
+		TableName: aws.String(tableName),
+	}
+
+	paginator := dynamodb.NewScanPaginator(d.db, input)
+	for paginator.HasMorePages() {
+		page, err := paginator.NextPage(context.Background())
+		if err != nil {
+			log.Fatalln(err)
+		}
+		items = append(items, page.Items...)
+	}
+
+	for _, item := range items {
+		for key, value := range item {
+			fmt.Printf("%s: %v\n", key, getValueAsString(value))
+		}
+		fmt.Println()
+	}
+}
+
+func getValueAsString(value types.AttributeValue) string {
+	switch v := value.(type) {
+	case *types.AttributeValueMemberS:
+		return v.Value
+	case *types.AttributeValueMemberN:
+		return v.Value
+	default:
+		return fmt.Sprintf("%v", value)
+	}
+}

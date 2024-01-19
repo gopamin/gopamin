@@ -1,0 +1,28 @@
+package main
+
+import (
+	"{{.Name}}/configs"
+	"{{.Name}}/internal/databases"
+)
+
+func init() {
+	configs.LoadEnv()
+}
+
+func main() {
+	db := databases.CreateLocalClient()
+
+	// Step 1) Uncomment the following line to create a new table
+	// db.CreateTable()
+
+	// Step 2) Uncomment the following line to add new values to the DB
+	// db.AddItem("1", "John Doe")
+
+	// Step 3) Uncomment the following line to update an existing row
+	// db.UpdateItem("1", "Jane Doe")
+
+	// Step 4) Uncomment the following line to delete a row
+	// db.RemoveItem("1")
+
+	db.ScanTable()
+}

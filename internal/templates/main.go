@@ -3,6 +3,7 @@ package templates
 import (
 	apiHttp "github.com/gopamin/cli/internal/templates/api/http"
 	common "github.com/gopamin/cli/internal/templates/common"
+	dynamodb "github.com/gopamin/cli/internal/templates/database/dynamodb"
 	mongodb "github.com/gopamin/cli/internal/templates/database/mongodb"
 	mysql "github.com/gopamin/cli/internal/templates/database/mysql"
 	postgres "github.com/gopamin/cli/internal/templates/database/postgres"
@@ -63,5 +64,12 @@ func Mapper() map[string]func() ([]byte, string) {
 		"sqlite-database": sqlite.SqliteDatabaseTemplate,
 		"sqlite-makefile": sqlite.SqliteMakefileTemplate,
 		"sqlite-readme":   sqlite.SqliteReadmeTemplate,
+
+		"dynamodb-env":            dynamodb.DynamodbEnvTemplate,
+		"dynamodb-main":           dynamodb.DynamodbMainTemplate,
+		"dynamodb-database":       dynamodb.DynamodbDatabaseTemplate,
+		"dynamodb-readme":         dynamodb.DynamodbReadmeTemplate,
+		"dynamodb-makefile":       dynamodb.DynamodbMakefileTemplate,
+		"dynamodb-docker-compose": dynamodb.DynamodbDockerComposeTemplate,
 	}
 }
