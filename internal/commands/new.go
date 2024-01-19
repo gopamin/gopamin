@@ -57,9 +57,10 @@ Available values for the "microservice" type are as follows:
  - dynamodb
  - redis`)
 
-	newCmd.Flags().BoolVarP(&isClean, "clean", "c", false, `For this flag, you don't need to specify any value; if interested, simply add either "--clean" or "-c" to your command (By default, it's falsy).
-What this flag does is that is implements the Clean Architecture for your project (Other names for it in the community are Hexagon, Onion, Layered etc).
-To familiarize yourself with this architecture style, please visit: https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html`)
+	// TODO
+	// 	newCmd.Flags().BoolVarP(&isClean, "clean", "c", false, `For this flag, you don't need to specify any value; if interested, simply add either "--clean" or "-c" to your command (By default, it's falsy).
+	// What this flag does is that is implements the Clean Architecture for your project (Other names for it in the community are Hexagon, Onion, Layered etc).
+	// To familiarize yourself with this architecture style, please visit: https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html`)
 
 	rootCmd.AddCommand(newCmd)
 }

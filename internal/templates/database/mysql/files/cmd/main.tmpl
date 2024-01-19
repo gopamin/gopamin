@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 
@@ -12,49 +13,73 @@ func init() {
 	configs.LoadEnv()
 }
 
-func callCreateTable(db *databases.MySQL) {
-	(*db).CreateTable()
-}
-
-func callInsertRow(db *databases.MySQL, value string) {
-	(*db).InsertRow(value)
-}
-
-func callUpdateRow(db *databases.MySQL, id int, newName string) {
-	(*db).UpdateRow(id, newName)
-}
-
-func callDeleteRow(db *databases.MySQL, id int) {
-	(*db).DeleteRow(id)
-}
-
-func callFetchData(db *databases.MySQL) {
-	data, err := (*db).FetchRows()
-	if err != nil {
-		log.Printf("Error fetching data: %v\n", err)
-
-	}
-	for _, row := range data {
-		for key, value := range row {
-			fmt.Printf("%s: %v\n", key, databases.ConvertToReadableValue(value))
-		}
-	}
-}
-
 func main() {
 	db := databases.New()
-	
-	// Step 1) After the first execution of main.go, comment out the following line
-	callCreateTable(&db)
 
-	// Step 2) Uncomment the following line to add new values to the DB
-	// callInsertRow(&db, "new name")
+	// Step 1) Uncomment the following line to add new values to the DB
+	// insertRow(&db, "John Doe")
+
+	// Step 2) Uncomment the following line to fetch a row by ID
+	// fetchRow(&db, 1)
 
 	// Step 3) Uncomment the following line to update an existing row
-	// callUpdateRow(&db, 1, "updated name")
+	// updateRow(&db, 1, "Jane Doe")
 
 	// Step 4) Uncomment the following line to delete a row
-	// callDeleteRow(&db, 1)
+	// deleteRow(&db, 1)
 
-	callFetchData(&db)
+	// Step 5) Uncomment the following line to fetch all rows
+	// fetchRows(&db)
+}
+
+func insertRow(db *databases.MySQL, value string) {
+	lastInsertID, err := (*db).InsertRow(value)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("last inserted ID:", lastInsertID)
+}
+
+func fetchRow(db *databases.MySQL, id int) {
+	data, err := (*db).FetchRow(id)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	json, err := json.Marshal(data)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(string(json))
+}
+
+func updateRow(db *databases.MySQL, id int, newName string) {
+	rowsAffected, err := (*db).UpdateRow(id, newName)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("rows effected:", rowsAffected)
+}
+
+func deleteRow(db *databases.MySQL, id int) {
+	rowsAffected, err := (*db).DeleteRow(id)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("rows effected:", rowsAffected)
+}
+
+func fetchRows(db *databases.MySQL) {
+	data, err := (*db).FetchRows()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	json, err := json.Marshal(data)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(string(json))
 }

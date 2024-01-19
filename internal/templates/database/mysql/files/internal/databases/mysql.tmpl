@@ -12,11 +12,16 @@ import (
 const tableName = "users"
 
 type MySQL interface {
-	CreateTable()
-	InsertRow(name string)
-	UpdateRow(id int, newName string)
-	DeleteRow(id int)
-	FetchRows() ([]map[string]interface{}, error)
+	InsertRow(name string) (int64, error)
+	UpdateRow(id int, newName string) (int64, error)
+	DeleteRow(id int) (int64, error)
+	FetchRows() ([]User, error)
+	FetchRow(id int) (User, error)
+}
+
+type User struct {
+	Id   int    `json:"id"`
+	Name string `json:"name"`
 }
 
 type connection struct {
@@ -40,87 +45,81 @@ func New() MySQL {
 
 	s := &connection{db: db}
 
-	return s
-}
-
-func (s *connection) CreateTable() {
 	query := fmt.Sprintf("CREATE TABLE IF NOT EXISTS %s (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50))", tableName)
-	_, err := s.db.Exec(query)
+	_, err = db.Exec(query)
 	if err != nil {
 		log.Fatalf(fmt.Sprintf("error creating table: %v", err))
 	}
+
+	return s
 }
 
-func (s *connection) InsertRow(name string) {
+func (s *connection) InsertRow(name string) (int64, error) {
 	query := fmt.Sprintf("INSERT INTO %s (name) VALUES (?)", tableName)
-	_, err := s.db.Exec(query, name)
+	result, err := s.db.Exec(query, name)
 	if err != nil {
-		log.Fatalf(fmt.Sprintf("error inserting data: %v", err))
+		return 0, err
 	}
+	lastInsertID, _ := result.LastInsertId()
+
+	return lastInsertID, nil
 }
 
-func (s *connection) UpdateRow(id int, newName string) {
+func (s *connection) FetchRow(id int) (User, error) {
+	var user User
+	query := fmt.Sprintf("SELECT * FROM %s WHERE id = ?", tableName)
+	row := s.db.QueryRow(query, id)
+
+	if err := row.Scan(&user.Id, &user.Name); err != nil {
+		if err == sql.ErrNoRows {
+			return User{}, fmt.Errorf("user not found with ID %d", id)
+		} else {
+			return User{}, fmt.Errorf("error fetching data: %v", err)
+		}
+	}
+
+	return user, nil
+}
+
+func (s *connection) UpdateRow(id int, newName string) (int64, error) {
 	query := fmt.Sprintf("UPDATE %s SET name = ? WHERE id = ?", tableName)
-	_, err := s.db.Exec(query, newName, id)
+	result, err := s.db.Exec(query, newName, id)
 	if err != nil {
-		log.Fatalf(fmt.Sprintf("error updating data: %v", err))
+		return 0, err
 	}
+	rowsAffected, _ := result.RowsAffected()
+
+	return rowsAffected, nil
+
 }
 
-func (s *connection) DeleteRow(id int) {
+func (s *connection) DeleteRow(id int) (int64, error) {
 	query := fmt.Sprintf("DELETE FROM %s WHERE id = ?", tableName)
-	_, err := s.db.Exec(query, id)
+	result, err := s.db.Exec(query, id)
 	if err != nil {
-		log.Fatalf(fmt.Sprintf("error deleting data: %v", err))
+		return 0, err
 	}
+	rowsAffected, _ := result.RowsAffected()
+
+	return rowsAffected, nil
 }
 
-func (s *connection) FetchRows() ([]map[string]interface{}, error) {
+func (s *connection) FetchRows() ([]User, error) {
+	var users []User
 	query := fmt.Sprintf("SELECT * FROM %s", tableName)
 	rows, err := s.db.Query(query)
 	if err != nil {
-		log.Fatalf(fmt.Sprintf("error fetching data: %v", err))
 		return nil, err
 	}
 	defer rows.Close()
 
-	columns, err := rows.Columns()
-	if err != nil {
-		log.Fatalf(fmt.Sprintf("error getting columns: %v", err))
-		return nil, err
-	}
-
-	var result []map[string]interface{}
-
 	for rows.Next() {
-		values := make([]interface{}, len(columns))
-		for i := range columns {
-			values[i] = new(interface{})
-		}
-
-		if err := rows.Scan(values...); err != nil {
-			log.Fatalf(fmt.Sprintf("error scanning rows: %v", err))
+		var user User
+		if err := rows.Scan(&user.Id, &user.Name); err != nil {
 			return nil, err
 		}
-
-		entry := make(map[string]interface{})
-		for i, col := range columns {
-			entry[col] = *(values[i].(*interface{}))
-		}
-
-		result = append(result, entry)
+		users = append(users, user)
 	}
 
-	return result, nil
-}
-
-func ConvertToReadableValue(value interface{}) interface{} {
-	switch v := value.(type) {
-	case []uint8:
-		return string(v)
-	case int64:
-		return int(v)
-	default:
-		return v
-	}
+	return users, nil
 }
