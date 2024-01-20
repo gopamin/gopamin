@@ -38,3 +38,31 @@ var apiHttpMain []byte
 func ApiHttpMainTemplate() ([]byte, string) {
 	return apiHttpMain, "cmd/main.go"
 }
+
+//go:embed files/internal/api/handlers/users.tmpl
+var apiHttpUsersHandler []byte
+
+func ApiHttpUsersHandlerTemplate() ([]byte, string) {
+	return apiHttpUsersHandler, "internal/api/handlers/users.go"
+}
+
+//go:embed files/internal/api/routes/routes.tmpl
+var apiHttpRoutes []byte
+
+func ApiHttpRoutesTemplate() ([]byte, string) {
+	return apiHttpRoutes, "internal/api/routes/routes.go"
+}
+
+//go:embed files/internal/api/server/server.tmpl
+var apiHttpServer []byte
+
+func ApiHttpServerTemplate() ([]byte, string) {
+	return apiHttpServer, "internal/api/server/server.go"
+}
+
+//go:embed files/internal/api/services/users.tmpl
+var apiHttpUsersService []byte
+
+func ApiHttpUsersServiceTemplate() ([]byte, string) {
+	return apiHttpUsersService, "internal/api/services/users.go"
+}

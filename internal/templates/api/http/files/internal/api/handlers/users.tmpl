@@ -1,0 +1,166 @@
+package handlers
+
+import (
+	"encoding/json"
+	"fmt"
+	"{{.Name}}/internal/api/services"
+	"io"
+	"net/http"
+	"regexp"
+	"strconv"
+)
+
+type Handler struct {
+	userService *services.UserService
+}
+
+type response struct {
+	Status  int         `json:"status"`
+	Message string      `json:"message"`
+	Data    interface{} `json:"data,omitempty"`
+}
+
+func New(userService *services.UserService) *Handler {
+	return &Handler{userService: userService}
+}
+
+func (h *Handler) BaseRouteHandler(rw http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodGet:
+		h.Index(rw, r)
+	case http.MethodPost:
+		h.Create(rw, r)
+	default:
+		http.Error(rw, "Method not allowed", http.StatusMethodNotAllowed)
+	}
+}
+
+func (h *Handler) RouteHandlerWithId(rw http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodGet:
+		h.Show(rw, r)
+	case http.MethodPut:
+		h.Update(rw, r)
+	case http.MethodDelete:
+		h.Delete(rw, r)
+	default:
+		http.Error(rw, "Method not allowed", http.StatusMethodNotAllowed)
+	}
+}
+
+func (h *Handler) Index(rw http.ResponseWriter, r *http.Request) {
+	var res response
+	rw.Header().Set("Content-Type", "application/json")
+
+	result := h.userService.Index()
+	if len(result) != 0 {
+		res = response{
+			Status:  http.StatusOK,
+			Message: "Data fetched successfully",
+			Data:    result,
+		}
+	} else {
+		res = response{
+			Status:  http.StatusOK,
+			Message: "No data found",
+			Data:    result,
+		}
+	}
+
+	jsonResp, err := json.Marshal(res)
+	if err != nil {
+		http.Error(rw, "error encoding JSON", http.StatusInternalServerError)
+		return
+	}
+	rw.Write(jsonResp)
+}
+
+func (h *Handler) Show(rw http.ResponseWriter, r *http.Request) {
+	var res response
+	rw.Header().Set("Content-Type", "application/json")
+	id, err := extractID(r)
+	if err != nil {
+		http.Error(rw, err.Error(), http.StatusNotAcceptable)
+	}
+
+	result := h.userService.Show(id)
+	res = response{Status: 200, Message: "User fetched successfully", Data: result}
+
+	jsonResp, err := json.Marshal(res)
+	if err != nil {
+		http.Error(rw, "error encoding JSON", http.StatusInternalServerError)
+		return
+	}
+
+	rw.Write(jsonResp)
+}
+
+func (h *Handler) Create(rw http.ResponseWriter, r *http.Request) {
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		http.Error(rw, "error reading request body", http.StatusInternalServerError)
+		return
+	}
+
+	var requestBody map[string]interface{}
+	err = json.Unmarshal(body, &requestBody)
+	if err != nil {
+		http.Error(rw, "error encoding body payload", http.StatusInternalServerError)
+		return
+	}
+
+	if name, ok := requestBody["name"].(string); ok {
+		h.userService.Create(name)
+		rw.WriteHeader(http.StatusCreated)
+	} else {
+		http.Error(rw, `"name" key is required`, http.StatusUnprocessableEntity)
+	}
+}
+
+func (h *Handler) Update(rw http.ResponseWriter, r *http.Request) {
+	id, err := extractID(r)
+	if err != nil {
+		http.Error(rw, err.Error(), http.StatusNotAcceptable)
+	}
+
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		http.Error(rw, "Error reading request body", http.StatusInternalServerError)
+		return
+	}
+
+	var requestBody map[string]interface{}
+	err = json.Unmarshal(body, &requestBody)
+	if err != nil {
+		http.Error(rw, "error encoding body payload", http.StatusInternalServerError)
+		return
+	}
+
+	if name, ok := requestBody["name"].(string); ok {
+		h.userService.Update(id, name)
+	} else {
+		http.Error(rw, `"name" key is required`, http.StatusUnprocessableEntity)
+	}
+}
+
+func (h *Handler) Delete(rw http.ResponseWriter, r *http.Request) {
+	id, err := extractID(r)
+	if err != nil {
+		http.Error(rw, err.Error(), http.StatusNotAcceptable)
+	}
+
+	h.userService.Delete(id)
+}
+
+func extractID(r *http.Request) (int, error) {
+	re := regexp.MustCompile(`/(\d+)$`)
+	match := re.FindStringSubmatch(r.URL.Path)
+
+	if len(match) != 2 || match[1] == "0" {
+		return 0, fmt.Errorf("no user ID found in the URL path")
+	}
+
+	id, _ := strconv.Atoi(match[1])
+
+	return id, nil
+}

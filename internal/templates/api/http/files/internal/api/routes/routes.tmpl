@@ -1,0 +1,19 @@
+package routes
+
+import (
+	"{{.Name}}/internal/api/handlers"
+	"{{.Name}}/internal/api/services"
+	"net/http"
+)
+
+const BaseRoute = "/api/v1"
+
+func Register() http.Handler {
+	appHandler := handlers.New(services.InitService())
+
+	mux := http.NewServeMux()
+	mux.HandleFunc(BaseRoute+"/users/", appHandler.RouteHandlerWithId)
+	mux.HandleFunc(BaseRoute+"/users", appHandler.BaseRouteHandler)
+
+	return mux
+}

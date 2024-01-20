@@ -1,0 +1,33 @@
+package services
+
+type UserService struct {
+	users  map[int]string
+	nextId int
+}
+
+func InitService() *UserService {
+	return &UserService{users: map[int]string{}, nextId: 1}
+}
+
+func (us *UserService) Index() map[int]string {
+	return us.users
+}
+
+func (us *UserService) Show(id int) string {
+	return us.users[id]
+}
+
+func (us *UserService) Create(name string) {
+	us.users[us.nextId] = name
+	us.nextId++
+}
+
+func (us *UserService) Update(id int, newName string) {
+	if _, exists := us.users[id]; exists {
+		us.users[id] = newName
+	}
+}
+
+func (us *UserService) Delete(id int) {
+	delete(us.users, id)
+}

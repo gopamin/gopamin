@@ -30,6 +30,10 @@ func Mapper() map[string]func() ([]byte, string) {
 		"api-http-readme":   apiHttp.ApiHttpReadmeTemplate,
 		"api-http-makefile": apiHttp.ApiHttpMakefileTemplate,
 		"api-http-env":      apiHttp.ApiHttpEnvTemplate,
+		"api-http-handlers": apiHttp.ApiHttpUsersHandlerTemplate,
+		"api-http-routes":   apiHttp.ApiHttpRoutesTemplate,
+		"api-http-server":   apiHttp.ApiHttpServerTemplate,
+		"api-http-services": apiHttp.ApiHttpUsersServiceTemplate,
 
 		"mysql-env":            mysql.MysqlEnvTemplate,
 		"mysql-main":           mysql.MysqlMainTemplate,

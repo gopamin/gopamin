@@ -1,0 +1,26 @@
+package server
+
+import (
+	"fmt"
+	"{{.Name}}/internal/api/routes"
+	"net/http"
+	"os"
+	"strconv"
+	"time"
+)
+
+func Init() {
+	port, _ := strconv.Atoi(os.Getenv("PORT"))
+
+	server := &http.Server{
+		Addr:         fmt.Sprintf(":%d", port),
+		Handler:      routes.Register(),
+		IdleTimeout:  time.Minute,
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 30 * time.Second,
+	}
+	err := server.ListenAndServe()
+	if err != nil {
+		panic(fmt.Sprintf("Cannot start server: %s", err))
+	}
+}

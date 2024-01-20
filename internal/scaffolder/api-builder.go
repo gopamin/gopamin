@@ -68,6 +68,11 @@ func (h *httpBuilder) build() {
 	fileGenerator([]string{"api-http-env"}, h.project)
 	fileGenerator([]string{"api-http-load-env"}, h.project)
 	fileGenerator([]string{"api-http-main"}, h.project)
+	fileGenerator([]string{"api-http-handlers"}, h.project)
+	fileGenerator([]string{"api-http-routes"}, h.project)
+	fileGenerator([]string{"api-http-server"}, h.project)
+	fileGenerator([]string{"api-http-services"}, h.project)
+
 	fmt.Printf("%v project created successfully", h.project.Name)
 }
 
