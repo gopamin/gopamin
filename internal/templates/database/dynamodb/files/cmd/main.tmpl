@@ -3,6 +3,9 @@ package main
 import (
 	"{{.Name}}/configs"
 	"{{.Name}}/internal/databases"
+	"encoding/json"
+	"fmt"
+	"log"
 )
 
 func init() {
@@ -10,19 +13,84 @@ func init() {
 }
 
 func main() {
-	db := databases.CreateLocalClient()
+	db := databases.New()
 
-	// Step 1) Uncomment the following line to create a new table
-	// db.CreateTable()
+	// Step 1) Comment out the following line after the first run
+	createTable(&db)
 
 	// Step 2) Uncomment the following line to add new values to the DB
-	// db.AddItem("1", "John Doe")
+	// insert(&db, "1", "John Doe")
 
-	// Step 3) Uncomment the following line to update an existing row
-	// db.UpdateItem("1", "Jane Doe")
+	// Step 3) Uncomment the following line to fetch by ID
+	// fetch(&db, "1")
 
-	// Step 4) Uncomment the following line to delete a row
-	// db.RemoveItem("1")
+	// Step 4) Uncomment the following line to update
+	// update(&db, "1", "Jane Doe")
 
-	db.ScanTable()
+	// Step 5) Uncomment the following line to delete
+	// delete(&db, "1")
+
+	// Step 6) Uncomment the following line to fetch all
+	// fetchAll(&db)
+}
+
+func createTable(db *databases.Database) {
+	err := (*db).CreateTable()
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func insert(db *databases.Database, id, value string) {
+	result, err := (*db).Insert(id, value)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(result)
+}
+
+func fetch(db *databases.Database, id string) {
+	data, err := (*db).Fetch(id)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	json, err := json.Marshal(data)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(string(json))
+}
+
+func update(db *databases.Database, id, newName string) {
+	affectedId, err := (*db).Update(id, newName)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("updated ID:", affectedId)
+}
+
+func delete(db *databases.Database, id string) {
+	affectedId, err := (*db).Delete(id)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("deleted ID:", affectedId)
+}
+
+func fetchAll(db *databases.Database) {
+	data, err := (*db).FetchAll()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	json, err := json.Marshal(data)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(string(json))
 }

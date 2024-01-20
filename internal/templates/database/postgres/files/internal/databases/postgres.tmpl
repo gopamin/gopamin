@@ -12,19 +12,25 @@ import (
 
 const tableName = "users"
 
-type Postgres interface {
-	CreateTable()
-	InsertRow(name string)
-	UpdateRow(id int, newName string)
-	DeleteRow(id int)
-	FetchRows()
+type Database interface {
+	CreateTable() error
+	Insert(name string) (int, error)
+	Update(id int, newName string) (int64, error)
+	Delete(id int) (int64, error)
+	Fetch(id int) (User, error)
+	FetchAll() ([]User, error)
+}
+
+type User struct {
+	Id   int    `json:"id"`
+	Name string `json:"name"`
 }
 
 type connection struct {
 	db *pgx.Conn
 }
 
-func New() Postgres {
+func New() Database {
 	databaseName := os.Getenv("DB_DATABASE")
 	databasePassword := os.Getenv("DB_PASSWORD")
 	databaseUsername := os.Getenv("DB_USERNAME")
@@ -34,67 +40,132 @@ func New() Postgres {
 		log.Fatal("Error converting DB_PORT to integer:", err)
 	}
 
-	connectionStr := fmt.Sprintf("postgres://%v:%v@%v:%d/%v",
-		databaseUsername, databasePassword, databaseHost, databasePort, databaseName)
-	db, err := pgx.Connect(context.Background(), connectionStr)
+	db, err := pgx.Connect(
+		context.Background(),
+		fmt.Sprintf(
+			"postgres://%v:%v@%v:%d/%v",
+			databaseUsername,
+			databasePassword,
+			databaseHost,
+			databasePort,
+			databaseName,
+		),
+	)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
 		os.Exit(1)
 	}
 
-	s := &connection{db: db}
+	c := &connection{db: db}
 
-	return s
+	return c
 }
 
-func (s *connection) CreateTable() {
-	createTableQuery := fmt.Sprintf("CREATE TABLE IF NOT EXISTS %v (id SERIAL PRIMARY KEY, name VARCHAR(100))", tableName)
-	_, err := s.db.Exec(context.Background(), createTableQuery)
+func (c *connection) CreateTable() error {
+	_, err := c.db.Exec(
+		context.Background(),
+		fmt.Sprintf(
+			"CREATE TABLE IF NOT EXISTS %v (id SERIAL PRIMARY KEY, name VARCHAR(100))",
+			tableName,
+		),
+	)
 	if err != nil {
-		log.Fatal("Error creating table:", err)
-	}
-}
-
-func (s *connection) InsertRow(name string) {
-	insertQuery := fmt.Sprintf("INSERT INTO %v (name) VALUES ($1) RETURNING id", tableName)
-	var insertedID int
-	err := s.db.QueryRow(context.Background(), insertQuery, name).Scan(&insertedID)
-	if err != nil {
-		log.Fatal("Error inserting row:", err)
+		return err
 	}
 
+	return nil
 }
 
-func (s *connection) UpdateRow(id int, newName string) {
-	updateQuery := fmt.Sprintf("UPDATE %v SET name = $1 WHERE id = $2", tableName)
-	_, err := s.db.Exec(context.Background(), updateQuery, newName, id)
+func (c *connection) Insert(name string) (int, error) {
+	var insertedId int
+	err := c.db.QueryRow(
+		context.Background(),
+		fmt.Sprintf(
+			"INSERT INTO %v (name) VALUES ($1) RETURNING id",
+			tableName,
+		),
+		name,
+	).Scan(&insertedId)
 	if err != nil {
-		log.Fatal("Error updating row:", err)
+		return 0, err
 	}
+
+	return insertedId, nil
 }
 
-func (s *connection) DeleteRow(id int) {
-	deleteQuery := fmt.Sprintf("DELETE FROM %v WHERE id = $1", tableName)
-	_, err := s.db.Exec(context.Background(), deleteQuery, id)
+func (c *connection) Update(id int, newName string) (int64, error) {
+	commandTag, err := c.db.Exec(
+		context.Background(),
+		fmt.Sprintf(
+			"UPDATE %v SET name = $1 WHERE id = $2",
+			tableName,
+		),
+		newName,
+		id,
+	)
 	if err != nil {
-		log.Fatal("Error deleting row:", err)
+		return 0, err
 	}
+
+	return commandTag.RowsAffected(), err
 }
 
-func (s *connection) FetchRows() {
-	selectQuery := fmt.Sprintf("SELECT id, name FROM %v", tableName)
-	rows, err := s.db.Query(context.Background(), selectQuery)
+func (c *connection) Delete(id int) (int64, error) {
+	commandTag, err := c.db.Exec(
+		context.Background(),
+		fmt.Sprintf(
+			"DELETE FROM %v WHERE id = $1",
+			tableName,
+		),
+		id,
+	)
 	if err != nil {
-		log.Fatal("Error querying rows:", err)
+		return 0, err
+	}
+
+	return commandTag.RowsAffected(), nil
+}
+
+func (c *connection) Fetch(id int) (User, error) {
+	var user User
+
+	err := c.db.QueryRow(
+		context.Background(),
+		fmt.Sprintf(
+			"SELECT id, name FROM %v WHERE id = $1",
+			tableName,
+		),
+		id,
+	).Scan(&user.Id, &user.Name)
+
+	if err != nil {
+		return User{}, err
+	}
+
+	return user, nil
+}
+
+func (c *connection) FetchAll() ([]User, error) {
+	var users []User
+	rows, err := c.db.Query(
+		context.Background(),
+		fmt.Sprintf(
+			"SELECT id, name FROM %v",
+			tableName,
+		),
+	)
+	if err != nil {
+		return nil, err
 	}
 	defer rows.Close()
 
 	for rows.Next() {
-		var id int
-		var name string
-		if err := rows.Scan(&id, &name); err != nil {
-			log.Fatal("Error scanning result:", err)
+		var user User
+		if err := rows.Scan(&user.Id, &user.Name); err != nil {
+			return nil, err
 		}
-		fmt.Printf("ID: %d, Name: %s\n", id, name)
+		users = append(users, user)
 	}
+
+	return users, nil
 }

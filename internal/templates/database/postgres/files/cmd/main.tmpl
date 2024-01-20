@@ -1,6 +1,9 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
+	"log"
 	"{{.Name}}/configs"
 	"{{.Name}}/internal/databases"
 )
@@ -9,40 +12,83 @@ func init() {
 	configs.LoadEnv()
 }
 
-func callCreateTable(db *databases.Postgres) {
-	(*db).CreateTable()
-}
-
-func callInsertRow(db *databases.Postgres, value string) {
-	(*db).InsertRow(value)
-}
-
-func callUpdateRow(db *databases.Postgres, id int, newName string) {
-	(*db).UpdateRow(id, newName)
-}
-
-func callDeleteRow(db *databases.Postgres, id int) {
-	(*db).DeleteRow(id)
-}
-
-func callFetchData(db *databases.Postgres) {
-	(*db).FetchRows()
-}
-
 func main() {
 	db := databases.New()
 
-	// Step 1) Uncomment the following line to create a new table
-	// callCreateTable(&db)
+	// Step 1) Comment out the following line after the first run
+	createTable(&db)
 
 	// Step 2) Uncomment the following line to add new values to the DB
-	// callInsertRow(&db, "new name")
+	// insert(&db, "John Doe")
 
-	// Step 3) Uncomment the following line to update an existing row
-	// callUpdateRow(&db, 1, "updated name")
+	// Step 3) Uncomment the following line to fetch by ID
+	// fetch(&db, 1)
 
-	// Step 4) Uncomment the following line to delete a row
-	// callDeleteRow(&db, 1)
+	// Step 4) Uncomment the following line to update
+	// update(&db, 1, "Jane Doe")
 
-	callFetchData(&db)
+	// Step 5) Uncomment the following line to delete
+	// delete(&db, 1)
+
+	// Step 6) Uncomment the following line to fetch all
+	// fetchAll(&db)
+}
+
+func createTable(db *databases.Database) {
+	err := (*db).CreateTable()
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func insert(db *databases.Database, value string) {
+	lastInsertId, err := (*db).Insert(value)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("last inserted ID:", lastInsertId)
+}
+
+func fetch(db *databases.Database, id int) {
+	data, err := (*db).Fetch(id)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	json, err := json.Marshal(data)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(string(json))
+}
+
+func update(db *databases.Database, id int, newName string) {
+	rowsEffected, err := (*db).Update(id, newName)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("rows effected", rowsEffected)
+}
+
+func delete(db *databases.Database, id int) {
+	rowsEffected, err := (*db).Delete(id)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("rows effected", rowsEffected)
+}
+
+func fetchAll(db *databases.Database) {
+	data, err := (*db).FetchAll()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	json, err := json.Marshal(data)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(string(json))
 }

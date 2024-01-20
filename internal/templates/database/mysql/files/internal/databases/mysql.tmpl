@@ -11,12 +11,13 @@ import (
 
 const tableName = "users"
 
-type MySQL interface {
-	InsertRow(name string) (int64, error)
-	UpdateRow(id int, newName string) (int64, error)
-	DeleteRow(id int) (int64, error)
-	FetchRows() ([]User, error)
-	FetchRow(id int) (User, error)
+type Database interface {
+	CreateTable() error
+	Insert(name string) (int64, error)
+	Update(id int, newName string) (int64, error)
+	Delete(id int) (int64, error)
+	Fetch(id int) (User, error)
+	FetchAll() ([]User, error)
 }
 
 type User struct {
@@ -28,14 +29,24 @@ type connection struct {
 	db *sql.DB
 }
 
-func New() MySQL {
+func New() Database {
 	databaseName := os.Getenv("DB_DATABASE")
 	databasePassword := os.Getenv("DB_PASSWORD")
 	databaseUsername := os.Getenv("DB_USERNAME")
 	databasePort := os.Getenv("DB_PORT")
 	databaseHost := os.Getenv("DB_HOST")
 
-	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", databaseUsername, databasePassword, databaseHost, databasePort, databaseName))
+	db, err := sql.Open(
+		"mysql",
+		fmt.Sprintf(
+			"%s:%s@tcp(%s:%s)/%s?timeout=10s",
+			databaseUsername,
+			databasePassword,
+			databaseHost,
+			databasePort,
+			databaseName,
+		),
+	)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -43,32 +54,86 @@ func New() MySQL {
 	db.SetMaxIdleConns(50)
 	db.SetMaxOpenConns(50)
 
-	s := &connection{db: db}
+	c := &connection{db: db}
 
-	query := fmt.Sprintf("CREATE TABLE IF NOT EXISTS %s (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50))", tableName)
-	_, err = db.Exec(query)
-	if err != nil {
-		log.Fatalf(fmt.Sprintf("error creating table: %v", err))
-	}
-
-	return s
+	return c
 }
 
-func (s *connection) InsertRow(name string) (int64, error) {
-	query := fmt.Sprintf("INSERT INTO %s (name) VALUES (?)", tableName)
-	result, err := s.db.Exec(query, name)
+func (c *connection) CreateTable() error {
+	_, err := c.db.Exec(
+		fmt.Sprintf(
+			"CREATE TABLE IF NOT EXISTS %s (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50))",
+			tableName,
+		),
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (c *connection) Insert(name string) (int64, error) {
+	result, err := c.db.Exec(
+		fmt.Sprintf(
+			"INSERT INTO %s (name) VALUES (?)",
+			tableName,
+		),
+		name,
+	)
 	if err != nil {
 		return 0, err
 	}
+
 	lastInsertID, _ := result.LastInsertId()
 
 	return lastInsertID, nil
 }
 
-func (s *connection) FetchRow(id int) (User, error) {
+func (c *connection) Update(id int, newName string) (int64, error) {
+	result, err := c.db.Exec(
+		fmt.Sprintf(
+			"UPDATE %s SET name = ? WHERE id = ?",
+			tableName,
+		),
+		newName,
+		id,
+	)
+	if err != nil {
+		return 0, err
+	}
+
+	rowsAffected, _ := result.RowsAffected()
+
+	return rowsAffected, nil
+}
+
+func (c *connection) Delete(id int) (int64, error) {
+	result, err := c.db.Exec(
+		fmt.Sprintf(
+			"DELETE FROM %s WHERE id = ?",
+			tableName,
+		),
+		id,
+	)
+	if err != nil {
+		return 0, err
+	}
+	
+	rowsAffected, _ := result.RowsAffected()
+
+	return rowsAffected, nil
+}
+
+func (c *connection) Fetch(id int) (User, error) {
 	var user User
-	query := fmt.Sprintf("SELECT * FROM %s WHERE id = ?", tableName)
-	row := s.db.QueryRow(query, id)
+	row := c.db.QueryRow(
+		fmt.Sprintf(
+			"SELECT * FROM %s WHERE id = ?",
+			tableName,
+		),
+		id,
+	)
 
 	if err := row.Scan(&user.Id, &user.Name); err != nil {
 		if err == sql.ErrNoRows {
@@ -81,33 +146,14 @@ func (s *connection) FetchRow(id int) (User, error) {
 	return user, nil
 }
 
-func (s *connection) UpdateRow(id int, newName string) (int64, error) {
-	query := fmt.Sprintf("UPDATE %s SET name = ? WHERE id = ?", tableName)
-	result, err := s.db.Exec(query, newName, id)
-	if err != nil {
-		return 0, err
-	}
-	rowsAffected, _ := result.RowsAffected()
-
-	return rowsAffected, nil
-
-}
-
-func (s *connection) DeleteRow(id int) (int64, error) {
-	query := fmt.Sprintf("DELETE FROM %s WHERE id = ?", tableName)
-	result, err := s.db.Exec(query, id)
-	if err != nil {
-		return 0, err
-	}
-	rowsAffected, _ := result.RowsAffected()
-
-	return rowsAffected, nil
-}
-
-func (s *connection) FetchRows() ([]User, error) {
+func (c *connection) FetchAll() ([]User, error) {
 	var users []User
-	query := fmt.Sprintf("SELECT * FROM %s", tableName)
-	rows, err := s.db.Query(query)
+	rows, err := c.db.Query(
+		fmt.Sprintf(
+			"SELECT * FROM %s",
+			tableName,
+		),
+	)
 	if err != nil {
 		return nil, err
 	}

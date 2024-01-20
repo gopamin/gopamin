@@ -10,25 +10,32 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/credentials"
+	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 )
 
 const tableName = "users"
 
-type DynamoDB interface {
-	CreateTable() bool
-	AddItem(id, name string)
-	RemoveItem(id string)
-	UpdateItem(id, updatedName string)
-	ScanTable()
+type Database interface {
+	CreateTable() error
+	Insert(id, name string) (string, error)
+	Update(id, updatedName string) (string, error)
+	Delete(id string) (string, error)
+	Fetch(is string) (User, error)
+	FetchAll() ([]User, error)
+}
+
+type User struct {
+	ID   string `json:"id" dynamodbav:"id"`
+	Name string `json:"name" dynamodbav:"firstName"`
 }
 
 type connection struct {
 	db *dynamodb.Client
 }
 
-func CreateLocalClient() DynamoDB {
+func New() Database {
 	databaseAccessKeyID := os.Getenv("DB_ACCESS_KEY_ID")
 	databaseSecretAccessKey := os.Getenv("DB_SECRET_ACCESS_KEY")
 	databaseSessionToken := os.Getenv("DB_SESSION_TOKEN")
@@ -60,18 +67,18 @@ func CreateLocalClient() DynamoDB {
 	return c
 }
 
-func (d *connection) CreateTable() bool {
-	tables, err := d.db.ListTables(context.TODO(), &dynamodb.ListTablesInput{})
+func (c *connection) CreateTable() error {
+	tables, err := c.db.ListTables(context.TODO(), &dynamodb.ListTablesInput{})
 	if err != nil {
-		log.Fatal("ListTables failed", err)
+		return err
 	}
 	for _, n := range tables.TableNames {
 		if n == tableName {
-			return true
+			return nil
 		}
 	}
 
-	_, err = d.db.CreateTable(context.TODO(), &dynamodb.CreateTableInput{
+	_, err = c.db.CreateTable(context.TODO(), &dynamodb.CreateTableInput{
 		AttributeDefinitions: []types.AttributeDefinition{
 			{
 				AttributeName: aws.String("id"),
@@ -88,25 +95,35 @@ func (d *connection) CreateTable() bool {
 		BillingMode: types.BillingModePayPerRequest,
 	})
 	if err != nil {
-		log.Fatal("CreateTable failed", err)
+		return err
 	}
 
-	return true
+	return nil
 }
 
-func (d *connection) AddItem(id, name string) {
+func (c *connection) Insert(id, name string) (string, error) {
 	item := map[string]types.AttributeValue{
 		"id":        &types.AttributeValueMemberS{Value: id},
 		"firstName": &types.AttributeValueMemberS{Value: name},
 	}
-	d.db.PutItem(context.TODO(), &dynamodb.PutItemInput{
+	result, err := c.db.PutItem(context.TODO(), &dynamodb.PutItemInput{
 		TableName:           aws.String(tableName),
 		Item:                item,
-		ConditionExpression: aws.String("attribute_not_exists(PK)"), // TODO
+		ConditionExpression: aws.String("attribute_not_exists(PK)"),
+		ReturnValues:        "ALL_OLD",
 	})
+	if err != nil {
+		return "", err
+	}
+
+	if result.Attributes != nil {
+		return "ID already exits", nil
+	}
+
+	return fmt.Sprintf("new inserted ID: %v", id), nil
 }
 
-func (d *connection) UpdateItem(id, updatedName string) {
+func (c *connection) Update(id, updatedName string) (string, error) {
 	updateExpression := "SET firstName = :updatedName"
 	expressionAttributeValues := map[string]types.AttributeValue{
 		":updatedName": &types.AttributeValueMemberS{Value: updatedName},
@@ -119,59 +136,90 @@ func (d *connection) UpdateItem(id, updatedName string) {
 		},
 		UpdateExpression:          aws.String(updateExpression),
 		ExpressionAttributeValues: expressionAttributeValues,
+		ConditionExpression:       aws.String("attribute_exists(id)"),
+		ReturnValues:              "ALL_NEW",
 	}
 
-	_, err := d.db.UpdateItem(context.TODO(), input)
+	result, err := c.db.UpdateItem(context.TODO(), input)
 	if err != nil {
-		log.Fatal("Update failed", err)
+		return "", fmt.Errorf("item not found with ID %s", id)
 	}
+
+	primaryKey := result.Attributes["id"].(*types.AttributeValueMemberS)
+
+	return primaryKey.Value, nil
 }
 
-func (d *connection) RemoveItem(id string) {
+func (c *connection) Delete(id string) (string, error) {
 	input := &dynamodb.DeleteItemInput{
+		TableName: aws.String(tableName),
+		Key: map[string]types.AttributeValue{
+			"id": &types.AttributeValueMemberS{Value: id},
+		},
+		ReturnValues: "ALL_OLD",
+	}
+
+	result, err := c.db.DeleteItem(context.TODO(), input)
+	if err != nil {
+		return "", err
+	}
+
+	if len(result.Attributes) == 0 {
+		return "", fmt.Errorf("item not found with ID %s", id)
+	}
+
+	return id, nil
+}
+
+func (c *connection) Fetch(id string) (User, error) {
+	input := &dynamodb.GetItemInput{
 		TableName: aws.String(tableName),
 		Key: map[string]types.AttributeValue{
 			"id": &types.AttributeValueMemberS{Value: id},
 		},
 	}
 
-	_, err := d.db.DeleteItem(context.TODO(), input)
+	result, err := c.db.GetItem(context.TODO(), input)
 	if err != nil {
-		log.Fatal("Deletion failed", err)
+		return User{}, err
 	}
+
+	if len(result.Item) == 0 {
+		return User{}, fmt.Errorf("user not found with ID %s", id)
+	}
+
+	var user User
+	err = attributevalue.UnmarshalMap(result.Item, &user)
+	if err != nil {
+		return User{}, err
+	}
+
+	return user, nil
 }
 
-func (d *connection) ScanTable() {
-	var items []map[string]types.AttributeValue
+func (c *connection) FetchAll() ([]User, error) {
+	var users []User
 
 	input := &dynamodb.ScanInput{
 		TableName: aws.String(tableName),
 	}
 
-	paginator := dynamodb.NewScanPaginator(d.db, input)
+	paginator := dynamodb.NewScanPaginator(c.db, input)
 	for paginator.HasMorePages() {
 		page, err := paginator.NextPage(context.Background())
 		if err != nil {
-			log.Fatalln(err)
+			return nil, err
 		}
-		items = append(items, page.Items...)
+
+		for _, item := range page.Items {
+			var user User
+			err := attributevalue.UnmarshalMap(item, &user)
+			if err != nil {
+				return nil, err
+			}
+			users = append(users, user)
+		}
 	}
 
-	for _, item := range items {
-		for key, value := range item {
-			fmt.Printf("%s: %v\n", key, getValueAsString(value))
-		}
-		fmt.Println()
-	}
-}
-
-func getValueAsString(value types.AttributeValue) string {
-	switch v := value.(type) {
-	case *types.AttributeValueMemberS:
-		return v.Value
-	case *types.AttributeValueMemberN:
-		return v.Value
-	default:
-		return fmt.Sprintf("%v", value)
-	}
+	return users, nil
 }

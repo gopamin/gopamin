@@ -11,73 +11,128 @@ import (
 
 const tableName = "users"
 
-type Sqlite interface {
-	CreateTable()
-	InsertRow(name string)
-	UpdateRow(id int, newName string)
-	DeleteRow(id int)
-	FetchRows()
+type Database interface {
+	CreateTable() error
+	Insert(name string) (int64, error)
+	Update(id int, newName string) (int64, error)
+	Delete(id int) (int64, error)
+	Fetch(id int) (User, error)
+	FetchAll() ([]User, error)
+}
+
+type User struct {
+	Id   int    `json:"id"`
+	Name string `json:"name"`
 }
 
 type connection struct {
 	db *sql.DB
 }
 
-func New() Sqlite {
+func New() Database {
 	dburl := os.Getenv("DB_URL")
 	db, err := sql.Open("sqlite3", dburl)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	s := &connection{db: db}
+	c := &connection{db: db}
 
-	return s
+	return c
 }
 
-func (s *connection) CreateTable() {
-	sqlStmt := fmt.Sprintf("CREATE TABLE IF NOT EXISTS %v (id INTEGER NOT NULL PRIMARY KEY, name TEXT)", tableName)
-	_, err := s.db.Exec(sqlStmt)
+func (c *connection) CreateTable() error {
+	_, err := c.db.Exec(
+		fmt.Sprintf("CREATE TABLE IF NOT EXISTS %v (id INTEGER NOT NULL PRIMARY KEY, name TEXT)",
+			tableName,
+		),
+	)
 	if err != nil {
-		log.Printf("Error creating the table: %v", err)
+		return err
 	}
+
+	return nil
 }
 
-func (s *connection) InsertRow(name string) {
-	_, err := s.db.Exec(fmt.Sprintf("INSERT INTO %v (name) VALUES ('%v')", tableName, name))
+func (c *connection) Insert(name string) (int64, error) {
+	result, err := c.db.Exec(fmt.Sprintf("INSERT INTO %v (name) VALUES ('%v')", tableName, name))
 	if err != nil {
-		log.Fatal(err)
+		return 0, nil
 	}
+
+	lastInsertID, _ := result.LastInsertId()
+
+	return lastInsertID, nil
 }
 
-func (s *connection) UpdateRow(id int, newName string) {
-	_, err := s.db.Exec(fmt.Sprintf("UPDATE %v SET name = ? WHERE id = ?", tableName), newName, id)
+func (c *connection) Update(id int, newName string) (int64, error) {
+	result, err := c.db.Exec(
+		fmt.Sprintf("UPDATE %v SET name = ? WHERE id = ?", tableName),
+		newName,
+		id,
+	)
 	if err != nil {
-		log.Fatal(err)
+		return 0, err
 	}
+
+	rowsAffected, _ := result.RowsAffected()
+
+	return rowsAffected, nil
 }
 
-func (s *connection) DeleteRow(id int) {
-	_, err := s.db.Exec(fmt.Sprintf("DELETE FROM %v WHERE id = ?", tableName), id)
+func (c *connection) Delete(id int) (int64, error) {
+	result, err := c.db.Exec(
+		fmt.Sprintf("DELETE FROM %v WHERE id = ?", tableName),
+		id,
+	)
 	if err != nil {
-		log.Fatal(err)
+		return 0, err
 	}
+
+	rowsAffected, _ := result.RowsAffected()
+
+	return rowsAffected, nil
 }
 
-func (s *connection) FetchRows() {
-	rows, err := s.db.Query(fmt.Sprintf("SELECT id, name FROM %v", tableName))
+func (c *connection) Fetch(id int) (User, error) {
+	var user User
+	row := c.db.QueryRow(
+		fmt.Sprintf(
+			"SELECT * FROM %s WHERE id = ?",
+			tableName,
+		),
+		id,
+	)
+
+	if err := row.Scan(&user.Id, &user.Name); err != nil {
+		if err == sql.ErrNoRows {
+			return User{}, fmt.Errorf("user not found with ID %d", id)
+		} else {
+			return User{}, fmt.Errorf("error fetching data: %v", err)
+		}
+	}
+
+	return user, nil
+}
+
+func (c *connection) FetchAll() ([]User, error) {
+	var users []User
+	rows, err := c.db.Query(
+		fmt.Sprintf("SELECT id, name FROM %v", tableName),
+	)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	defer rows.Close()
 
 	for rows.Next() {
-		var id int
-		var name string
-		err := rows.Scan(&id, &name)
+		var user User
+		err := rows.Scan(&user.Id, &user.Name)
 		if err != nil {
-			log.Fatal(err)
+			return nil, err
 		}
-		fmt.Printf("ID: %d, Name: %s\n", id, name)
+		users = append(users, user)
 	}
+
+	return users, nil
 }

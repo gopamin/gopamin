@@ -3,39 +3,85 @@ package main
 import (
 	"{{.Name}}/configs"
 	"{{.Name}}/internal/databases"
+	"encoding/json"
+	"fmt"
+	"log"
 )
 
 func init() {
 	configs.LoadEnv()
 }
 
-func callInsertDocument(db *databases.MongoDB, value string) {
-	(*db).InsertDocument(value)
-}
-
-func callUpdateDocument(db *databases.MongoDB, id string, newName string) {
-	(*db).UpdateDocument(id, newName)
-}
-
-func callDeleteDocument(db *databases.MongoDB, id string) {
-	(*db).DeleteDocument(id)
-}
-
-func callFetchDocuments(db *databases.MongoDB) {
-	(*db).FetchDocuments()
-}
-
 func main() {
 	db := databases.New()
 
 	// Step 1) Uncomment the following line to add new values to the DB
-	// callInsertDocument(&db, "new name")
+	// insert(&db, "John Doe")
 
-	// Step 2) Uncomment the following line to update an existing document
-	// callUpdateDocument(&db, "<document_id>", "updated name")
+	// Step 2) Uncomment the following line to fetch by ID
+	// fetch(&db, "<id>")
 
-	// Step 3) Uncomment the following line to delete a document
-	// callDeleteDocument(&db, "<document_id>")
+	// Step 3) Uncomment the following line to update
+	// update(&db, "<id>", "Jane Doe")
 
-	callFetchDocuments(&db)
+	// Step 4) Uncomment the following line to delete
+	// delete(&db, "<id>")
+
+	// Step 5) Uncomment the following line to fetch all
+	// fetchAll(&db)
+}
+
+func insert(db *databases.Database, value string) {
+	lastInsertId, err := (*db).Insert(value)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("last inserted ID:", lastInsertId)
+}
+
+func fetch(db *databases.Database, id string) {
+	data, err := (*db).Fetch(id)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	json, err := json.Marshal(data)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(string(json))
+}
+
+func update(db *databases.Database, id string, newName string) {
+	rowsAffected, err := (*db).Update(id, newName)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("rows effected:", rowsAffected)
+}
+
+func delete(db *databases.Database, id string) {
+	rowsAffected, err := (*db).Delete(id)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("rows effected:", rowsAffected)
+}
+
+func fetchAll(db *databases.Database) {
+	data, err := (*db).FetchAll()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	json, err := json.Marshal(data)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(string(json))
 }
