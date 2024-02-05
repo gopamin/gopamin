@@ -1,9 +1,11 @@
-package databases
+package postgres
 
 import (
 	"context"
 	"fmt"
 	"log"
+	"{{.Name}}/internal/core/domain"
+	"{{.Name}}/internal/core/ports"
 	"os"
 	"strconv"
 
@@ -12,30 +14,16 @@ import (
 
 const tableName = "users"
 
-type Database interface {
-	CreateTable() error
-	Insert(name string) (int, error)
-	Update(id int, newName string) (int64, error)
-	Delete(id int) (int64, error)
-	Fetch(id int) (User, error)
-	FetchAll() ([]User, error)
-}
-
-type User struct {
-	Id   int    `json:"id"`
-	Name string `json:"name"`
-}
-
 type connection struct {
 	db *pgx.Conn
 }
 
-func New() Database {
-	databaseName := os.Getenv("DB_DATABASE")
-	databasePassword := os.Getenv("DB_PASSWORD")
-	databaseUsername := os.Getenv("DB_USERNAME")
-	databaseHost := os.Getenv("DB_HOST")
-	databasePort, err := strconv.Atoi(os.Getenv("DB_PORT"))
+func New() ports.UserRepositoryInterface {
+	databaseName := os.Getenv("POSTGRES_DATABASE")
+	databasePassword := os.Getenv("POSTGRES_PASSWORD")
+	databaseUsername := os.Getenv("POSTGRES_USERNAME")
+	databaseHost := os.Getenv("POSTGRES_HOST")
+	databasePort, err := strconv.Atoi(os.Getenv("POSTGRES_PORT"))
 	if err != nil {
 		log.Fatal("Error converting DB_PORT to integer:", err)
 	}
@@ -57,6 +45,7 @@ func New() Database {
 	}
 
 	c := &connection{db: db}
+	c.CreateTable()
 
 	return c
 }
@@ -76,8 +65,8 @@ func (c *connection) CreateTable() error {
 	return nil
 }
 
-func (c *connection) Insert(name string) (int, error) {
-	var insertedId int
+func (c *connection) Insert(name string) (string, error) {
+	var insertedId int64
 	err := c.db.QueryRow(
 		context.Background(),
 		fmt.Sprintf(
@@ -87,13 +76,13 @@ func (c *connection) Insert(name string) (int, error) {
 		name,
 	).Scan(&insertedId)
 	if err != nil {
-		return 0, err
+		return "", err
 	}
 
-	return insertedId, nil
+	return strconv.FormatInt(insertedId, 10), nil
 }
 
-func (c *connection) Update(id int, newName string) (int64, error) {
+func (c *connection) Update(id string, newName string) (string, error) {
 	commandTag, err := c.db.Exec(
 		context.Background(),
 		fmt.Sprintf(
@@ -104,13 +93,13 @@ func (c *connection) Update(id int, newName string) (int64, error) {
 		id,
 	)
 	if err != nil {
-		return 0, err
+		return "", err
 	}
 
-	return commandTag.RowsAffected(), err
+	return strconv.FormatInt(commandTag.RowsAffected(), 10), nil
 }
 
-func (c *connection) Delete(id int) (int64, error) {
+func (c *connection) Delete(id string) (string, error) {
 	commandTag, err := c.db.Exec(
 		context.Background(),
 		fmt.Sprintf(
@@ -120,14 +109,14 @@ func (c *connection) Delete(id int) (int64, error) {
 		id,
 	)
 	if err != nil {
-		return 0, err
+		return "", err
 	}
 
-	return commandTag.RowsAffected(), nil
+	return strconv.FormatInt(commandTag.RowsAffected(), 10), nil
 }
 
-func (c *connection) Fetch(id int) (User, error) {
-	var user User
+func (c *connection) Fetch(id string) (domain.User, error) {
+	var user domain.User
 
 	err := c.db.QueryRow(
 		context.Background(),
@@ -139,14 +128,14 @@ func (c *connection) Fetch(id int) (User, error) {
 	).Scan(&user.Id, &user.Name)
 
 	if err != nil {
-		return User{}, err
+		return domain.User{}, err
 	}
 
 	return user, nil
 }
 
-func (c *connection) FetchAll() ([]User, error) {
-	var users []User
+func (c *connection) FetchAll() ([]domain.User, error) {
+	var users []domain.User
 	rows, err := c.db.Query(
 		context.Background(),
 		fmt.Sprintf(
@@ -160,7 +149,7 @@ func (c *connection) FetchAll() ([]User, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		var user User
+		var user domain.User
 		if err := rows.Scan(&user.Id, &user.Name); err != nil {
 			return nil, err
 		}

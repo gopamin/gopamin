@@ -1,87 +1,87 @@
 package main
 
 import (
-	"{{.Name}}/configs"
-	"{{.Name}}/internal/databases"
-	"encoding/json"
 	"fmt"
 	"log"
+
+	"{{.Name}}/configs"
+	"{{.Name}}/internal/adapters/mongodb"
+	"{{.Name}}/internal/core/ports"
+	"{{.Name}}/internal/core/services"
 )
 
 func init() {
 	configs.LoadEnv()
 }
 
+func insert(us ports.UserServiceInterface, value string) {
+	lastInsertID, err := us.Create(value)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("last inserted ID:", lastInsertID)
+}
+
+func fetch(us ports.UserServiceInterface, id string) {
+	user, err := us.Show(id)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	json, err := user.ToJson()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(json)
+}
+
+func update(us ports.UserServiceInterface, id string, newName string) {
+	rowsAffected, err := us.Update(id, newName)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("rows effected:", rowsAffected)
+}
+
+func delete(us ports.UserServiceInterface, id string) {
+	rowsAffected, err := us.Delete(id)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("rows effected:", rowsAffected)
+}
+
+func fetchAll(us ports.UserServiceInterface) {
+	users, err := us.Index()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, user := range users {
+		json, err := user.ToJson()
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(json)
+	}
+}
+
 func main() {
-	db := databases.New()
+	db := mongodb.New()
+	us := services.NewUserService(db)
 
 	// Step 1) Uncomment the following line to add new values to the DB
-	// insert(&db, "John Doe")
+	// insert(us, "John Doe")
 
 	// Step 2) Uncomment the following line to fetch by ID
-	// fetch(&db, "<id>")
+	// fetch(us, "<record_id>")
 
 	// Step 3) Uncomment the following line to update
-	// update(&db, "<id>", "Jane Doe")
+	// update(us, "<record_id>", "Jane Doe")
 
 	// Step 4) Uncomment the following line to delete
-	// delete(&db, "<id>")
+	// delete(us, "<record_id>")
 
-	// Step 5) Uncomment the following line to fetch all
-	// fetchAll(&db)
-}
-
-func insert(db *databases.Database, value string) {
-	lastInsertId, err := (*db).Insert(value)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println("last inserted ID:", lastInsertId)
-}
-
-func fetch(db *databases.Database, id string) {
-	data, err := (*db).Fetch(id)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	json, err := json.Marshal(data)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println(string(json))
-}
-
-func update(db *databases.Database, id string, newName string) {
-	rowsAffected, err := (*db).Update(id, newName)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println("rows effected:", rowsAffected)
-}
-
-func delete(db *databases.Database, id string) {
-	rowsAffected, err := (*db).Delete(id)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println("rows effected:", rowsAffected)
-}
-
-func fetchAll(db *databases.Database) {
-	data, err := (*db).FetchAll()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	json, err := json.Marshal(data)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println(string(json))
+	fetchAll(us)
 }

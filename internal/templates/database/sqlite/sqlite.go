@@ -4,37 +4,37 @@ import (
 	_ "embed"
 )
 
-//go:embed files/internal/databases/sqlite.tmpl
-var sqliteDatabase []byte
-
 //go:embed files/env.tmpl
 var sqliteEnv []byte
-
-//go:embed files/makefile.tmpl
-var sqliteMakefile []byte
-
-//go:embed files/readme.tmpl
-var sqliteReadme []byte
-
-//go:embed files/cmd/main.tmpl
-var sqliteMain []byte
-
-func SqliteMakefileTemplate() ([]byte, string) {
-	return sqliteMakefile, "Makefile"
-}
-
-func SqliteMainTemplate() ([]byte, string) {
-	return sqliteMain, "cmd/main.go"
-}
-
-func SqliteDatabaseTemplate() ([]byte, string) {
-	return sqliteDatabase, "internal/databases/sqlite.go"
-}
 
 func SqliteEnvTemplate() ([]byte, string) {
 	return sqliteEnv, ".env"
 }
 
+//go:embed files/makefile.tmpl
+var sqliteMakefile []byte
+
+func SqliteMakefileTemplate() ([]byte, string) {
+	return sqliteMakefile, "Makefile"
+}
+
+//go:embed files/readme.tmpl
+var sqliteReadme []byte
+
 func SqliteReadmeTemplate() ([]byte, string) {
 	return sqliteReadme, "README.md"
+}
+
+//go:embed files/cmd/main.tmpl
+var sqliteMain []byte
+
+func SqliteMainTemplate() ([]byte, string) {
+	return sqliteMain, "cmd/main.go"
+}
+
+//go:embed files/internal/adapters/sqlite/repository.tmpl
+var sqliteRepository []byte
+
+func SqliteRepositoryTemplate() ([]byte, string) {
+	return sqliteRepository, "internal/adapters/sqlite/repository.go"
 }

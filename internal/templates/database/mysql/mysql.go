@@ -4,32 +4,25 @@ import (
 	_ "embed"
 )
 
-//go:embed files/internal/databases/mysql.tmpl
-var mysqlDatabase []byte
-
 //go:embed files/env.tmpl
 var mysqlEnv []byte
 
+func MysqlEnvTemplate() ([]byte, string) {
+	return mysqlEnv, ".env"
+}
+
 //go:embed files/docker-compose.tmpl
 var mysqlDockerCompose []byte
+
+func MysqlDockerComposeTemplate() ([]byte, string) {
+	return mysqlDockerCompose, "docker-compose.yml"
+}
 
 //go:embed files/cmd/main.tmpl
 var mysqlMain []byte
 
 func MysqlMainTemplate() ([]byte, string) {
 	return mysqlMain, "cmd/main.go"
-}
-
-func MysqlDockerComposeTemplate() ([]byte, string) {
-	return mysqlDockerCompose, "docker-compose.yml"
-}
-
-func MysqlDatabaseTemplate() ([]byte, string) {
-	return mysqlDatabase, "internal/databases/mysql.go"
-}
-
-func MysqlEnvTemplate() ([]byte, string) {
-	return mysqlEnv, ".env"
 }
 
 //go:embed files/makefile.tmpl
@@ -44,4 +37,11 @@ var mysqlReadme []byte
 
 func MysqlReadmeTemplate() ([]byte, string) {
 	return mysqlReadme, "README.md"
+}
+
+//go:embed files/internal/adapters/mysql/repository.tmpl
+var mysqlRepository []byte
+
+func MysqlRepositoryTemplate() ([]byte, string) {
+	return mysqlRepository, "internal/adapters/mysql/repository.go"
 }

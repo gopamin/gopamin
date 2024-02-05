@@ -1,0 +1,52 @@
+package mock
+
+import "{{.Name}}/internal/core/domain"
+
+type MockRepository struct {
+	Users         map[int]domain.User
+	SpyOnInsert   func(name string) (string, error)
+	SpyOnUpdate   func(id string, name string) (string, error)
+	SpyOnDelete   func(id string) (string, error)
+	SpyOnFetch    func(id string) (domain.User, error)
+	SpyOnFetchAll func() ([]domain.User, error)
+}
+
+func (m *MockRepository) Insert(name string) (string, error) {
+	if m.SpyOnInsert != nil {
+		return m.SpyOnInsert(name)
+	}
+
+	return "", nil
+}
+
+func (m *MockRepository) Update(id string, name string) (string, error) {
+	if m.SpyOnUpdate != nil {
+		return m.SpyOnUpdate(id, name)
+	}
+
+	return "", nil
+}
+
+func (m *MockRepository) Delete(id string) (string, error) {
+	if m.SpyOnDelete != nil {
+		return m.SpyOnDelete(id)
+	}
+
+	return "", nil
+}
+
+func (m *MockRepository) Fetch(id string) (domain.User, error) {
+	if m.SpyOnFetch != nil {
+		return m.SpyOnFetch(id)
+	}
+
+	return domain.User{}, nil
+}
+
+func (m *MockRepository) FetchAll() ([]domain.User, error) {
+	if m.SpyOnFetchAll != nil {
+		return m.SpyOnFetchAll()
+	}
+
+	return []domain.User{}, nil
+}

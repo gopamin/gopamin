@@ -5,7 +5,15 @@ type mysqlBuilder struct {
 }
 
 func (m *mysqlBuilder) build() {
-	fileGenerator([]string{"mysql-database"}, m.project)
+	fileGenerator([]string{"mock-repository"}, m.project)
+	fileGenerator([]string{"user-test"}, m.project)
+	fileGenerator([]string{"user"}, m.project)
+	fileGenerator([]string{"user-repository-interface"}, m.project)
+	fileGenerator([]string{"user-service-interface"}, m.project)
+	fileGenerator([]string{"user-service"}, m.project)
+	fileGenerator([]string{"user-service-test"}, m.project)
+
+	fileGenerator([]string{"mysql-repository"}, m.project)
 	fileGenerator([]string{"mysql-docker-compose"}, m.project)
 	goGetPackages(m.project.Path, []string{"github.com/go-sql-driver/mysql"})
 }
@@ -15,7 +23,15 @@ type postgresBuilder struct {
 }
 
 func (p *postgresBuilder) build() {
-	fileGenerator([]string{"postgres-database"}, p.project)
+	fileGenerator([]string{"mock-repository"}, p.project)
+	fileGenerator([]string{"user-test"}, p.project)
+	fileGenerator([]string{"user"}, p.project)
+	fileGenerator([]string{"user-repository-interface"}, p.project)
+	fileGenerator([]string{"user-service-interface"}, p.project)
+	fileGenerator([]string{"user-service"}, p.project)
+	fileGenerator([]string{"user-service-test"}, p.project)
+
+	fileGenerator([]string{"postgres-repository"}, p.project)
 	fileGenerator([]string{"postgres-docker-compose"}, p.project)
 	goGetPackages(p.project.Path, []string{"github.com/jackc/pgx/v5"})
 }
@@ -25,7 +41,15 @@ type mongodbBuilder struct {
 }
 
 func (m *mongodbBuilder) build() {
-	fileGenerator([]string{"mongodb-database"}, m.project)
+	fileGenerator([]string{"mock-repository"}, m.project)
+	fileGenerator([]string{"user-test"}, m.project)
+	fileGenerator([]string{"user"}, m.project)
+	fileGenerator([]string{"user-repository-interface"}, m.project)
+	fileGenerator([]string{"user-service-interface"}, m.project)
+	fileGenerator([]string{"user-service"}, m.project)
+	fileGenerator([]string{"user-service-test"}, m.project)
+
+	fileGenerator([]string{"mongodb-repository"}, m.project)
 	fileGenerator([]string{"mongodb-docker-compose"}, m.project)
 	goGetPackages(m.project.Path, []string{"go.mongodb.org/mongo-driver/mongo"})
 }
@@ -35,9 +59,18 @@ type dynamodbBuilder struct {
 }
 
 func (m *dynamodbBuilder) build() {
-	fileGenerator([]string{"dynamodb-database"}, m.project)
+	fileGenerator([]string{"mock-repository"}, m.project)
+	fileGenerator([]string{"user-test"}, m.project)
+	fileGenerator([]string{"user"}, m.project)
+	fileGenerator([]string{"user-repository-interface"}, m.project)
+	fileGenerator([]string{"user-service-interface"}, m.project)
+	fileGenerator([]string{"user-service"}, m.project)
+	fileGenerator([]string{"user-service-test"}, m.project)
+
+	fileGenerator([]string{"dynamodb-repository"}, m.project)
 	fileGenerator([]string{"dynamodb-docker-compose"}, m.project)
 	goGetPackages(m.project.Path, []string{
+		"github.com/google/uuid",
 		"github.com/aws/aws-sdk-go-v2",
 		"github.com/aws/aws-sdk-go-v2/aws",
 		"github.com/aws/aws-sdk-go-v2/config",
@@ -50,19 +83,38 @@ type redisBuilder struct {
 	project *Project
 }
 
-func (m *redisBuilder) build() {
-	fileGenerator([]string{"redis-database"}, m.project)
-	fileGenerator([]string{"redis-docker-compose"}, m.project)
-	goGetPackages(m.project.Path, []string{"github.com/redis/go-redis/v9"})
+func (r *redisBuilder) build() {
+	fileGenerator([]string{"mock-repository"}, r.project)
+	fileGenerator([]string{"user-test"}, r.project)
+	fileGenerator([]string{"user"}, r.project)
+	fileGenerator([]string{"user-repository-interface"}, r.project)
+	fileGenerator([]string{"user-service-interface"}, r.project)
+	fileGenerator([]string{"user-service"}, r.project)
+	fileGenerator([]string{"user-service-test"}, r.project)
+
+	fileGenerator([]string{"redis-repository"}, r.project)
+	fileGenerator([]string{"redis-docker-compose"}, r.project)
+	goGetPackages(r.project.Path, []string{
+		"github.com/redis/go-redis/v9",
+		"github.com/google/uuid",
+	})
 }
 
 type sqliteBuilder struct {
 	project *Project
 }
 
-func (m *sqliteBuilder) build() {
-	fileGenerator([]string{"sqlite-database"}, m.project)
-	goGetPackages(m.project.Path, []string{"github.com/mattn/go-sqlite3"})
+func (s *sqliteBuilder) build() {
+	fileGenerator([]string{"mock-repository"}, s.project)
+	fileGenerator([]string{"user-test"}, s.project)
+	fileGenerator([]string{"user"}, s.project)
+	fileGenerator([]string{"user-repository-interface"}, s.project)
+	fileGenerator([]string{"user-service-interface"}, s.project)
+	fileGenerator([]string{"user-service"}, s.project)
+	fileGenerator([]string{"user-service-test"}, s.project)
+
+	fileGenerator([]string{"sqlite-repository"}, s.project)
+	goGetPackages(s.project.Path, []string{"github.com/mattn/go-sqlite3"})
 }
 
 type databaseBuilderFactory func(p *Project) boilerplateBuilder

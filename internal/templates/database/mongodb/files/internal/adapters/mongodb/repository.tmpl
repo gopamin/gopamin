@@ -1,10 +1,13 @@
-package databases
+package mongodb
 
 import (
 	"context"
 	"fmt"
 	"log"
+	"{{.Name}}/internal/core/domain"
+	"{{.Name}}/internal/core/ports"
 	"os"
+	"strconv"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -14,16 +17,7 @@ import (
 
 const collectionName = "users"
 
-type Database interface {
-	GetCollection() *mongo.Collection
-	Insert(name string) (string, error)
-	Update(id string, newName string) (int64, error)
-	Delete(id string) (int64, error)
-	Fetch(id string) (User, error)
-	FetchAll() ([]User, error)
-}
-
-type User struct {
+type mongodbUser struct {
 	Id   primitive.ObjectID `json:"id" bson:"_id"`
 	Name string             `json:"name" bson:"name"`
 }
@@ -32,11 +26,18 @@ type connection struct {
 	db *mongo.Client
 }
 
-func New() Database {
-	host := os.Getenv("DB_HOST")
-	port := os.Getenv("DB_PORT")
-	username := os.Getenv("DB_USERNAME")
-	password := os.Getenv("DB_ROOT_PASSWORD")
+func mapMongodbToUser(m mongodbUser) domain.User {
+	return domain.User{
+		Id:   m.Id.Hex(),
+		Name: m.Name,
+	}
+}
+
+func New() ports.UserRepositoryInterface {
+	host := os.Getenv("MONGODB_HOST")
+	port := os.Getenv("MONGODB_PORT")
+	username := os.Getenv("MONGODB_USERNAME")
+	password := os.Getenv("MONGODB_PASSWORD")
 
 	mongoClient, err := mongo.Connect(context.Background(), options.Client().ApplyURI(fmt.Sprintf("mongodb://%s:%s@%s:%s", username, password, host, port)))
 	if err != nil {
@@ -49,7 +50,7 @@ func New() Database {
 }
 
 func (c *connection) GetCollection() *mongo.Collection {
-	database := os.Getenv("DB_NAME")
+	database := os.Getenv("MONGODB_NAME")
 
 	return c.db.Database(database).Collection(collectionName)
 }
@@ -73,10 +74,10 @@ func (c *connection) Insert(name string) (string, error) {
 	return insertedId.Hex(), nil
 }
 
-func (c *connection) Update(id string, name string) (int64, error) {
+func (c *connection) Update(id string, name string) (string, error) {
 	objectID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
-		return 0, err
+		return "", err
 	}
 
 	result, err := c.GetCollection().UpdateOne(
@@ -93,35 +94,35 @@ func (c *connection) Update(id string, name string) (int64, error) {
 		},
 	)
 	if err != nil {
-		return 0, err
+		return "", err
 	}
 
-	return result.ModifiedCount, nil
+	return strconv.FormatInt(result.ModifiedCount, 10), nil
 }
 
-func (c *connection) Delete(id string) (int64, error) {
+func (c *connection) Delete(id string) (string, error) {
 	objectID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
-		return 0, err
+		return "", err
 	}
 
 	result, err := c.GetCollection().DeleteOne(context.TODO(), bson.D{
 		{Key: "_id", Value: objectID},
 	})
 	if err != nil {
-		return 0, err
+		return "", err
 	}
 
-	return result.DeletedCount, nil
+	return strconv.FormatInt(result.DeletedCount, 10), nil
 }
 
-func (c *connection) Fetch(id string) (User, error) {
+func (c *connection) Fetch(id string) (domain.User, error) {
 	objectID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
-		return User{}, err
+		return domain.User{}, err
 	}
 
-	var user User
+	var user mongodbUser
 	filter := bson.D{
 		{Key: "_id", Value: objectID},
 	}
@@ -129,16 +130,16 @@ func (c *connection) Fetch(id string) (User, error) {
 	err = c.GetCollection().FindOne(context.TODO(), filter).Decode(&user)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
-			return User{}, fmt.Errorf("user not found with ID %s", id)
+			return domain.User{}, fmt.Errorf("user not found with ID %s", id)
 		}
-		return User{}, err
+		return domain.User{}, err
 	}
 
-	return user, nil
+	return mapMongodbToUser(user), nil
 }
 
-func (c *connection) FetchAll() ([]User, error) {
-	var users []User
+func (c *connection) FetchAll() ([]domain.User, error) {
+	var users []domain.User
 	cursor, err := c.GetCollection().Find(context.TODO(), bson.D{})
 	if err != nil {
 		return nil, err
@@ -146,11 +147,11 @@ func (c *connection) FetchAll() ([]User, error) {
 	defer cursor.Close(context.TODO())
 
 	for cursor.Next(context.TODO()) {
-		var user User
+		var user mongodbUser
 		if err := cursor.Decode(&user); err != nil {
 			return nil, err
 		}
-		users = append(users, user)
+		users = append(users, mapMongodbToUser(user))
 	}
 
 	if err := cursor.Err(); err != nil {

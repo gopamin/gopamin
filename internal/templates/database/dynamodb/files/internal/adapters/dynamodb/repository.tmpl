@@ -1,9 +1,11 @@
-package databases
+package dynamodb
 
 import (
 	"context"
 	"fmt"
 	"log"
+	"{{.Name}}/internal/core/domain"
+	"{{.Name}}/internal/core/ports"
 	"os"
 	"strconv"
 
@@ -13,20 +15,12 @@ import (
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+	"github.com/google/uuid"
 )
 
 const tableName = "users"
 
-type Database interface {
-	CreateTable() error
-	Insert(id, name string) (string, error)
-	Update(id, updatedName string) (string, error)
-	Delete(id string) (string, error)
-	Fetch(is string) (User, error)
-	FetchAll() ([]User, error)
-}
-
-type User struct {
+type dynamodbUser struct {
 	ID   string `json:"id" dynamodbav:"id"`
 	Name string `json:"name" dynamodbav:"firstName"`
 }
@@ -35,13 +29,20 @@ type connection struct {
 	db *dynamodb.Client
 }
 
-func New() Database {
-	databaseAccessKeyID := os.Getenv("DB_ACCESS_KEY_ID")
-	databaseSecretAccessKey := os.Getenv("DB_SECRET_ACCESS_KEY")
-	databaseSessionToken := os.Getenv("DB_SESSION_TOKEN")
-	databaseHost := os.Getenv("DB_HOST")
-	databaseRegion := os.Getenv("DB_REGION")
-	databasePort, err := strconv.Atoi(os.Getenv("DB_PORT"))
+func mapDynamodbToUser(d dynamodbUser) domain.User {
+	return domain.User{
+		Id:   d.ID,
+		Name: d.Name,
+	}
+}
+
+func New() ports.UserRepositoryInterface {
+	databaseAccessKeyID := os.Getenv("DYNAMODB_ACCESS_KEY_ID")
+	databaseSecretAccessKey := os.Getenv("DYNAMODB_SECRET_ACCESS_KEY")
+	databaseSessionToken := os.Getenv("DYNAMODB_SESSION_TOKEN")
+	databaseHost := os.Getenv("DYNAMODB_HOST")
+	databaseRegion := os.Getenv("DYNAMODB_REGION")
+	databasePort, err := strconv.Atoi(os.Getenv("DYNAMODB_PORT"))
 	if err != nil {
 		log.Fatal("Error converting DB_PORT to integer:", err)
 	}
@@ -63,6 +64,7 @@ func New() Database {
 	}
 
 	c := &connection{db: dynamodb.NewFromConfig(cfg)}
+	c.CreateTable()
 
 	return c
 }
@@ -101,12 +103,14 @@ func (c *connection) CreateTable() error {
 	return nil
 }
 
-func (c *connection) Insert(id, name string) (string, error) {
+func (c *connection) Insert(name string) (string, error) {
+	id := uuid.New()
+
 	item := map[string]types.AttributeValue{
-		"id":        &types.AttributeValueMemberS{Value: id},
+		"id":        &types.AttributeValueMemberS{Value: id.String()},
 		"firstName": &types.AttributeValueMemberS{Value: name},
 	}
-	result, err := c.db.PutItem(context.TODO(), &dynamodb.PutItemInput{
+	_, err := c.db.PutItem(context.TODO(), &dynamodb.PutItemInput{
 		TableName:           aws.String(tableName),
 		Item:                item,
 		ConditionExpression: aws.String("attribute_not_exists(PK)"),
@@ -116,11 +120,7 @@ func (c *connection) Insert(id, name string) (string, error) {
 		return "", err
 	}
 
-	if result.Attributes != nil {
-		return "ID already exits", nil
-	}
-
-	return fmt.Sprintf("new inserted ID: %v", id), nil
+	return id.String(), nil
 }
 
 func (c *connection) Update(id, updatedName string) (string, error) {
@@ -171,7 +171,7 @@ func (c *connection) Delete(id string) (string, error) {
 	return id, nil
 }
 
-func (c *connection) Fetch(id string) (User, error) {
+func (c *connection) Fetch(id string) (domain.User, error) {
 	input := &dynamodb.GetItemInput{
 		TableName: aws.String(tableName),
 		Key: map[string]types.AttributeValue{
@@ -181,24 +181,24 @@ func (c *connection) Fetch(id string) (User, error) {
 
 	result, err := c.db.GetItem(context.TODO(), input)
 	if err != nil {
-		return User{}, err
+		return domain.User{}, err
 	}
 
 	if len(result.Item) == 0 {
-		return User{}, fmt.Errorf("user not found with ID %s", id)
+		return domain.User{}, fmt.Errorf("user not found with ID %s", id)
 	}
 
-	var user User
+	var user dynamodbUser
 	err = attributevalue.UnmarshalMap(result.Item, &user)
 	if err != nil {
-		return User{}, err
+		return domain.User{}, err
 	}
 
-	return user, nil
+	return mapDynamodbToUser(user), nil
 }
 
-func (c *connection) FetchAll() ([]User, error) {
-	var users []User
+func (c *connection) FetchAll() ([]domain.User, error) {
+	var users []domain.User
 
 	input := &dynamodb.ScanInput{
 		TableName: aws.String(tableName),
@@ -212,12 +212,12 @@ func (c *connection) FetchAll() ([]User, error) {
 		}
 
 		for _, item := range page.Items {
-			var user User
+			var user dynamodbUser
 			err := attributevalue.UnmarshalMap(item, &user)
 			if err != nil {
 				return nil, err
 			}
-			users = append(users, user)
+			users = append(users, mapDynamodbToUser(user))
 		}
 	}
 

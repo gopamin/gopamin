@@ -1,40 +1,29 @@
-package databases
+package mysql
 
 import (
 	"database/sql"
 	"fmt"
 	"log"
+	"{{.Name}}/internal/core/domain"
+	"{{.Name}}/internal/core/ports"
 	"os"
+	"strconv"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
 const tableName = "users"
 
-type Database interface {
-	CreateTable() error
-	Insert(name string) (int64, error)
-	Update(id int, newName string) (int64, error)
-	Delete(id int) (int64, error)
-	Fetch(id int) (User, error)
-	FetchAll() ([]User, error)
-}
-
-type User struct {
-	Id   int    `json:"id"`
-	Name string `json:"name"`
-}
-
 type connection struct {
 	db *sql.DB
 }
 
-func New() Database {
-	databaseName := os.Getenv("DB_DATABASE")
-	databasePassword := os.Getenv("DB_PASSWORD")
-	databaseUsername := os.Getenv("DB_USERNAME")
-	databasePort := os.Getenv("DB_PORT")
-	databaseHost := os.Getenv("DB_HOST")
+func New() ports.UserRepositoryInterface {
+	databaseName := os.Getenv("MYSQL_DATABASE")
+	databasePassword := os.Getenv("MYSQL_PASSWORD")
+	databaseUsername := os.Getenv("MYSQL_USERNAME")
+	databasePort := os.Getenv("MYSQL_PORT")
+	databaseHost := os.Getenv("MYSQL_HOST")
 
 	db, err := sql.Open(
 		"mysql",
@@ -55,6 +44,7 @@ func New() Database {
 	db.SetMaxOpenConns(50)
 
 	c := &connection{db: db}
+	c.CreateTable()
 
 	return c
 }
@@ -73,7 +63,7 @@ func (c *connection) CreateTable() error {
 	return nil
 }
 
-func (c *connection) Insert(name string) (int64, error) {
+func (c *connection) Insert(name string) (string, error) {
 	result, err := c.db.Exec(
 		fmt.Sprintf(
 			"INSERT INTO %s (name) VALUES (?)",
@@ -82,15 +72,15 @@ func (c *connection) Insert(name string) (int64, error) {
 		name,
 	)
 	if err != nil {
-		return 0, err
+		return "", err
 	}
 
 	lastInsertID, _ := result.LastInsertId()
 
-	return lastInsertID, nil
+	return strconv.FormatInt(lastInsertID, 10), nil
 }
 
-func (c *connection) Update(id int, newName string) (int64, error) {
+func (c *connection) Update(id string, newName string) (string, error) {
 	result, err := c.db.Exec(
 		fmt.Sprintf(
 			"UPDATE %s SET name = ? WHERE id = ?",
@@ -100,15 +90,15 @@ func (c *connection) Update(id int, newName string) (int64, error) {
 		id,
 	)
 	if err != nil {
-		return 0, err
+		return "", err
 	}
 
 	rowsAffected, _ := result.RowsAffected()
 
-	return rowsAffected, nil
+	return strconv.FormatInt(rowsAffected, 10), nil
 }
 
-func (c *connection) Delete(id int) (int64, error) {
+func (c *connection) Delete(id string) (string, error) {
 	result, err := c.db.Exec(
 		fmt.Sprintf(
 			"DELETE FROM %s WHERE id = ?",
@@ -117,16 +107,16 @@ func (c *connection) Delete(id int) (int64, error) {
 		id,
 	)
 	if err != nil {
-		return 0, err
+		return "0", err
 	}
-	
+
 	rowsAffected, _ := result.RowsAffected()
 
-	return rowsAffected, nil
+	return strconv.FormatInt(rowsAffected, 10), nil
 }
 
-func (c *connection) Fetch(id int) (User, error) {
-	var user User
+func (c *connection) Fetch(id string) (domain.User, error) {
+	var user domain.User
 	row := c.db.QueryRow(
 		fmt.Sprintf(
 			"SELECT * FROM %s WHERE id = ?",
@@ -137,17 +127,17 @@ func (c *connection) Fetch(id int) (User, error) {
 
 	if err := row.Scan(&user.Id, &user.Name); err != nil {
 		if err == sql.ErrNoRows {
-			return User{}, fmt.Errorf("user not found with ID %d", id)
+			return domain.User{}, fmt.Errorf("user not found with ID %v", id)
 		} else {
-			return User{}, fmt.Errorf("error fetching data: %v", err)
+			return domain.User{}, fmt.Errorf("error fetching data: %v", err)
 		}
 	}
 
 	return user, nil
 }
 
-func (c *connection) FetchAll() ([]User, error) {
-	var users []User
+func (c *connection) FetchAll() ([]domain.User, error) {
+	var users []domain.User
 	rows, err := c.db.Query(
 		fmt.Sprintf(
 			"SELECT * FROM %s",
@@ -160,7 +150,7 @@ func (c *connection) FetchAll() ([]User, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		var user User
+		var user domain.User
 		if err := rows.Scan(&user.Id, &user.Name); err != nil {
 			return nil, err
 		}
