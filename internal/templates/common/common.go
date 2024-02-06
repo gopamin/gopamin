@@ -32,11 +32,11 @@ func GitIgnoreTemplate() ([]byte, string) {
 	return gitIgnore, ".gitignore"
 }
 
-//go:embed files/internal/adapters/mock/repository.tmpl
+//go:embed files/internal/adapters/repositories/mock/repository.tmpl
 var mockRepository []byte
 
 func MockRepositoryTemplate() ([]byte, string) {
-	return mockRepository, "internal/adapters/mock/repository.go"
+	return mockRepository, "internal/adapters/repositories/mock/repository.go"
 }
 
 //go:embed files/internal/core/domain/user_test.tmpl

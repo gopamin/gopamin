@@ -32,9 +32,9 @@ func SqliteMainTemplate() ([]byte, string) {
 	return sqliteMain, "cmd/main.go"
 }
 
-//go:embed files/internal/adapters/sqlite/repository.tmpl
+//go:embed files/internal/adapters/repositories/sqlite/repository.tmpl
 var sqliteRepository []byte
 
 func SqliteRepositoryTemplate() ([]byte, string) {
-	return sqliteRepository, "internal/adapters/sqlite/repository.go"
+	return sqliteRepository, "internal/adapters/repositories/sqlite/repository.go"
 }

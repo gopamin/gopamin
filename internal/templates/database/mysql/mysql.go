@@ -39,9 +39,9 @@ func MysqlReadmeTemplate() ([]byte, string) {
 	return mysqlReadme, "README.md"
 }
 
-//go:embed files/internal/adapters/mysql/repository.tmpl
+//go:embed files/internal/adapters/repositories/mysql/repository.tmpl
 var mysqlRepository []byte
 
 func MysqlRepositoryTemplate() ([]byte, string) {
-	return mysqlRepository, "internal/adapters/mysql/repository.go"
+	return mysqlRepository, "internal/adapters/repositories/mysql/repository.go"
 }

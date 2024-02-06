@@ -39,7 +39,7 @@ func MongodbMainTemplate() ([]byte, string) {
 	return mongodbMain, "cmd/main.go"
 }
 
-//go:embed files/internal/adapters/mongodb/repository.tmpl
+//go:embed files/internal/adapters/repositories/mongodb/repository.tmpl
 var mongodbRepository []byte
 
 func MongodbRepositoryTemplate() ([]byte, string) {

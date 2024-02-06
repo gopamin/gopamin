@@ -39,9 +39,9 @@ func RedisMainTemplate() ([]byte, string) {
 	return redisMain, "cmd/main.go"
 }
 
-//go:embed files/internal/adapters/redis/repository.tmpl
+//go:embed files/internal/adapters/repositories/redis/repository.tmpl
 var redisRepository []byte
 
 func RedisRepositoryTemplate() ([]byte, string) {
-	return redisRepository, "internal/adapters/redis/repository.go"
+	return redisRepository, "internal/adapters/repositories/redis/repository.go"
 }

@@ -39,9 +39,9 @@ func PostgresMainTemplate() ([]byte, string) {
 	return postgresMain, "cmd/main.go"
 }
 
-//go:embed files/internal/adapters/postgres/repository.tmpl
+//go:embed files/internal/adapters/repositories/postgres/repository.tmpl
 var postgresRepository []byte
 
 func PostgresRepositoryTemplate() ([]byte, string) {
-	return postgresRepository, "internal/adapters/postgres/repository.go"
+	return postgresRepository, "internal/adapters/repositories/postgres/repository.go"
 }

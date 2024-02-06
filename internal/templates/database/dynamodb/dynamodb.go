@@ -39,9 +39,9 @@ func DynamodbMainTemplate() ([]byte, string) {
 	return dynamodbMain, "cmd/main.go"
 }
 
-//go:embed files/internal/adapters/dynamodb/repository.tmpl
+//go:embed files/internal/adapters/repositories/dynamodb/repository.tmpl
 var dynamodbRepository []byte
 
 func DynamodbRepositoryTemplate() ([]byte, string) {
-	return dynamodbRepository, "internal/adapters/dynamodb/repository.go"
+	return dynamodbRepository, "internal/adapters/repositories/dynamodb/repository.go"
 }
