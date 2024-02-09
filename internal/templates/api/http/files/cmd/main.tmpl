@@ -1,8 +1,11 @@
 package main
 
 import (
+	"{{.Name}}/cmd/server"
 	"{{.Name}}/configs"
-	"{{.Name}}/internal/api/server"
+	built_in_http "{{.Name}}/internal/adapters/handlers/built-in-http"
+	"{{.Name}}/internal/adapters/repositories/mock"
+	"{{.Name}}/internal/core/services"
 )
 
 func init() {
@@ -10,5 +13,8 @@ func init() {
 }
 
 func main() {
-	server.Init()
+	db := &mock.MockRepository{}
+	service := services.NewUserService(db)
+	handlers := built_in_http.NewRouter(service)
+	server.Serve(handlers)
 }

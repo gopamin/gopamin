@@ -1,7 +1,12 @@
 package templates
 
 import (
+	apiChi "github.com/gopamin/cli/internal/templates/api/chi"
+	apiEcho "github.com/gopamin/cli/internal/templates/api/echo"
+	apiGin "github.com/gopamin/cli/internal/templates/api/gin"
+	apiGorilla "github.com/gopamin/cli/internal/templates/api/gorilla"
 	apiHttp "github.com/gopamin/cli/internal/templates/api/http"
+	apiHttprouter "github.com/gopamin/cli/internal/templates/api/httprouter"
 	common "github.com/gopamin/cli/internal/templates/common"
 	dynamodb "github.com/gopamin/cli/internal/templates/database/dynamodb"
 	mongodb "github.com/gopamin/cli/internal/templates/database/mongodb"
@@ -25,22 +30,58 @@ func Mapper() map[string]func() ([]byte, string) {
 		"user-service-interface":    common.UserServiceInterfaceTemplate,
 		"user-service":              common.UserServiceTemplate,
 		"user-service-test":         common.UserServiceTestTemplate,
+		"router-inferface":          common.RouterInterfaceTemplate,
+		"api-errors":                common.ApiErrorsTemplate,
+		"api-response":              common.ApiResponseTemplate,
+		"load-env":                  common.LoadEnvTemplate,
+		"api-server":                common.ApiServerTemplate,
 
 		"hello-world-main":     helloWorld.HelloWorldMainTemplate,
-		"hello-world-load-env": helloWorld.HelloWoldLoadEnvTemplate,
 		"hello-world-readme":   helloWorld.HelloWorldReadmeTemplate,
 		"hello-world-makefile": helloWorld.HelloWorldMakefileTemplate,
 		"hello-world-env":      helloWorld.HelloWorldEnvTemplate,
 
 		"api-http-main":     apiHttp.ApiHttpMainTemplate,
-		"api-http-load-env": apiHttp.ApiHttpLoadEnvTemplate,
 		"api-http-readme":   apiHttp.ApiHttpReadmeTemplate,
 		"api-http-makefile": apiHttp.ApiHttpMakefileTemplate,
 		"api-http-env":      apiHttp.ApiHttpEnvTemplate,
-		"api-http-handlers": apiHttp.ApiHttpUsersHandlerTemplate,
 		"api-http-routes":   apiHttp.ApiHttpRoutesTemplate,
-		"api-http-server":   apiHttp.ApiHttpServerTemplate,
-		"api-http-services": apiHttp.ApiHttpUsersServiceTemplate,
+		"api-http-users":    apiHttp.ApiHttpUsersTemplate,
+
+		"api-chi-main":     apiChi.ApiChiMainTemplate,
+		"api-chi-readme":   apiChi.ApiChiReadmeTemplate,
+		"api-chi-makefile": apiChi.ApiChiMakefileTemplate,
+		"api-chi-env":      apiChi.ApiChiEnvTemplate,
+		"api-chi-routes":   apiChi.ApiChiRoutesTemplate,
+		"api-chi-users":    apiChi.ApiChiUsersTemplate,
+
+		"api-echo-main":     apiEcho.ApiEchoMainTemplate,
+		"api-echo-readme":   apiEcho.ApiEchoReadmeTemplate,
+		"api-echo-makefile": apiEcho.ApiEchoMakefileTemplate,
+		"api-echo-env":      apiEcho.ApiEchoEnvTemplate,
+		"api-echo-routes":   apiEcho.ApiEchoRoutesTemplate,
+		"api-echo-users":    apiEcho.ApiEchoUsersTemplate,
+
+		"api-gin-main":     apiGin.ApiGinMainTemplate,
+		"api-gin-readme":   apiGin.ApiGinReadmeTemplate,
+		"api-gin-makefile": apiGin.ApiGinMakefileTemplate,
+		"api-gin-env":      apiGin.ApiGinEnvTemplate,
+		"api-gin-routes":   apiGin.ApiGinRoutesTemplate,
+		"api-gin-users":    apiGin.ApiGinUsersTemplate,
+
+		"api-gorilla-main":     apiGorilla.ApiGorillaMainTemplate,
+		"api-gorilla-readme":   apiGorilla.ApiGorillaReadmeTemplate,
+		"api-gorilla-makefile": apiGorilla.ApiGorillaMakefileTemplate,
+		"api-gorilla-env":      apiGorilla.ApiGorillaEnvTemplate,
+		"api-gorilla-routes":   apiGorilla.ApiGorillaRoutesTemplate,
+		"api-gorilla-users":    apiGorilla.ApiGorillaUsersTemplate,
+
+		"api-httprouter-main":     apiHttprouter.ApiHttprouterMainTemplate,
+		"api-httprouter-readme":   apiHttprouter.ApiHttprouterReadmeTemplate,
+		"api-httprouter-makefile": apiHttprouter.ApiHttprouterMakefileTemplate,
+		"api-httprouter-env":      apiHttprouter.ApiHttprouterEnvTemplate,
+		"api-httprouter-routes":   apiHttprouter.ApiHttprouterRoutesTemplate,
+		"api-httprouter-users":    apiHttprouter.ApiHttprouterUsersTemplate,
 
 		"mysql-env":            mysql.MysqlEnvTemplate,
 		"mysql-main":           mysql.MysqlMainTemplate,

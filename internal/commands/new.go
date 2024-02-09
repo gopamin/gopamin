@@ -31,7 +31,7 @@ If you want to space-separated words, place them inside double quotes like "my d
 	newCmd.Flags().StringVarP(&projectType, "type", "t", "", `Type of the project. Available types are as follows:
  - hello-world (A simple "Hello World" app without any extra functionalities)
  - web-app (A minital web applicaion which serves an HTML file)
- - microservice (If chosen, you also MUST add the "-p" flag to specify the type of the microservice you want to create)
+ - microservice NOT_IMPLEMENTED_YET!!! (If chosen, you also MUST add the "-p" flag to specify the type of the microservice you want to create)
  - api (If chosen, you also MUST add the "-p" flag to specify the type of the third-party platform you want to use)`)
 
 	newCmd.Flags().StringVarP(&platform, "platform", "p", "", `If the chosen "--type" is either "api" or "microservice", you also Must add the "-p" flag to specify the underlying third-party platform.
@@ -39,15 +39,14 @@ Available values for the "api" type are as follows:
  - echo
  - chi
  - gin
- - fiber
  - httprouter
  - gorilla
  - http (The build-in HTTP client will be used)
- - graphql
+ - graphql NOT_IMPLEMENTED_YET!!!
 Available values for the "microservice" type are as follows:
-- grpc 
-- kafka
-- rabbitmq`)
+- grpc NOT_IMPLEMENTED_YET!!!
+- kafka NOT_IMPLEMENTED_YET!!!
+- rabbitmq NOT_IMPLEMENTED_YET!!!`)
 
 	newCmd.Flags().StringVarP(&database, "database", "d", "", `Type of the database. Available values are as follows:
  - mysql
@@ -56,11 +55,5 @@ Available values for the "microservice" type are as follows:
  - sqlite
  - dynamodb
  - redis`)
-
-	// TODO
-	// 	newCmd.Flags().BoolVarP(&isClean, "clean", "c", false, `For this flag, you don't need to specify any value; if interested, simply add either "--clean" or "-c" to your command (By default, it's falsy).
-	// What this flag does is that is implements the Clean Architecture for your project (Other names for it in the community are Hexagon, Onion, Layered etc).
-	// To familiarize yourself with this architecture style, please visit: https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html`)
-
 	rootCmd.AddCommand(newCmd)
 }

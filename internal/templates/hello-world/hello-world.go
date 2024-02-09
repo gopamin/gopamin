@@ -4,13 +4,6 @@ import (
 	_ "embed"
 )
 
-//go:embed files/configs/load-env.tmpl
-var helloWorldLoadEnv []byte
-
-func HelloWoldLoadEnvTemplate() ([]byte, string) {
-	return helloWorldLoadEnv, "configs/load-env.go"
-}
-
 //go:embed files/env.tmpl
 var helloWorldEnv []byte
 

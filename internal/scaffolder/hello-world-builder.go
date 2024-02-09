@@ -24,7 +24,7 @@ func (h *helloWorldProjectBuilder) build() {
 	fileGenerator(main, h.project)
 	fileGenerator(readme, h.project)
 	fileGenerator(makefile, h.project)
-	fileGenerator([]string{"hello-world-load-env"}, h.project)
+	fileGenerator([]string{"load-env"}, h.project)
 
 	fmt.Printf("%v project created successfully", h.project.Name)
 }

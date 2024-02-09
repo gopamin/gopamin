@@ -80,3 +80,38 @@ var userServiceTest []byte
 func UserServiceTestTemplate() ([]byte, string) {
 	return userServiceTest, "internal/core/services/user.service_test.go"
 }
+
+//go:embed files/internal/core/ports/router.interface.tmpl
+var routerInferface []byte
+
+func RouterInterfaceTemplate() ([]byte, string) {
+	return routerInferface, "internal/core/ports/router.interface.go"
+}
+
+//go:embed files/internal/core/api/errors.tmpl
+var apiErrors []byte
+
+func ApiErrorsTemplate() ([]byte, string) {
+	return apiErrors, "internal/core/api/errors.go"
+}
+
+//go:embed files/internal/core/api/response.tmpl
+var apiResponse []byte
+
+func ApiResponseTemplate() ([]byte, string) {
+	return apiResponse, "internal/core/api/response.go"
+}
+
+//go:embed files/configs/load-env.tmpl
+var loadEnv []byte
+
+func LoadEnvTemplate() ([]byte, string) {
+	return loadEnv, "configs/load-env.go"
+}
+
+//go:embed files/cmd/server/server.tmpl
+var apiServer []byte
+
+func ApiServerTemplate() ([]byte, string) {
+	return apiServer, "cmd/server/server.go"
+}
