@@ -25,13 +25,6 @@ func ApiEchoReadmeTemplate() ([]byte, string) {
 	return apiEchoReadme, "README.md"
 }
 
-//go:embed files/cmd/main.tmpl
-var apiEchoMain []byte
-
-func ApiEchoMainTemplate() ([]byte, string) {
-	return apiEchoMain, "cmd/main.go"
-}
-
 //go:embed files/internal/adapters/handlers/echo/routes.tmpl
 var apiEchoRoutes []byte
 

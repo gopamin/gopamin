@@ -25,13 +25,6 @@ func ApiGinReadmeTemplate() ([]byte, string) {
 	return apiGinReadme, "README.md"
 }
 
-//go:embed files/cmd/main.tmpl
-var apiGinMain []byte
-
-func ApiGinMainTemplate() ([]byte, string) {
-	return apiGinMain, "cmd/main.go"
-}
-
 //go:embed files/internal/adapters/handlers/gin/routes.tmpl
 var apiGinRoutes []byte
 

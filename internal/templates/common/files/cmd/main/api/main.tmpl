@@ -3,7 +3,7 @@ package main
 import (
 	"{{.Name}}/cmd/server"
 	"{{.Name}}/configs"
-	"{{.Name}}/internal/adapters/handlers/gorilla"
+	"{{.Name}}/internal/adapters/handlers/{{.Platform}}"
 	"{{.Name}}/internal/adapters/repositories/mock"
 	"{{.Name}}/internal/core/services"
 )
@@ -15,6 +15,6 @@ func init() {
 func main() {
 	db := &mock.MockRepository{}
 	service := services.NewUserService(db)
-	handlers := gorilla.NewRouter(service)
+	handlers := {{.Platform}}.NewRouter(service)
 	server.Serve(handlers)
 }

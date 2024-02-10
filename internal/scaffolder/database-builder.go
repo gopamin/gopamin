@@ -117,6 +117,20 @@ func (s *sqliteBuilder) build() {
 	goGetPackages(s.project.Path, []string{"github.com/mattn/go-sqlite3"})
 }
 
+type mockBuilder struct {
+	project *Project
+}
+
+func (s *mockBuilder) build() {
+	fileGenerator([]string{"mock-repository"}, s.project)
+	fileGenerator([]string{"user-test"}, s.project)
+	fileGenerator([]string{"user"}, s.project)
+	fileGenerator([]string{"user-repository-interface"}, s.project)
+	fileGenerator([]string{"user-service-interface"}, s.project)
+	fileGenerator([]string{"user-service"}, s.project)
+	fileGenerator([]string{"user-service-test"}, s.project)
+}
+
 type databaseBuilderFactory func(p *Project) boilerplateBuilder
 
 var databaseBuilderMap = map[string]databaseBuilderFactory{
@@ -137,5 +151,8 @@ var databaseBuilderMap = map[string]databaseBuilderFactory{
 	},
 	"sqlite": func(p *Project) boilerplateBuilder {
 		return &sqliteBuilder{p}
+	},
+	"mock": func(p *Project) boilerplateBuilder {
+		return &mockBuilder{p}
 	},
 }

@@ -25,13 +25,6 @@ func ApiHttprouterReadmeTemplate() ([]byte, string) {
 	return apiHttprouterReadme, "README.md"
 }
 
-//go:embed files/cmd/main.tmpl
-var apiHttprouterMain []byte
-
-func ApiHttprouterMainTemplate() ([]byte, string) {
-	return apiHttprouterMain, "cmd/main.go"
-}
-
 //go:embed files/internal/adapters/handlers/httprouter/routes.tmpl
 var apiHttprouterRoutes []byte
 

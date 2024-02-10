@@ -43,5 +43,5 @@ func MongodbMainTemplate() ([]byte, string) {
 var mongodbRepository []byte
 
 func MongodbRepositoryTemplate() ([]byte, string) {
-	return mongodbRepository, "internal/adapters/mongodb/repository.go"
+	return mongodbRepository, "internal/adapters/repositories/mongodb/repository.go"
 }

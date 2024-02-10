@@ -25,23 +25,16 @@ func ApiHttpReadmeTemplate() ([]byte, string) {
 	return apiHttpReadme, "README.md"
 }
 
-//go:embed files/cmd/main.tmpl
-var apiHttpMain []byte
-
-func ApiHttpMainTemplate() ([]byte, string) {
-	return apiHttpMain, "cmd/main.go"
-}
-
-//go:embed files/internal/adapters/handlers/built-in-http/routes.tmpl
+//go:embed files/internal/adapters/handlers/http/routes.tmpl
 var apiHttpRoutes []byte
 
 func ApiHttpRoutesTemplate() ([]byte, string) {
-	return apiHttpRoutes, "internal/adapters/handlers/built-in-http/routes.go"
+	return apiHttpRoutes, "internal/adapters/handlers/http/routes.go"
 }
 
-//go:embed files/internal/adapters/handlers/built-in-http/users.tmpl
+//go:embed files/internal/adapters/handlers/http/users.tmpl
 var apiHttpUsers []byte
 
 func ApiHttpUsersTemplate() ([]byte, string) {
-	return apiHttpUsers, "internal/adapters/handlers/built-in-http/users.go"
+	return apiHttpUsers, "internal/adapters/handlers/http/users.go"
 }

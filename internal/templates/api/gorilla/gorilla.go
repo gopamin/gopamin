@@ -25,13 +25,6 @@ func ApiGorillaReadmeTemplate() ([]byte, string) {
 	return apiGorillaReadme, "README.md"
 }
 
-//go:embed files/cmd/main.tmpl
-var apiGorillaMain []byte
-
-func ApiGorillaMainTemplate() ([]byte, string) {
-	return apiGorillaMain, "cmd/main.go"
-}
-
 //go:embed files/internal/adapters/handlers/gorilla/routes.tmpl
 var apiGorillaRoutes []byte
 

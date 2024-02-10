@@ -14,173 +14,220 @@ type echoBuilder struct {
 	project *Project
 }
 
-func (e *echoBuilder) build() {
-	fileGenerator([]string{"api-echo-main"}, e.project)
-	fileGenerator([]string{"api-echo-env"}, e.project)
-	fileGenerator([]string{"api-echo-readme"}, e.project)
-	fileGenerator([]string{"api-echo-makefile"}, e.project)
-	fileGenerator([]string{"load-env"}, e.project)
-	fileGenerator([]string{"api-server"}, e.project)
-	fileGenerator([]string{"api-echo-routes"}, e.project)
-	fileGenerator([]string{"api-echo-users"}, e.project)
-	fileGenerator([]string{"api-errors"}, e.project)
-	fileGenerator([]string{"api-response"}, e.project)
+func (b *echoBuilder) build() {
+	env := []string{"api-echo-env"}
+	readme := []string{"api-echo-readme"}
+	makefile := []string{"api-echo-makefile"}
 
-	fileGenerator([]string{"mock-repository"}, e.project)
-	fileGenerator([]string{"user-test"}, e.project)
-	fileGenerator([]string{"user"}, e.project)
-	fileGenerator([]string{"user-repository-interface"}, e.project)
-	fileGenerator([]string{"router-inferface"}, e.project)
-	fileGenerator([]string{"user-service-interface"}, e.project)
-	fileGenerator([]string{"user-service"}, e.project)
-	fileGenerator([]string{"user-service-test"}, e.project)
-	goGetPackages(e.project.Path, []string{"github.com/labstack/echo/v4"})
+	if b.project.Database == "" {
+		b.project.Database = "mock"
+		dbSelector(b.project)
+		fileGenerator([]string{"api-main"}, b.project)
+	} else {
+		fileGenerator([]string{"api-main-with-db"}, b.project)
+		readme = append(readme, b.project.Database+"-readme")
+		makefile = append(makefile, b.project.Database+"-makefile")
+		env = append(env, b.project.Database+"-env")
+		dbSelector(b.project)
+	}
 
-	fmt.Printf("%v project created successfully", e.project.Name)
+	fileGenerator(env, b.project)
+	fileGenerator(readme, b.project)
+	fileGenerator(makefile, b.project)
+	fileGenerator([]string{"load-env"}, b.project)
+	fileGenerator([]string{"api-server"}, b.project)
+	fileGenerator([]string{"api-echo-routes"}, b.project)
+	fileGenerator([]string{"api-echo-users"}, b.project)
+	fileGenerator([]string{"api-errors"}, b.project)
+	fileGenerator([]string{"api-response"}, b.project)
+	fileGenerator([]string{"router-inferface"}, b.project)
+
+	goGetPackages(b.project.Path, []string{"github.com/labstack/echo/v4"})
+
+	fmt.Printf("%v project created successfully", b.project.Name)
 }
 
 type chiBuilder struct {
 	project *Project
 }
 
-func (c *chiBuilder) build() {
-	fileGenerator([]string{"api-chi-main"}, c.project)
-	fileGenerator([]string{"api-chi-env"}, c.project)
-	fileGenerator([]string{"api-chi-readme"}, c.project)
-	fileGenerator([]string{"api-chi-makefile"}, c.project)
-	fileGenerator([]string{"load-env"}, c.project)
-	fileGenerator([]string{"api-server"}, c.project)
-	fileGenerator([]string{"api-chi-routes"}, c.project)
-	fileGenerator([]string{"api-chi-users"}, c.project)
-	fileGenerator([]string{"api-errors"}, c.project)
-	fileGenerator([]string{"api-response"}, c.project)
+func (b *chiBuilder) build() {
+	env := []string{"api-chi-env"}
+	readme := []string{"api-chi-readme"}
+	makefile := []string{"api-chi-makefile"}
 
-	fileGenerator([]string{"mock-repository"}, c.project)
-	fileGenerator([]string{"user-test"}, c.project)
-	fileGenerator([]string{"user"}, c.project)
-	fileGenerator([]string{"user-repository-interface"}, c.project)
-	fileGenerator([]string{"router-inferface"}, c.project)
-	fileGenerator([]string{"user-service-interface"}, c.project)
-	fileGenerator([]string{"user-service"}, c.project)
-	fileGenerator([]string{"user-service-test"}, c.project)
-	goGetPackages(c.project.Path, []string{"github.com/go-chi/chi/v5"})
+	if b.project.Database == "" {
+		b.project.Database = "mock"
+		dbSelector(b.project)
+		fileGenerator([]string{"api-main"}, b.project)
+	} else {
+		fileGenerator([]string{"api-main-with-db"}, b.project)
+		readme = append(readme, b.project.Database+"-readme")
+		makefile = append(makefile, b.project.Database+"-makefile")
+		env = append(env, b.project.Database+"-env")
+		dbSelector(b.project)
+	}
 
-	fmt.Printf("%v project created successfully", c.project.Name)
+	fileGenerator(env, b.project)
+	fileGenerator(readme, b.project)
+	fileGenerator(makefile, b.project)
+	fileGenerator([]string{"load-env"}, b.project)
+	fileGenerator([]string{"api-server"}, b.project)
+	fileGenerator([]string{"api-chi-routes"}, b.project)
+	fileGenerator([]string{"api-chi-users"}, b.project)
+	fileGenerator([]string{"api-errors"}, b.project)
+	fileGenerator([]string{"api-response"}, b.project)
+	fileGenerator([]string{"router-inferface"}, b.project)
+
+	goGetPackages(b.project.Path, []string{"github.com/go-chi/chi/v5"})
+
+	fmt.Printf("%v project created successfully", b.project.Name)
 }
 
 type ginBuilder struct {
 	project *Project
 }
 
-func (g *ginBuilder) build() {
-	fileGenerator([]string{"api-gin-main"}, g.project)
-	fileGenerator([]string{"api-gin-env"}, g.project)
-	fileGenerator([]string{"api-gin-readme"}, g.project)
-	fileGenerator([]string{"api-gin-makefile"}, g.project)
-	fileGenerator([]string{"load-env"}, g.project)
-	fileGenerator([]string{"api-server"}, g.project)
-	fileGenerator([]string{"api-gin-routes"}, g.project)
-	fileGenerator([]string{"api-gin-users"}, g.project)
-	fileGenerator([]string{"api-errors"}, g.project)
-	fileGenerator([]string{"api-response"}, g.project)
+func (b *ginBuilder) build() {
+	env := []string{"api-gin-env"}
+	readme := []string{"api-gin-readme"}
+	makefile := []string{"api-gin-makefile"}
 
-	fileGenerator([]string{"mock-repository"}, g.project)
-	fileGenerator([]string{"user-test"}, g.project)
-	fileGenerator([]string{"user"}, g.project)
-	fileGenerator([]string{"user-repository-interface"}, g.project)
-	fileGenerator([]string{"router-inferface"}, g.project)
-	fileGenerator([]string{"user-service-interface"}, g.project)
-	fileGenerator([]string{"user-service"}, g.project)
-	fileGenerator([]string{"user-service-test"}, g.project)
-	goGetPackages(g.project.Path, []string{"github.com/gin-gonic/gin"})
+	if b.project.Database == "" {
+		b.project.Database = "mock"
+		dbSelector(b.project)
+		fileGenerator([]string{"api-main"}, b.project)
+	} else {
+		fileGenerator([]string{"api-main-with-db"}, b.project)
+		readme = append(readme, b.project.Database+"-readme")
+		makefile = append(makefile, b.project.Database+"-makefile")
+		env = append(env, b.project.Database+"-env")
+		dbSelector(b.project)
+	}
 
-	fmt.Printf("%v project created successfully", g.project.Name)
+	fileGenerator(env, b.project)
+	fileGenerator(readme, b.project)
+	fileGenerator(makefile, b.project)
+	fileGenerator([]string{"load-env"}, b.project)
+	fileGenerator([]string{"api-server"}, b.project)
+	fileGenerator([]string{"api-gin-routes"}, b.project)
+	fileGenerator([]string{"api-gin-users"}, b.project)
+	fileGenerator([]string{"api-errors"}, b.project)
+	fileGenerator([]string{"api-response"}, b.project)
+	fileGenerator([]string{"router-inferface"}, b.project)
+
+	goGetPackages(b.project.Path, []string{"github.com/gin-gonic/gin"})
+
+	fmt.Printf("%v project created successfully", b.project.Name)
 }
 
 type httprouterBuilder struct {
 	project *Project
 }
 
-func (h *httprouterBuilder) build() {
-	fileGenerator([]string{"api-httprouter-main"}, h.project)
-	fileGenerator([]string{"api-httprouter-env"}, h.project)
-	fileGenerator([]string{"api-httprouter-readme"}, h.project)
-	fileGenerator([]string{"api-httprouter-makefile"}, h.project)
-	fileGenerator([]string{"load-env"}, h.project)
-	fileGenerator([]string{"api-server"}, h.project)
-	fileGenerator([]string{"api-httprouter-routes"}, h.project)
-	fileGenerator([]string{"api-httprouter-users"}, h.project)
-	fileGenerator([]string{"api-errors"}, h.project)
-	fileGenerator([]string{"api-response"}, h.project)
+func (b *httprouterBuilder) build() {
+	env := []string{"api-httprouter-env"}
+	readme := []string{"api-httprouter-readme"}
+	makefile := []string{"api-httprouter-makefile"}
 
-	fileGenerator([]string{"mock-repository"}, h.project)
-	fileGenerator([]string{"user-test"}, h.project)
-	fileGenerator([]string{"user"}, h.project)
-	fileGenerator([]string{"user-repository-interface"}, h.project)
-	fileGenerator([]string{"router-inferface"}, h.project)
-	fileGenerator([]string{"user-service-interface"}, h.project)
-	fileGenerator([]string{"user-service"}, h.project)
-	fileGenerator([]string{"user-service-test"}, h.project)
-	goGetPackages(h.project.Path, []string{"github.com/julienschmidt/httprouter"})
+	if b.project.Database == "" {
+		b.project.Database = "mock"
+		dbSelector(b.project)
+		fileGenerator([]string{"api-main"}, b.project)
+	} else {
+		fileGenerator([]string{"api-main-with-db"}, b.project)
+		readme = append(readme, b.project.Database+"-readme")
+		makefile = append(makefile, b.project.Database+"-makefile")
+		env = append(env, b.project.Database+"-env")
+		dbSelector(b.project)
+	}
 
-	fmt.Printf("%v project created successfully", h.project.Name)
+	fileGenerator(env, b.project)
+	fileGenerator(readme, b.project)
+	fileGenerator(makefile, b.project)
+	fileGenerator([]string{"load-env"}, b.project)
+	fileGenerator([]string{"api-server"}, b.project)
+	fileGenerator([]string{"api-httprouter-routes"}, b.project)
+	fileGenerator([]string{"api-httprouter-users"}, b.project)
+	fileGenerator([]string{"api-errors"}, b.project)
+	fileGenerator([]string{"api-response"}, b.project)
+	fileGenerator([]string{"router-inferface"}, b.project)
+
+	goGetPackages(b.project.Path, []string{"github.com/julienschmidt/httprouter"})
+
+	fmt.Printf("%v project created successfully", b.project.Name)
 }
 
 type gorillaBuilder struct {
 	project *Project
 }
 
-func (g *gorillaBuilder) build() {
-	fileGenerator([]string{"api-gorilla-main"}, g.project)
-	fileGenerator([]string{"api-gorilla-env"}, g.project)
-	fileGenerator([]string{"api-gorilla-readme"}, g.project)
-	fileGenerator([]string{"api-gorilla-makefile"}, g.project)
-	fileGenerator([]string{"load-env"}, g.project)
-	fileGenerator([]string{"api-server"}, g.project)
-	fileGenerator([]string{"api-gorilla-routes"}, g.project)
-	fileGenerator([]string{"api-gorilla-users"}, g.project)
-	fileGenerator([]string{"api-errors"}, g.project)
-	fileGenerator([]string{"api-response"}, g.project)
+func (b *gorillaBuilder) build() {
+	env := []string{"api-gorilla-env"}
+	readme := []string{"api-gorilla-readme"}
+	makefile := []string{"api-gorilla-makefile"}
 
-	fileGenerator([]string{"mock-repository"}, g.project)
-	fileGenerator([]string{"user-test"}, g.project)
-	fileGenerator([]string{"user"}, g.project)
-	fileGenerator([]string{"user-repository-interface"}, g.project)
-	fileGenerator([]string{"router-inferface"}, g.project)
-	fileGenerator([]string{"user-service-interface"}, g.project)
-	fileGenerator([]string{"user-service"}, g.project)
-	fileGenerator([]string{"user-service-test"}, g.project)
-	goGetPackages(g.project.Path, []string{"github.com/gorilla/mux"})
+	if b.project.Database == "" {
+		b.project.Database = "mock"
+		dbSelector(b.project)
+		fileGenerator([]string{"api-main"}, b.project)
+	} else {
+		fileGenerator([]string{"api-main-with-db"}, b.project)
+		readme = append(readme, b.project.Database+"-readme")
+		makefile = append(makefile, b.project.Database+"-makefile")
+		env = append(env, b.project.Database+"-env")
+		dbSelector(b.project)
+	}
 
-	fmt.Printf("%v project created successfully", g.project.Name)
+	fileGenerator(env, b.project)
+	fileGenerator(readme, b.project)
+	fileGenerator(makefile, b.project)
+	fileGenerator([]string{"load-env"}, b.project)
+	fileGenerator([]string{"api-server"}, b.project)
+	fileGenerator([]string{"api-gorilla-routes"}, b.project)
+	fileGenerator([]string{"api-gorilla-users"}, b.project)
+	fileGenerator([]string{"api-errors"}, b.project)
+	fileGenerator([]string{"api-response"}, b.project)
+	fileGenerator([]string{"router-inferface"}, b.project)
+
+	goGetPackages(b.project.Path, []string{"github.com/gorilla/mux"})
+
+	fmt.Printf("%v project created successfully", b.project.Name)
 }
 
 type httpBuilder struct {
 	project *Project
 }
 
-func (h *httpBuilder) build() {
-	fileGenerator([]string{"api-http-main"}, h.project)
-	fileGenerator([]string{"api-http-env"}, h.project)
-	fileGenerator([]string{"api-http-readme"}, h.project)
-	fileGenerator([]string{"api-http-makefile"}, h.project)
-	fileGenerator([]string{"load-env"}, h.project)
-	fileGenerator([]string{"api-server"}, h.project)
-	fileGenerator([]string{"api-http-routes"}, h.project)
-	fileGenerator([]string{"api-http-users"}, h.project)
-	fileGenerator([]string{"api-errors"}, h.project)
-	fileGenerator([]string{"api-response"}, h.project)
+func (b *httpBuilder) build() {
+	env := []string{"api-http-env"}
+	readme := []string{"api-http-readme"}
+	makefile := []string{"api-http-makefile"}
 
-	fileGenerator([]string{"mock-repository"}, h.project)
-	fileGenerator([]string{"user-test"}, h.project)
-	fileGenerator([]string{"user"}, h.project)
-	fileGenerator([]string{"user-repository-interface"}, h.project)
-	fileGenerator([]string{"router-inferface"}, h.project)
-	fileGenerator([]string{"user-service-interface"}, h.project)
-	fileGenerator([]string{"user-service"}, h.project)
-	fileGenerator([]string{"user-service-test"}, h.project)
+	if b.project.Database == "" {
+		b.project.Database = "mock"
+		dbSelector(b.project)
+		fileGenerator([]string{"api-main"}, b.project)
+	} else {
+		fileGenerator([]string{"api-main-with-db"}, b.project)
+		readme = append(readme, b.project.Database+"-readme")
+		makefile = append(makefile, b.project.Database+"-makefile")
+		env = append(env, b.project.Database+"-env")
+		dbSelector(b.project)
+	}
 
-	fmt.Printf("%v project created successfully", h.project.Name)
+	fileGenerator(env, b.project)
+	fileGenerator(readme, b.project)
+	fileGenerator(makefile, b.project)
+	fileGenerator([]string{"load-env"}, b.project)
+	fileGenerator([]string{"api-server"}, b.project)
+	fileGenerator([]string{"api-http-routes"}, b.project)
+	fileGenerator([]string{"api-http-users"}, b.project)
+	fileGenerator([]string{"api-errors"}, b.project)
+	fileGenerator([]string{"api-response"}, b.project)
+	fileGenerator([]string{"router-inferface"}, b.project)
+
+	fmt.Printf("%v project created successfully", b.project.Name)
 }
 
 type apiBuilderFactory func(p *Project) boilerplateBuilder

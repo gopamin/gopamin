@@ -16,13 +16,12 @@ import (
 type Project struct {
 	Database    string
 	Platform    string
-	IsClean     bool
 	Name        string
 	Path        string
 	ProjectType string
 }
 
-func New(projectType, platform, name, database string, isClean bool) {
+func New(projectType, platform, name, database string) {
 	lowerCaseName := strings.ToLower(name)
 	currentDir, err := os.Getwd()
 	if err != nil {
@@ -40,7 +39,6 @@ func New(projectType, platform, name, database string, isClean bool) {
 	p := Project{
 		Database:    database,
 		Platform:    platform,
-		IsClean:     isClean,
 		Name:        lowerCaseName,
 		Path:        projectPath,
 		ProjectType: projectType,

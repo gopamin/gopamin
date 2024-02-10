@@ -8,7 +8,6 @@ import (
 var (
 	database    string
 	platform    string
-	isClean     bool
 	name        string
 	projectType string
 )
@@ -19,7 +18,7 @@ var newCmd = &cobra.Command{
 	Short:   "Create a new project",
 	Run: func(cmd *cobra.Command, args []string) {
 		if argsValidator() {
-			scaffolder.New(projectType, platform, name, database, isClean)
+			scaffolder.New(projectType, platform, name, database)
 		}
 	},
 }

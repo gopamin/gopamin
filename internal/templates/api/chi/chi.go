@@ -25,13 +25,6 @@ func ApiChiReadmeTemplate() ([]byte, string) {
 	return apiChiReadme, "README.md"
 }
 
-//go:embed files/cmd/main.tmpl
-var apiChiMain []byte
-
-func ApiChiMainTemplate() ([]byte, string) {
-	return apiChiMain, "cmd/main.go"
-}
-
 //go:embed files/internal/adapters/handlers/chi/routes.tmpl
 var apiChiRoutes []byte
 

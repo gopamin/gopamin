@@ -115,3 +115,17 @@ var apiServer []byte
 func ApiServerTemplate() ([]byte, string) {
 	return apiServer, "cmd/server/server.go"
 }
+
+//go:embed files/cmd/main/api/main.tmpl
+var apiMain []byte
+
+func ApiMainTemplate() ([]byte, string) {
+	return apiMain, "cmd/main.go"
+}
+
+//go:embed files/cmd/main/api/main-with-db.tmpl
+var apiMainWithDb []byte
+
+func ApiMainWithDbTemplate() ([]byte, string) {
+	return apiMainWithDb, "cmd/main.go"
+}
