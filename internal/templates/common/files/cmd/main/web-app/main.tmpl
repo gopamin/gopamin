@@ -1,0 +1,26 @@
+package main
+
+import (
+	"fmt"
+	"log"
+	"net/http"
+	"os"
+
+	"{{.Name}}/configs"
+)
+
+func init() {
+	configs.LoadEnv()
+}
+
+func main() {
+	port := os.Getenv("PORT")
+	dir := http.Dir("./assets")
+	fs := http.FileServer(dir)
+	mux := http.NewServeMux()
+	mux.Handle("/", fs)
+	err := http.ListenAndServe(fmt.Sprintf(":%v", port), mux)
+	if err != nil {
+		log.Fatal(err)
+	}
+}

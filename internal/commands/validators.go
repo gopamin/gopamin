@@ -70,7 +70,6 @@ func restFrameworkValidator() bool {
 	if platform == "echo" ||
 		platform == "chi" ||
 		platform == "gin" ||
-		platform == "fiber" ||
 		platform == "httprouter" ||
 		platform == "http" ||
 		platform == "graphql" ||

@@ -32,13 +32,6 @@ func MongodbDockerComposeTemplate() ([]byte, string) {
 	return mongodbDockerCompose, "docker-compose.yml"
 }
 
-//go:embed files/cmd/main.tmpl
-var mongodbMain []byte
-
-func MongodbMainTemplate() ([]byte, string) {
-	return mongodbMain, "cmd/main.go"
-}
-
 //go:embed files/internal/adapters/repositories/mongodb/repository.tmpl
 var mongodbRepository []byte
 

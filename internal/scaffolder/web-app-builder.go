@@ -6,8 +6,16 @@ type webAppProjectBuilder struct {
 	project *Project
 }
 
-func (w *webAppProjectBuilder) build() {
-	fmt.Printf("%v\n", w.project.ProjectType)
+func (b *webAppProjectBuilder) build() {
+	fileGenerator([]string{"load-env"}, b.project)
+	fileGenerator([]string{"web-app-index-page"}, b.project)
+	fileGenerator([]string{"web-app-styles"}, b.project)
+	fileGenerator([]string{"web-app-main"}, b.project)
+	fileGenerator([]string{"web-app-readme"}, b.project)
+	fileGenerator([]string{"web-app-env"}, b.project)
+	fileGenerator([]string{"web-app-makefile"}, b.project)
+
+	fmt.Printf("%v project created successfully", b.project.Name)
 }
 
 type webAppBuilderFactory func(p *Project) boilerplateBuilder

@@ -32,13 +32,6 @@ func DynamodbDockerComposeTemplate() ([]byte, string) {
 	return dynamodbDockerCompose, "docker-compose.yml"
 }
 
-//go:embed files/cmd/main.tmpl
-var dynamodbMain []byte
-
-func DynamodbMainTemplate() ([]byte, string) {
-	return dynamodbMain, "cmd/main.go"
-}
-
 //go:embed files/internal/adapters/repositories/dynamodb/repository.tmpl
 var dynamodbRepository []byte
 

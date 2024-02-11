@@ -18,13 +18,6 @@ func MysqlDockerComposeTemplate() ([]byte, string) {
 	return mysqlDockerCompose, "docker-compose.yml"
 }
 
-//go:embed files/cmd/main.tmpl
-var mysqlMain []byte
-
-func MysqlMainTemplate() ([]byte, string) {
-	return mysqlMain, "cmd/main.go"
-}
-
 //go:embed files/makefile.tmpl
 var mysqlMakefile []byte
 

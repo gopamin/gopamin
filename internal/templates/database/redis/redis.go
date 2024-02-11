@@ -32,13 +32,6 @@ func RedisDockerComposeTemplate() ([]byte, string) {
 	return redisDockerCompose, "docker-compose.yml"
 }
 
-//go:embed files/cmd/main.tmpl
-var redisMain []byte
-
-func RedisMainTemplate() ([]byte, string) {
-	return redisMain, "cmd/main.go"
-}
-
 //go:embed files/internal/adapters/repositories/redis/repository.tmpl
 var redisRepository []byte
 

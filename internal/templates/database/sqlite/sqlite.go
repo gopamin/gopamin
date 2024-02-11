@@ -25,13 +25,6 @@ func SqliteReadmeTemplate() ([]byte, string) {
 	return sqliteReadme, "README.md"
 }
 
-//go:embed files/cmd/main.tmpl
-var sqliteMain []byte
-
-func SqliteMainTemplate() ([]byte, string) {
-	return sqliteMain, "cmd/main.go"
-}
-
 //go:embed files/internal/adapters/repositories/sqlite/repository.tmpl
 var sqliteRepository []byte
 

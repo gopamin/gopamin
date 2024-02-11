@@ -129,3 +129,38 @@ var apiMainWithDb []byte
 func ApiMainWithDbTemplate() ([]byte, string) {
 	return apiMainWithDb, "cmd/main.go"
 }
+
+//go:embed files/cmd/main/hello-world/main.tmpl
+var helloWorldMain []byte
+
+func HelloWorldMainTemplate() ([]byte, string) {
+	return helloWorldMain, "cmd/main.go"
+}
+
+//go:embed files/cmd/main/hello-world/main-with-db.tmpl
+var helloWorldMainWithDb []byte
+
+func HelloWorldMainWithDbTemplate() ([]byte, string) {
+	return helloWorldMainWithDb, "cmd/main.go"
+}
+
+//go:embed files/assets/index.tmpl
+var webAppIndexPage []byte
+
+func WebAppIndexPageTemplate() ([]byte, string) {
+	return webAppIndexPage, "assets/index.html"
+}
+
+//go:embed files/assets/styles.tmpl
+var webAppStyles []byte
+
+func WebAppStylesTemplate() ([]byte, string) {
+	return webAppStyles, "assets/styles.css"
+}
+
+//go:embed files/cmd/main/web-app/main.tmpl
+var webAppMain []byte
+
+func WebAppMainTemplate() ([]byte, string) {
+	return webAppMain, "cmd/main.go"
+}

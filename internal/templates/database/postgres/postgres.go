@@ -32,13 +32,6 @@ func PostgresDockerComposeTemplate() ([]byte, string) {
 	return postgresDockerCompose, "docker-compose.yml"
 }
 
-//go:embed files/cmd/main.tmpl
-var postgresMain []byte
-
-func PostgresMainTemplate() ([]byte, string) {
-	return postgresMain, "cmd/main.go"
-}
-
 //go:embed files/internal/adapters/repositories/postgres/repository.tmpl
 var postgresRepository []byte
 

@@ -24,10 +24,3 @@ var helloWorldReadme []byte
 func HelloWorldReadmeTemplate() ([]byte, string) {
 	return helloWorldReadme, "README.md"
 }
-
-//go:embed files/cmd/main.tmpl
-var helloWorldMain []byte
-
-func HelloWorldMainTemplate() ([]byte, string) {
-	return helloWorldMain, "cmd/main.go"
-}

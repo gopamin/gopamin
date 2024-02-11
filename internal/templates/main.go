@@ -15,6 +15,7 @@ import (
 	redis "github.com/gopamin/cli/internal/templates/database/redis"
 	sqlite "github.com/gopamin/cli/internal/templates/database/sqlite"
 	helloWorld "github.com/gopamin/cli/internal/templates/hello-world"
+	webApp "github.com/gopamin/cli/internal/templates/web-app"
 )
 
 func Mapper() map[string]func() ([]byte, string) {
@@ -37,8 +38,12 @@ func Mapper() map[string]func() ([]byte, string) {
 		"api-server":                common.ApiServerTemplate,
 		"api-main":                  common.ApiMainTemplate,
 		"api-main-with-db":          common.ApiMainWithDbTemplate,
+		"hello-world-main":          common.HelloWorldMainTemplate,
+		"hello-world-main-with-db":  common.HelloWorldMainWithDbTemplate,
+		"web-app-index-page":        common.WebAppIndexPageTemplate,
+		"web-app-styles":            common.WebAppIndexPageTemplate,
+		"web-app-main":              common.WebAppMainTemplate,
 
-		"hello-world-main":     helloWorld.HelloWorldMainTemplate,
 		"hello-world-readme":   helloWorld.HelloWorldReadmeTemplate,
 		"hello-world-makefile": helloWorld.HelloWorldMakefileTemplate,
 		"hello-world-env":      helloWorld.HelloWorldEnvTemplate,
@@ -80,44 +85,42 @@ func Mapper() map[string]func() ([]byte, string) {
 		"api-httprouter-users":    apiHttprouter.ApiHttprouterUsersTemplate,
 
 		"mysql-env":            mysql.MysqlEnvTemplate,
-		"mysql-main":           mysql.MysqlMainTemplate,
 		"mysql-repository":     mysql.MysqlRepositoryTemplate,
 		"mysql-readme":         mysql.MysqlReadmeTemplate,
 		"mysql-makefile":       mysql.MysqlMakefileTemplate,
 		"mysql-docker-compose": mysql.MysqlDockerComposeTemplate,
 
 		"postgres-env":            postgres.PostgresEnvTemplate,
-		"postgres-main":           postgres.PostgresMainTemplate,
 		"postgres-repository":     postgres.PostgresRepositoryTemplate,
 		"postgres-readme":         postgres.PostgresReadmeTemplate,
 		"postgres-makefile":       postgres.PostgresMakefileTemplate,
 		"postgres-docker-compose": postgres.PostgresDockerComposeTemplate,
 
 		"mongodb-env":            mongodb.MongodbEnvTemplate,
-		"mongodb-main":           mongodb.MongodbMainTemplate,
 		"mongodb-repository":     mongodb.MongodbRepositoryTemplate,
 		"mongodb-readme":         mongodb.MongodbReadmeTemplate,
 		"mongodb-makefile":       mongodb.MongodbMakefileTemplate,
 		"mongodb-docker-compose": mongodb.MongodbDockerComposeTemplate,
 
 		"redis-env":            redis.RedisEnvTemplate,
-		"redis-main":           redis.RedisMainTemplate,
 		"redis-repository":     redis.RedisRepositoryTemplate,
 		"redis-readme":         redis.RedisReadmeTemplate,
 		"redis-makefile":       redis.RedisMakefileTemplate,
 		"redis-docker-compose": redis.RedisDockerComposeTemplate,
 
 		"sqlite-env":        sqlite.SqliteEnvTemplate,
-		"sqlite-main":       sqlite.SqliteMainTemplate,
 		"sqlite-repository": sqlite.SqliteRepositoryTemplate,
 		"sqlite-makefile":   sqlite.SqliteMakefileTemplate,
 		"sqlite-readme":     sqlite.SqliteReadmeTemplate,
 
 		"dynamodb-env":            dynamodb.DynamodbEnvTemplate,
-		"dynamodb-main":           dynamodb.DynamodbMainTemplate,
 		"dynamodb-repository":     dynamodb.DynamodbRepositoryTemplate,
 		"dynamodb-readme":         dynamodb.DynamodbReadmeTemplate,
 		"dynamodb-makefile":       dynamodb.DynamodbMakefileTemplate,
 		"dynamodb-docker-compose": dynamodb.DynamodbDockerComposeTemplate,
+
+		"web-app-readme":   webApp.WebAppReadmeTemplate,
+		"web-app-env":      webApp.WebAppEnvTemplate,
+		"web-app-makefile": webApp.WebAppMakefileTemplate,
 	}
 }
