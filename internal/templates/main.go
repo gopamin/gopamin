@@ -15,6 +15,9 @@ import (
 	redis "github.com/gopamin/cli/internal/templates/database/redis"
 	sqlite "github.com/gopamin/cli/internal/templates/database/sqlite"
 	helloWorld "github.com/gopamin/cli/internal/templates/hello-world"
+	kafkaMicroservice "github.com/gopamin/cli/internal/templates/microservice/kafka"
+	rabbitmqMicroservice "github.com/gopamin/cli/internal/templates/microservice/rabbitmq"
+	redisMicroservice "github.com/gopamin/cli/internal/templates/microservice/redis"
 	webApp "github.com/gopamin/cli/internal/templates/web-app"
 )
 
@@ -43,6 +46,11 @@ func Mapper() map[string]func() ([]byte, string) {
 		"web-app-index-page":        common.WebAppIndexPageTemplate,
 		"web-app-styles":            common.WebAppIndexPageTemplate,
 		"web-app-main":              common.WebAppMainTemplate,
+		"message":                   common.MessageTemplate,
+		"broker-service-interface":  common.BrokerServiceInterfaceTemplate,
+		"broker-service":            common.BrokerServiceTemplate,
+		"message-broker-interface":  common.MessageBrokerInterfaceTemplate,
+		"microservice-main":         common.MicroserviceMainTemplate,
 
 		"hello-world-readme":   helloWorld.HelloWorldReadmeTemplate,
 		"hello-world-makefile": helloWorld.HelloWorldMakefileTemplate,
@@ -122,5 +130,23 @@ func Mapper() map[string]func() ([]byte, string) {
 		"web-app-readme":   webApp.WebAppReadmeTemplate,
 		"web-app-env":      webApp.WebAppEnvTemplate,
 		"web-app-makefile": webApp.WebAppMakefileTemplate,
+
+		"redis-microservice-readme":         redisMicroservice.RedisMicroserviceReadmeTemplate,
+		"redis-microservice-env":            redisMicroservice.RedisMicroserviceEnvTemplate,
+		"redis-microservice-makefile":       redisMicroservice.RedisMicroserviceMakefileTemplate,
+		"redis-microservice-docker-compose": redisMicroservice.RedisMicroserviceDockerComposeTemplate,
+		"redis-microservice-broker":         redisMicroservice.RedisMicroserviceBrokerTemplate,
+
+		"kafka-microservice-readme":         kafkaMicroservice.KafkaMicroserviceReadmeTemplate,
+		"kafka-microservice-env":            kafkaMicroservice.KafkaMicroserviceEnvTemplate,
+		"kafka-microservice-makefile":       kafkaMicroservice.KafkaMicroserviceMakefileTemplate,
+		"kafka-microservice-docker-compose": kafkaMicroservice.KafkaMicroserviceDockerComposeTemplate,
+		"kafka-microservice-broker":         kafkaMicroservice.KafkaMicroserviceBrokerTemplate,
+
+		"rabbitmq-microservice-readme":         rabbitmqMicroservice.RabbitmqMicroserviceReadmeTemplate,
+		"rabbitmq-microservice-env":            rabbitmqMicroservice.RabbitmqMicroserviceEnvTemplate,
+		"rabbitmq-microservice-makefile":       rabbitmqMicroservice.RabbitmqMicroserviceMakefileTemplate,
+		"rabbitmq-microservice-docker-compose": rabbitmqMicroservice.RabbitmqMicroserviceDockerComposeTemplate,
+		"rabbitmq-microservice-broker":         rabbitmqMicroservice.RabbitmqMicroserviceBrokerTemplate,
 	}
 }

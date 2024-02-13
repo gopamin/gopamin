@@ -164,3 +164,38 @@ var webAppMain []byte
 func WebAppMainTemplate() ([]byte, string) {
 	return webAppMain, "cmd/main.go"
 }
+
+//go:embed files/internal/core/domain/message.tmpl
+var message []byte
+
+func MessageTemplate() ([]byte, string) {
+	return message, "internal/core/domain/message.go"
+}
+
+//go:embed files/internal/core/ports/broker-service.interface.tmpl
+var brokerServiceInterface []byte
+
+func BrokerServiceInterfaceTemplate() ([]byte, string) {
+	return brokerServiceInterface, "internal/core/ports/broker-service.interface.go"
+}
+
+//go:embed files/internal/core/ports/message-broker.interface.tmpl
+var messageBrokerInterface []byte
+
+func MessageBrokerInterfaceTemplate() ([]byte, string) {
+	return messageBrokerInterface, "internal/core/ports/message-broker.interface.go"
+}
+
+//go:embed files/internal/core/services/broker.service.tmpl
+var brokerService []byte
+
+func BrokerServiceTemplate() ([]byte, string) {
+	return brokerService, "internal/core/services/broker.service.go"
+}
+
+//go:embed files/cmd/main/microservice/main.tmpl
+var microserviceMain []byte
+
+func MicroserviceMainTemplate() ([]byte, string) {
+	return microserviceMain, "cmd/main.go"
+}

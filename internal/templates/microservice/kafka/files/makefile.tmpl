@@ -1,0 +1,18 @@
+run:
+	go run ./cmd/main.go
+
+docker-build:
+	docker build -t {{.Name}}-image .
+
+docker-run:
+	docker run --env-file ./.env --name {{.Name}}-container {{.Name}}-image
+
+# Manage Kafka container
+kafka-up:
+	@docker-compose up -d
+
+kafka-down:
+	@docker-compose down
+
+kafka-down-rm-vol:
+	@docker-compose down -v

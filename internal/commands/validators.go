@@ -20,6 +20,13 @@ func argsValidator() bool {
 		return false
 	}
 
+	flagAllowed, message := flagIsAllowedForTypes()
+	if !flagAllowed {
+		fmt.Println(message)
+
+		return false
+	}
+
 	if isProjectNameTaken() {
 		fmt.Println("This project name is already taken in the current directory")
 		return false
@@ -83,7 +90,7 @@ func restFrameworkValidator() bool {
 func microserviceFrameworkValidator() bool {
 	if platform == "kafka" ||
 		platform == "rabbitmq" ||
-		platform == "grpc" {
+		platform == "redis" {
 		return true
 	}
 
@@ -117,4 +124,26 @@ func isProjectNameTaken() bool {
 	}
 
 	return false
+}
+
+func flagIsAllowedForTypes() (bool, string) {
+	switch projectType {
+	case "hello-world":
+		if platform != "" {
+			return false, `The -p flag is not allowed for projects of type "hello-world"`
+		}
+	case "web-app":
+		if platform != "" {
+			return false, `The -p flag is not allowed for projects of type "web-app"`
+		}
+		if database != "" {
+			return false, `The -d flag is not allowed for projects of type "web-app"`
+		}
+	case "microservice":
+		if database != "" {
+			return false, `The -d flag is not allowed for projects of type "microservice"`
+		}
+	}
+
+	return true, ""
 }
