@@ -1,9 +1,11 @@
 # Introduction
 
-This is a CLI tool for the Gopamin framework. Gopamin CLI creates new projects based on ideas promoted by [Standard Go Project Layout](https://github.com/golang-standards/project-layout) which is a **well-accepted** architecture by the Go community (It's not an official standard defined by the core Go dev team; however, it is a set of common historical and emerging project layout patterns in the Go ecosystem).  
+Gopamin CLI creates new projects based on ideas promoted by [Standard Go Project Layout](https://github.com/golang-standards/project-layout) which is a **well-accepted** architecture by the Go community (It's not an official standard defined by the core Go dev team; however, it is a set of common historical and emerging project layout patterns in the Go ecosystem).  
 To create this tool, I got inspirations from [Golang Blueprint](https://github.com/Melkeydev/go-blueprint) and some of its functionalities are used inside this tool.
 
-**THIS PROJECT IS UNDER ACTIVE DEVELOPMENT. SO YOU MIGHT SEE SOME BREAKING CHANGES!**
+## Clean Architecture
+
+All boilerplates created by Gopamin CLI are based on clean architecture. Simply put, it is a software architectural pattern introduced by Robert C. Martin in order to create maintainable, scalable, and testable software systems by decoupling the application logic from the infrastructure details (This architectural pattern is referred to by other names such as Onion Architecture, Hexagonal Architecture, and Onion Architecture).
 
 ## Prerequisites
 
