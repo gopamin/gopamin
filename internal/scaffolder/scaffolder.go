@@ -10,7 +10,7 @@ import (
 	"strings"
 
 	"github.com/fatih/color"
-	"github.com/gopamin/cli/internal/templates"
+	"github.com/gopamin/gopamin/internal/templates"
 )
 
 type Project struct {

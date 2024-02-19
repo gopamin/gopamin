@@ -1,7 +1,7 @@
 package commands
 
 import (
-	"github.com/gopamin/cli/internal/scaffolder"
+	"github.com/gopamin/gopamin/internal/scaffolder"
 	"github.com/spf13/cobra"
 )
 

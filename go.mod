@@ -1,4 +1,4 @@
-module github.com/gopamin/cli
+module github.com/gopamin/gopamin
 
 go 1.22.0
 
