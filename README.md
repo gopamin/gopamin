@@ -20,7 +20,7 @@ The minimum required tools for using the Gopamin CLI is Golang which can be down
 To install Gopamin CLI, run the following command inside terminal:
 
 ```text
-$ go install -v github.com/gopamin/gopamin@latest
+$ go install github.com/gopamin/gopamin@v1.0.5
 ```
 
 To make sure it's installed correctly in your `$GOPATH`, run the following command:

@@ -3,11 +3,11 @@ package scaffolder
 import (
 	"bytes"
 	"fmt"
-	"html/template"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
+	"text/template"
 
 	"github.com/fatih/color"
 	"github.com/gopamin/gopamin/internal/templates"
@@ -58,9 +58,9 @@ func generateProjectAgnosticFiles(p *Project) {
 	fileGenerator([]string{"license"}, p)
 	fileGenerator([]string{"dockerfile"}, p)
 
-	initGit(*&p.Path)
-	initGoMod(*&p.Name, *&p.Path)
-	goGetPackages(*&p.Path, []string{"github.com/joho/godotenv"})
+	initGit(p.Path)
+	initGoMod(p.Name, p.Path)
+	goGetPackages(p.Path, []string{"github.com/joho/godotenv"})
 }
 
 func fileGenerator(fileTypes []string, p *Project) {

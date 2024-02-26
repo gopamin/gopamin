@@ -2,14 +2,6 @@ package scaffolder
 
 import "fmt"
 
-// type graphqlBuilder struct {
-// 	project *Project
-// }
-
-// func (g *graphqlBuilder) build() {
-// 	fmt.Printf("%v -> %v \n", g.project.ProjectType, g.project.Platform)
-// }
-
 type echoBuilder struct {
 	project *Project
 }
@@ -34,8 +26,9 @@ func (b *echoBuilder) build() {
 	fileGenerator(env, b.project)
 	fileGenerator(readme, b.project)
 	fileGenerator(makefile, b.project)
-	fileGenerator([]string{"load-env"}, b.project)
-	fileGenerator([]string{"api-server"}, b.project)
+	fileGenerator([]string{"configs"}, b.project)
+	fileGenerator([]string{"tools"}, b.project)
+	fileGenerator([]string{"server"}, b.project)
 	fileGenerator([]string{"api-echo-routes"}, b.project)
 	fileGenerator([]string{"api-echo-users"}, b.project)
 	fileGenerator([]string{"api-errors"}, b.project)
@@ -71,8 +64,9 @@ func (b *chiBuilder) build() {
 	fileGenerator(env, b.project)
 	fileGenerator(readme, b.project)
 	fileGenerator(makefile, b.project)
-	fileGenerator([]string{"load-env"}, b.project)
-	fileGenerator([]string{"api-server"}, b.project)
+	fileGenerator([]string{"configs"}, b.project)
+	fileGenerator([]string{"tools"}, b.project)
+	fileGenerator([]string{"server"}, b.project)
 	fileGenerator([]string{"api-chi-routes"}, b.project)
 	fileGenerator([]string{"api-chi-users"}, b.project)
 	fileGenerator([]string{"api-errors"}, b.project)
@@ -108,8 +102,9 @@ func (b *ginBuilder) build() {
 	fileGenerator(env, b.project)
 	fileGenerator(readme, b.project)
 	fileGenerator(makefile, b.project)
-	fileGenerator([]string{"load-env"}, b.project)
-	fileGenerator([]string{"api-server"}, b.project)
+	fileGenerator([]string{"configs"}, b.project)
+	fileGenerator([]string{"tools"}, b.project)
+	fileGenerator([]string{"server"}, b.project)
 	fileGenerator([]string{"api-gin-routes"}, b.project)
 	fileGenerator([]string{"api-gin-users"}, b.project)
 	fileGenerator([]string{"api-errors"}, b.project)
@@ -145,8 +140,9 @@ func (b *httprouterBuilder) build() {
 	fileGenerator(env, b.project)
 	fileGenerator(readme, b.project)
 	fileGenerator(makefile, b.project)
-	fileGenerator([]string{"load-env"}, b.project)
-	fileGenerator([]string{"api-server"}, b.project)
+	fileGenerator([]string{"configs"}, b.project)
+	fileGenerator([]string{"tools"}, b.project)
+	fileGenerator([]string{"server"}, b.project)
 	fileGenerator([]string{"api-httprouter-routes"}, b.project)
 	fileGenerator([]string{"api-httprouter-users"}, b.project)
 	fileGenerator([]string{"api-errors"}, b.project)
@@ -182,8 +178,9 @@ func (b *gorillaBuilder) build() {
 	fileGenerator(env, b.project)
 	fileGenerator(readme, b.project)
 	fileGenerator(makefile, b.project)
-	fileGenerator([]string{"load-env"}, b.project)
-	fileGenerator([]string{"api-server"}, b.project)
+	fileGenerator([]string{"configs"}, b.project)
+	fileGenerator([]string{"tools"}, b.project)
+	fileGenerator([]string{"server"}, b.project)
 	fileGenerator([]string{"api-gorilla-routes"}, b.project)
 	fileGenerator([]string{"api-gorilla-users"}, b.project)
 	fileGenerator([]string{"api-errors"}, b.project)
@@ -219,8 +216,9 @@ func (b *httpBuilder) build() {
 	fileGenerator(env, b.project)
 	fileGenerator(readme, b.project)
 	fileGenerator(makefile, b.project)
-	fileGenerator([]string{"load-env"}, b.project)
-	fileGenerator([]string{"api-server"}, b.project)
+	fileGenerator([]string{"configs"}, b.project)
+	fileGenerator([]string{"tools"}, b.project)
+	fileGenerator([]string{"server"}, b.project)
 	fileGenerator([]string{"api-http-routes"}, b.project)
 	fileGenerator([]string{"api-http-users"}, b.project)
 	fileGenerator([]string{"api-errors"}, b.project)
@@ -233,9 +231,6 @@ func (b *httpBuilder) build() {
 type apiBuilderFactory func(p *Project) boilerplateBuilder
 
 var apiBuilderMap = map[string]apiBuilderFactory{
-	// "graphql": func(p *Project) boilerplateBuilder {
-	// 	return &graphqlBuilder{p}
-	// },
 	"echo": func(p *Project) boilerplateBuilder {
 		return &echoBuilder{p}
 	},

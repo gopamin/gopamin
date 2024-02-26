@@ -102,18 +102,18 @@ func ApiResponseTemplate() ([]byte, string) {
 	return apiResponse, "internal/core/api/response.go"
 }
 
-//go:embed files/configs/load-env.tmpl
-var loadEnv []byte
+//go:embed files/configs/configs.tmpl
+var configs []byte
 
-func LoadEnvTemplate() ([]byte, string) {
-	return loadEnv, "configs/load-env.go"
+func ConfigsTemplate() ([]byte, string) {
+	return configs, "configs/configs.go"
 }
 
 //go:embed files/cmd/server/server.tmpl
-var apiServer []byte
+var server []byte
 
-func ApiServerTemplate() ([]byte, string) {
-	return apiServer, "cmd/server/server.go"
+func ServerTemplate() ([]byte, string) {
+	return server, "cmd/server/server.go"
 }
 
 //go:embed files/cmd/main/api/main.tmpl
@@ -130,6 +130,13 @@ func ApiMainWithDbTemplate() ([]byte, string) {
 	return apiMainWithDb, "cmd/main.go"
 }
 
+//go:embed files/cmd/main/web-app/main-with-db.tmpl
+var webAppMainWithDb []byte
+
+func WebAppMainWithDbTemplate() ([]byte, string) {
+	return webAppMainWithDb, "cmd/main.go"
+}
+
 //go:embed files/cmd/main/hello-world/main.tmpl
 var helloWorldMain []byte
 
@@ -144,11 +151,18 @@ func HelloWorldMainWithDbTemplate() ([]byte, string) {
 	return helloWorldMainWithDb, "cmd/main.go"
 }
 
-//go:embed files/assets/index.tmpl
-var webAppIndexPage []byte
+//go:embed files/assets/users.tmpl
+var webAppUsersHtmlTemplate []byte
 
-func WebAppIndexPageTemplate() ([]byte, string) {
-	return webAppIndexPage, "assets/index.html"
+func WebAppUsersHtmlTemplateTemplate() ([]byte, string) {
+	return webAppUsersHtmlTemplate, "assets/users.html"
+}
+
+//go:embed files/assets/user.tmpl
+var webAppUserHtmlTemplate []byte
+
+func WebAppUserHtmlTemplateTemplate() ([]byte, string) {
+	return webAppUserHtmlTemplate, "assets/user.html"
 }
 
 //go:embed files/assets/styles.tmpl
@@ -198,4 +212,11 @@ var microserviceMain []byte
 
 func MicroserviceMainTemplate() ([]byte, string) {
 	return microserviceMain, "cmd/main.go"
+}
+
+//go:embed files/tools/tools.tmpl
+var tools []byte
+
+func ToolsTemplate() ([]byte, string) {
+	return tools, "tools/tools.go"
 }

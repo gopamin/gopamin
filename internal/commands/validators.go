@@ -16,7 +16,7 @@ func argsValidator() bool {
 		fmt.Println(`The -t flag is required. For more help, type "gopamin new -h"`)
 		return false
 	case noPlatfromForApiOrMicroservice():
-		fmt.Println(`The -p flag is required for projects of type "api" or "microservice". For more help, type "gopamin new -h"`)
+		fmt.Println(`The -p flag is required for projects of type "api", "web-app", and "microservice". For more help, type "gopamin new -h"`)
 		return false
 	}
 
@@ -37,7 +37,12 @@ func argsValidator() bool {
 		return false
 	}
 
-	if projectType == "api" && !restFrameworkValidator() {
+	if projectType == "web-app" && !httpServerValidator() {
+		fmt.Println(`The specified value for the -p flag for "web-app" type of apps is wrong. For more help, type "gopamin new -h"`)
+		return false
+	}
+
+	if projectType == "api" && !httpServerValidator() {
 		fmt.Println(`The specified value for the -p flag for "api" type of apps is wrong. For more help, type "gopamin new -h"`)
 		return false
 	}
@@ -56,7 +61,7 @@ func argsValidator() bool {
 }
 
 func noPlatfromForApiOrMicroservice() bool {
-	if (projectType == "microservice" || projectType == "api") && platform == "" {
+	if (projectType == "microservice" || projectType == "api" || projectType == "web-app") && platform == "" {
 		return true
 	}
 	return false
@@ -73,13 +78,12 @@ func validateType() bool {
 	return false
 }
 
-func restFrameworkValidator() bool {
+func httpServerValidator() bool {
 	if platform == "echo" ||
 		platform == "chi" ||
 		platform == "gin" ||
 		platform == "httprouter" ||
 		platform == "http" ||
-		platform == "graphql" ||
 		platform == "gorilla" {
 		return true
 	}
@@ -131,13 +135,6 @@ func flagIsAllowedForTypes() (bool, string) {
 	case "hello-world":
 		if platform != "" {
 			return false, `The -p flag is not allowed for projects of type "hello-world"`
-		}
-	case "web-app":
-		if platform != "" {
-			return false, `The -p flag is not allowed for projects of type "web-app"`
-		}
-		if database != "" {
-			return false, `The -d flag is not allowed for projects of type "web-app"`
 		}
 	case "microservice":
 		if database != "" {

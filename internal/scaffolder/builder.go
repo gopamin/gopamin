@@ -24,7 +24,7 @@ var buildersMap = map[string]builderFactory{
 		return helloWorldBuilderFactory(p)
 	},
 	"web-app": func(p *Project) boilerplateBuilder {
-		webAppBuilderFactory := webAppBuilderMap[p.ProjectType]
+		webAppBuilderFactory := webAppBuilderMap[p.Platform]
 		return webAppBuilderFactory(p)
 	},
 	"microservice": func(p *Project) boilerplateBuilder {

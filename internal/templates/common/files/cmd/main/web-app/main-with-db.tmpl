@@ -4,7 +4,7 @@ import (
 	"{{.Name}}/cmd/server"
 	"{{.Name}}/configs"
 	"{{.Name}}/internal/adapters/handlers/{{.Platform}}"
-	"{{.Name}}/internal/adapters/repositories/mock"
+	"{{.Name}}/internal/adapters/repositories/{{.Database}}"
 	"{{.Name}}/internal/core/services"
 )
 
@@ -13,7 +13,7 @@ func init() {
 }
 
 func main() {
-	db := &mock.MockRepository{}
+	db := {{.Database}}.New()
 	service := services.NewUserService(db)
 	handlers := {{.Platform}}.NewRouter(service)
 	server.Serve(handlers)

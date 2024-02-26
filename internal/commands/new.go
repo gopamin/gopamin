@@ -17,8 +17,8 @@ var newCmd = &cobra.Command{
 gopamin new -n HelloWorld -t hello-world
 To create a hello world app with MySQL integration, run the following command:
  gopamin new -n HelloWorld -t hello-world -d mysql
-To create a simple web application, run the following command:
- gopamin new -n HelloWorld -t web-app
+To create a web application using the built-in http package and MySQL support, run the following command:
+ gopamin new -n HelloWorld -t web-app -p http -d mysql
 To create a RESTful API using the echo framework, run the following command:
  gopamin new -n HelloWorld -t api -p echo
 To create a RESTful API using the built-in http package and MongoDB integration, run the following command:
@@ -39,13 +39,13 @@ func init() {
 If you want to use space-separated words, place them inside double quotes like "my demo app" then it will be converted to "my-demo-app".`)
 
 	newCmd.Flags().StringVarP(&projectType, "type", "t", "", `Type of the project. Available types are:
- - hello-world (A simple "Hello World" app without any extra functionalities)
- - web-app (A minital web applicaion which serves an HTML and CSS files)
- - microservice (If chosen, you must also add the "-p" flag to specify the type of the third-party platform you want to use)
- - api (If chosen, you must also add the "-p" flag to specify the type of the third-party platform you want to use)`)
+ - hello-world (A simple "Hello World" app without any extra functionalities. Database integration can also be added).
+ - web-app (If chosen, you must also add the "-p" flag to specify the type of the third-party platform you want to use).
+ - microservice (If chosen, you must also add the "-p" flag to specify the type of the third-party platform you want to use).
+ - api (If chosen, you must also add the "-p" flag to specify the type of the third-party platform you want to use).`)
 
-	newCmd.Flags().StringVarP(&platform, "platform", "p", "", `If the chosen "-t" is either "api" or "microservice", you must also add the "-p" flag to specify the underlying third-party platform.
-Available values for the "api" type are:
+	newCmd.Flags().StringVarP(&platform, "platform", "p", "", `If the chosen "-t" is "api", "web-app", or "microservice", you must also add the "-p" flag to specify the underlying third-party platform.
+Available values for the "api" and "web-app" type are:
  - echo
  - chi
  - gin

@@ -4,10 +4,12 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Document</title>
-        <link rel="stylesheet" href="main.css" />
+        <link rel="stylesheet" href="/assets/styles.css" />
     </head>
     <body>
-        This page is served using Golang's built-in
-        <a href="https://pkg.go.dev/net/http">http</a> package
+        <h1>#{{`{{.Id}}`}}: {{`{{.Name}}`}}</h1>
     </body>
 </html>
+
+
+
