@@ -51,7 +51,7 @@ Available values for the "api" and "web-app" type are:
  - gin
  - httprouter
  - gorilla
- - http (The build-in HTTP client will be used)
+ - http (The build-in HTTP package will be used)
 Available values for the "microservice" type are:
 - redis
 - kafka
