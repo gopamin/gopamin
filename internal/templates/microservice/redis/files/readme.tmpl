@@ -8,13 +8,13 @@ In order to run this Go app, you have two options:
 
 ### Use The GNU/Make Tool
 
-By default, a `Makefile` is added to this project which can be used for running common commands like `go run`. To run this app using the `make` command, run the following command in the terminal:
+By default, a `Makefile` is added to this project which can be used for running common commands like `go run`. To run this app using the `make` tool, run the following command in the terminal:
 
 ```text
 $ make run
 ```
 
-### Use The `go` Command
+### Use The `go run` Command
 
 You can also use the `go run` command in order to run your app as follows:
 
@@ -22,17 +22,17 @@ You can also use the `go run` command in order to run your app as follows:
 $ go run ./cmd/main.go
 ```
 
-As `main.go` which is considered the entry point of the app resides inside the `cmd` folder, while using the `go run` command, we have to pass the full path as above.
+As the `main.go` file which is considered the entry point of the app resides inside the `cmd` folder, while using the `go run` command, we have to pass the full path as above.
 
 ## How to Dockerize The App
 
-By default, each project created by the Gopamin CLI includes a `Dockerfile`. Also, some rules are added to the `Makefile` in order to run Docker commands easier to use. In order to build an image off of your project, you can run the following command:
+By default, each project created by the Gopamin CLI tool includes a `Dockerfile`. Also, some rules are added to the `Makefile` in order to make Docker commands easier to use. In order to build an image off of your project, you can run the following command:
 
 ```text
 $ make docker-build
 ```
 
-The above command will create a Docker image called **{{.Name}}-image**. Then in order to run a container off of the newly-created image, you can run the following command:
+The above command will create a Docker image called **{{.Name}}-image**. To launch a container from this newly created image, execute the subsequent command:
 
 ```text
 $ make docker-run
@@ -42,46 +42,4 @@ The above command will create and run a Docker container called **{{.Name}}-cont
 
 ```text
 $ docker run --env-file ./.env --name {{.Name}}-container {{.Name}}-image
-```
-
-## How to publish new messages?
-
-In `main.go` file, `service.Produce(domain.Message{Data: "Hello World"})` publishes new message to a Redis client. In order to see the published messages in Redis, first connect to the Redis CLI by running the `redis-cli` command in the terminal then run the `SUBSCRIBE` command as follows:
-
-```text
-127.0.0.1:6379> SUBSCRIBE testing
-1) "subscribe"
-2) "testing"
-3) (integer) 1
-Reading messages ...
-1) "message"
-2) "testing"
-3) "{\"data\":\"Hello World\"}"
-```
-
-`testing` is the name of the channel that we have defined while creating a new Redis broker.
-
-## How to consume messages?
-
-First, let's change the `main.go` file as follows:
-
-```go
-func main() {
-	broker := redis.New("testing")
-	service := services.NewBrokerService(broker)
-	service.Consume()
-}
-```
-
-After running the application either by calling `make run` or `go run ./cmd/main.go`, then we have to connect to the Redis CLI and run the `PUBLISH` command as follows:
-
-```text
-127.0.0.1:6379> PUBLISH testing "Hello World"
-(integer) 1
-```
-
-If we return to the tab for the running application now, we will observe the published message:
-
-```text
-Hello World
 ```

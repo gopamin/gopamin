@@ -8,13 +8,13 @@ In order to run this Go app, you have two options:
 
 ### Use The GNU/Make Tool
 
-By default, a `Makefile` is added to this project which can be used for running common commands like `go run`. To run this app using the `make` command, run the following command in the terminal:
+By default, a `Makefile` is added to this project which can be used for running common commands like `go run`. To run this app using the `make` tool, run the following command in the terminal:
 
 ```text
 $ make run
 ```
 
-### Use The `go` Command
+### Use The `go run` Command
 
 You can also use the `go run` command in order to run your app as follows:
 
@@ -22,17 +22,17 @@ You can also use the `go run` command in order to run your app as follows:
 $ go run ./cmd/main.go
 ```
 
-As `main.go` which is considered the entry point of the app resides inside the `cmd` folder, while using the `go run` command, we have to pass the full path as above.
+As the `main.go` file which is considered the entry point of the app resides inside the `cmd` folder, while using the `go run` command, we have to pass the full path as above.
 
 ## How to Dockerize The App
 
-By default, each project created by the Gopamin CLI includes a `Dockerfile`. Also, some rules are added to the `Makefile` in order to run Docker commands easier to use. In order to build an image off of your project, you can run the following command:
+By default, each project created by the Gopamin CLI tool includes a `Dockerfile`. Also, some rules are added to the `Makefile` in order to make Docker commands easier to use. In order to build an image off of your project, you can run the following command:
 
 ```text
 $ make docker-build
 ```
 
-The above command will create a Docker image called **{{.Name}}-image**. Then in order to run a container off of the newly-created image, you can run the following command:
+The above command will create a Docker image called **{{.Name}}-image**. To launch a container from this newly created image, execute the subsequent command:
 
 ```text
 $ make docker-run
@@ -42,49 +42,4 @@ The above command will create and run a Docker container called **{{.Name}}-cont
 
 ```text
 $ docker run --env-file ./.env --name {{.Name}}-container {{.Name}}-image
-```
-
-## How to publish new messages?
-
-In order to connect to Kafka shell, run the following command:
-
-```text
-$ docker exec -it kafka sh
-```
-
-Then run the following command to subscribe to the `testing` topic:
-
-```text
-$ kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic testing
-```
-
-After running the application to publish new messages, in Kafka shell we would see the result as follows:
-
-```text
-{"data":"Hello World"}
-```
-
-## How to consume messages?
-
-First, let's change the `main.go` file as follows:
-
-```go
-func main() {
-	broker := kafka.New("testing")
-	service := services.NewBrokerService(broker)
-	service.Consume()
-}
-```
-
-After running the application either by calling `make run` or `go run ./cmd/main.go`, then we have to connect to the Kafka shell and run the `kafka-console-producer.sh` command as follows:
-
-```text
-$ kafka-console-producer.sh --bootstrap-server localhost:9092 --topic testing
->Hello World
-```
-
-If we return to the tab for the running application now, we will observe the published message:
-
-```text
-Hello World
 ```

@@ -13,6 +13,7 @@ func (b *helloWorldProjectBuilder) build() {
 
 	if b.project.Database == "" {
 		fileGenerator([]string{"hello-world-main"}, b.project)
+		fileGenerator([]string{"hello-world-main-test"}, b.project)
 	} else {
 		fileGenerator([]string{"hello-world-main-with-db"}, b.project)
 		readme = append(readme, b.project.Database+"-readme")
@@ -25,7 +26,9 @@ func (b *helloWorldProjectBuilder) build() {
 	fileGenerator(readme, b.project)
 	fileGenerator(makefile, b.project)
 	fileGenerator([]string{"configs"}, b.project)
+	fileGenerator([]string{"configs-test"}, b.project)
 	fileGenerator([]string{"tools"}, b.project)
+	fileGenerator([]string{"tools-test"}, b.project)
 
 	fmt.Printf("%v project created successfully", b.project.Name)
 }

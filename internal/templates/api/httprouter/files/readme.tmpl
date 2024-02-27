@@ -8,13 +8,13 @@ In order to run this Go app, you have two options:
 
 ### Use The GNU/Make Tool
 
-By default, a `Makefile` is added to this project which can be used for running common commands like `go run`. To run this app using the `make` command, run the following command in the terminal:
+By default, a `Makefile` is added to this project which can be used for running common commands like `go run`. To run this app using the `make` tool, run the following command in the terminal:
 
 ```text
 $ make run
 ```
 
-### Use The `go` Command
+### Use The `go run` Command
 
 You can also use the `go run` command in order to run your app as follows:
 
@@ -22,17 +22,17 @@ You can also use the `go run` command in order to run your app as follows:
 $ go run ./cmd/main.go
 ```
 
-As `main.go` which is considered the entry point of the app resides inside the `cmd` folder, while using the `go run` command, we have to pass the full path as above.
+As the `main.go` file which is considered the entry point of the app resides inside the `cmd` folder, while using the `go run` command, we have to pass the full path as above.
 
 ## How to Dockerize The App
 
-By default, each project created by the Gopamin CLI includes a `Dockerfile`. Also, some rules are added to the `Makefile` in order to run Docker commands easier to use. In order to build an image off of your project, you can run the following command:
+By default, each project created by the Gopamin CLI tool includes a `Dockerfile`. Also, some rules are added to the `Makefile` in order to make Docker commands easier to use. In order to build an image off of your project, you can run the following command:
 
 ```text
 $ make docker-build
 ```
 
-The above command will create a Docker image called **{{.Name}}-image**. Then in order to run a container off of the newly-created image, you can run the following command:
+The above command will create a Docker image called **{{.Name}}-image**. To launch a container from this newly created image, execute the subsequent command:
 
 ```text
 $ make docker-run

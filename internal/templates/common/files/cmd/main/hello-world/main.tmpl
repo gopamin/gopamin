@@ -4,14 +4,17 @@ import (
 	"fmt"
 	"os"
 
-	"{{.Name}}/configs"
+	"allah2/configs"
 )
 
 func init() {
 	configs.LoadEnv()
 }
 
+func projectName() string {
+	return os.Getenv("PROJECT_NAME")
+}
+
 func main() {
-	projectName := os.Getenv("PROJECT_NAME")
-	fmt.Println(projectName)
+	fmt.Println(projectName())
 }

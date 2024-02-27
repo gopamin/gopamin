@@ -109,6 +109,13 @@ func ConfigsTemplate() ([]byte, string) {
 	return configs, "configs/configs.go"
 }
 
+//go:embed files/configs/configs_test.tmpl
+var configsTest []byte
+
+func ConfigsTestTemplate() ([]byte, string) {
+	return configsTest, "configs/configs_test.go"
+}
+
 //go:embed files/cmd/server/server.tmpl
 var server []byte
 
@@ -142,6 +149,13 @@ var helloWorldMain []byte
 
 func HelloWorldMainTemplate() ([]byte, string) {
 	return helloWorldMain, "cmd/main.go"
+}
+
+//go:embed files/cmd/main/hello-world/main_test.tmpl
+var helloWorldMainTest []byte
+
+func HelloWorldMainTestTemplate() ([]byte, string) {
+	return helloWorldMainTest, "cmd/main_test.go"
 }
 
 //go:embed files/cmd/main/hello-world/main-with-db.tmpl
@@ -219,4 +233,11 @@ var tools []byte
 
 func ToolsTemplate() ([]byte, string) {
 	return tools, "tools/tools.go"
+}
+
+//go:embed files/tools/tools_test.tmpl
+var toolsTest []byte
+
+func ToolsTestTemplate() ([]byte, string) {
+	return toolsTest, "tools/tools_test.go"
 }
