@@ -1,2 +1,24 @@
-# MySQL Setup
-This comes the setup guide for MySQL database
+## MySQL Setup
+
+This project comes with a `docker-compose.yml` file which will be used for creating a MySQL container. Also there is a `Makefile` which includes some commands for running a container (The following guide is applicable if GNU/Make tool is installed on your machine).
+
+### How to Run A MySQL Container?
+
+First, make sure Docker is up and running on your machine. Then in the root path of the project run the following command:
+
+```text
+$ make mysql-up
+```
+
+In order to stop the container, you can run the following command:
+
+```text
+$ make mysql-down
+```
+
+Although it stops the container, still the volume related to the previously-created container exits and if you run `make mysql-up` again, you have access to persisted data if any.  
+In order to stop the container and at the same time remove the volume related to that container, you can run the following command:
+
+```text
+$ make mysql-down-rm-vol
+```

@@ -1,8 +1,8 @@
 run:
-	go run .
+	@go run .
 
 test:
-	go test ./...
+	@go test ./...
 	
 install: 
-	go install
+	@go install
