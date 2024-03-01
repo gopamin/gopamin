@@ -64,7 +64,7 @@ Based on the database type you choose, a `docker-compose.yml` file will be added
 To install the Gopamin tool, run the following command inside terminal:
 
 ```text
-$ go install github.com/gopamin/gopamin@latest
+$ go install github.com/gopamin/gopamin@v1.0.7
 ```
 
 To make sure it's installed correctly in your `$GOPATH`, run the following command:
