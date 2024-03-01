@@ -1,0 +1,208 @@
+package templates
+
+import (
+	_ "embed"
+)
+
+//go:embed files/env/env-dynamodb.tmpl
+var dynamodbEnv []byte
+
+func DynamodbEnvTemplate() ([]byte, string) {
+	return dynamodbEnv, ".env"
+}
+
+//go:embed files/makefile/makefile-dynamodb.tmpl
+var dynamodbMakefile []byte
+
+func DynamodbMakefileTemplate() ([]byte, string) {
+	return dynamodbMakefile, "Makefile"
+}
+
+//go:embed files/readme/readme-dynamodb.tmpl
+var dynamodbReadme []byte
+
+func DynamodbReadmeTemplate() ([]byte, string) {
+	return dynamodbReadme, "README.md"
+}
+
+//go:embed files/docker-compose/docker-compose-dynamodb.tmpl
+var dynamodbDockerCompose []byte
+
+func DynamodbDockerComposeTemplate() ([]byte, string) {
+	return dynamodbDockerCompose, "docker-compose.yml"
+}
+
+//go:embed files/internal/adapters/repositories/dynamodb/repository.tmpl
+var dynamodbRepository []byte
+
+func DynamodbRepositoryTemplate() ([]byte, string) {
+	return dynamodbRepository, "internal/adapters/repositories/dynamodb/repository.go"
+}
+
+//go:embed files/env/env-mongodb.tmpl
+var mongodbEnv []byte
+
+func MongodbEnvTemplate() ([]byte, string) {
+	return mongodbEnv, ".env"
+}
+
+//go:embed files/makefile/makefile-mongodb.tmpl
+var mongodbMakefile []byte
+
+func MongodbMakefileTemplate() ([]byte, string) {
+	return mongodbMakefile, "Makefile"
+}
+
+//go:embed files/readme/readme-mongodb.tmpl
+var mongodbReadme []byte
+
+func MongodbReadmeTemplate() ([]byte, string) {
+	return mongodbReadme, "README.md"
+}
+
+//go:embed files/docker-compose/docker-compose-mongodb.tmpl
+var mongodbDockerCompose []byte
+
+func MongodbDockerComposeTemplate() ([]byte, string) {
+	return mongodbDockerCompose, "docker-compose.yml"
+}
+
+//go:embed files/internal/adapters/repositories/mongodb/repository.tmpl
+var mongodbRepository []byte
+
+func MongodbRepositoryTemplate() ([]byte, string) {
+	return mongodbRepository, "internal/adapters/repositories/mongodb/repository.go"
+}
+
+//go:embed files/env/env-mysql.tmpl
+var mysqlEnv []byte
+
+func MysqlEnvTemplate() ([]byte, string) {
+	return mysqlEnv, ".env"
+}
+
+//go:embed files/docker-compose/docker-compose-mysql.tmpl
+var mysqlDockerCompose []byte
+
+func MysqlDockerComposeTemplate() ([]byte, string) {
+	return mysqlDockerCompose, "docker-compose.yml"
+}
+
+//go:embed files/makefile/makefile-mysql.tmpl
+var mysqlMakefile []byte
+
+func MysqlMakefileTemplate() ([]byte, string) {
+	return mysqlMakefile, "Makefile"
+}
+
+//go:embed files/readme/readme-mysql.tmpl
+var mysqlReadme []byte
+
+func MysqlReadmeTemplate() ([]byte, string) {
+	return mysqlReadme, "README.md"
+}
+
+//go:embed files/internal/adapters/repositories/mysql/repository.tmpl
+var mysqlRepository []byte
+
+func MysqlRepositoryTemplate() ([]byte, string) {
+	return mysqlRepository, "internal/adapters/repositories/mysql/repository.go"
+}
+
+//go:embed files/env/env-postgres.tmpl
+var postgresEnv []byte
+
+func PostgresEnvTemplate() ([]byte, string) {
+	return postgresEnv, ".env"
+}
+
+//go:embed files/makefile/makefile-postgres.tmpl
+var postgresMakefile []byte
+
+func PostgresMakefileTemplate() ([]byte, string) {
+	return postgresMakefile, "Makefile"
+}
+
+//go:embed files/readme/readme-postgres.tmpl
+var postgresReadme []byte
+
+func PostgresReadmeTemplate() ([]byte, string) {
+	return postgresReadme, "README.md"
+}
+
+//go:embed files/docker-compose/docker-compose-postgres.tmpl
+var postgresDockerCompose []byte
+
+func PostgresDockerComposeTemplate() ([]byte, string) {
+	return postgresDockerCompose, "docker-compose.yml"
+}
+
+//go:embed files/internal/adapters/repositories/postgres/repository.tmpl
+var postgresRepository []byte
+
+func PostgresRepositoryTemplate() ([]byte, string) {
+	return postgresRepository, "internal/adapters/repositories/postgres/repository.go"
+}
+
+//go:embed files/env/env-redis.tmpl
+var redisEnv []byte
+
+func RedisEnvTemplate() ([]byte, string) {
+	return redisEnv, ".env"
+}
+
+//go:embed files/makefile/makefile-redis.tmpl
+var redisMakefile []byte
+
+func RedisMakefileTemplate() ([]byte, string) {
+	return redisMakefile, "Makefile"
+}
+
+//go:embed files/readme/readme-redis.tmpl
+var redisReadme []byte
+
+func RedisReadmeTemplate() ([]byte, string) {
+	return redisReadme, "README.md"
+}
+
+//go:embed files/docker-compose/docker-compose-redis.tmpl
+var redisDockerCompose []byte
+
+func RedisDockerComposeTemplate() ([]byte, string) {
+	return redisDockerCompose, "docker-compose.yml"
+}
+
+//go:embed files/internal/adapters/repositories/redis/repository.tmpl
+var redisRepository []byte
+
+func RedisRepositoryTemplate() ([]byte, string) {
+	return redisRepository, "internal/adapters/repositories/redis/repository.go"
+}
+
+//go:embed files/env/env-sqlite.tmpl
+var sqliteEnv []byte
+
+func SqliteEnvTemplate() ([]byte, string) {
+	return sqliteEnv, ".env"
+}
+
+//go:embed files/makefile/makefile-sqlite.tmpl
+var sqliteMakefile []byte
+
+func SqliteMakefileTemplate() ([]byte, string) {
+	return sqliteMakefile, "Makefile"
+}
+
+//go:embed files/readme/readme-sqlite.tmpl
+var sqliteReadme []byte
+
+func SqliteReadmeTemplate() ([]byte, string) {
+	return sqliteReadme, "README.md"
+}
+
+//go:embed files/internal/adapters/repositories/sqlite/repository.tmpl
+var sqliteRepository []byte
+
+func SqliteRepositoryTemplate() ([]byte, string) {
+	return sqliteRepository, "internal/adapters/repositories/sqlite/repository.go"
+}

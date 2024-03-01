@@ -54,9 +54,7 @@ func New(projectType, platform, name, database string) {
 
 func generateProjectAgnosticFiles(p *Project) {
 	fileGenerator([]string{"gitignore"}, p)
-	fileGenerator([]string{"dockerignore"}, p)
 	fileGenerator([]string{"license"}, p)
-	fileGenerator([]string{"dockerfile"}, p)
 
 	initGit(p.Path)
 	initGoMod(p.Name, p.Path)

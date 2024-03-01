@@ -7,16 +7,15 @@ type kafkaMicroserviceBuilder struct {
 }
 
 func (b *kafkaMicroserviceBuilder) build() {
-	fileGenerator([]string{"kafka-microservice-readme"}, b.project)
-	fileGenerator([]string{"kafka-microservice-env"}, b.project)
-	fileGenerator([]string{"kafka-microservice-makefile"}, b.project)
+	fileGenerator([]string{"readme", "kafka-microservice-readme"}, b.project)
+	fileGenerator([]string{"env", "kafka-microservice-env"}, b.project)
+	fileGenerator([]string{"makefile", "kafka-microservice-makefile"}, b.project)
 	fileGenerator([]string{"kafka-microservice-docker-compose"}, b.project)
 	fileGenerator([]string{"kafka-microservice-broker"}, b.project)
 	fileGenerator([]string{"configs"}, b.project)
 	fileGenerator([]string{"configs-test"}, b.project)
 	fileGenerator([]string{"tools"}, b.project)
 	fileGenerator([]string{"tools-test"}, b.project)
-	fileGenerator([]string{"api-main"}, b.project)
 	fileGenerator([]string{"message"}, b.project)
 	fileGenerator([]string{"broker-service-interface"}, b.project)
 	fileGenerator([]string{"broker-service"}, b.project)
@@ -33,16 +32,15 @@ type rabbitmqMicroserviceBuilder struct {
 }
 
 func (b *rabbitmqMicroserviceBuilder) build() {
-	fileGenerator([]string{"rabbitmq-microservice-readme"}, b.project)
-	fileGenerator([]string{"rabbitmq-microservice-env"}, b.project)
-	fileGenerator([]string{"rabbitmq-microservice-makefile"}, b.project)
+	fileGenerator([]string{"readme", "rabbitmq-microservice-readme"}, b.project)
+	fileGenerator([]string{"env", "rabbitmq-microservice-env"}, b.project)
+	fileGenerator([]string{"makefile", "rabbitmq-microservice-makefile"}, b.project)
 	fileGenerator([]string{"rabbitmq-microservice-docker-compose"}, b.project)
 	fileGenerator([]string{"rabbitmq-microservice-broker"}, b.project)
 	fileGenerator([]string{"configs"}, b.project)
 	fileGenerator([]string{"configs-test"}, b.project)
 	fileGenerator([]string{"tools"}, b.project)
 	fileGenerator([]string{"tools-test"}, b.project)
-	fileGenerator([]string{"api-main"}, b.project)
 	fileGenerator([]string{"message"}, b.project)
 	fileGenerator([]string{"broker-service-interface"}, b.project)
 	fileGenerator([]string{"broker-service"}, b.project)
@@ -59,16 +57,15 @@ type redisMicroserviceBuilder struct {
 }
 
 func (b *redisMicroserviceBuilder) build() {
-	fileGenerator([]string{"redis-microservice-readme"}, b.project)
-	fileGenerator([]string{"redis-microservice-env"}, b.project)
-	fileGenerator([]string{"redis-microservice-makefile"}, b.project)
+	fileGenerator([]string{"readme", "redis-microservice-readme"}, b.project)
+	fileGenerator([]string{"env", "redis-microservice-env"}, b.project)
+	fileGenerator([]string{"makefile", "redis-microservice-makefile"}, b.project)
 	fileGenerator([]string{"redis-microservice-docker-compose"}, b.project)
 	fileGenerator([]string{"redis-microservice-broker"}, b.project)
 	fileGenerator([]string{"configs"}, b.project)
 	fileGenerator([]string{"configs-test"}, b.project)
 	fileGenerator([]string{"tools"}, b.project)
 	fileGenerator([]string{"tools-test"}, b.project)
-	fileGenerator([]string{"api-main"}, b.project)
 	fileGenerator([]string{"message"}, b.project)
 	fileGenerator([]string{"broker-service-interface"}, b.project)
 	fileGenerator([]string{"broker-service"}, b.project)

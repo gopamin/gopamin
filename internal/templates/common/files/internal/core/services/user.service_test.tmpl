@@ -132,7 +132,7 @@ func TestShow(t *testing.T) {
 }
 
 func TestIndex(t *testing.T) {
-	mockRepository := mock.MockRepository{Users: map[int]domain.User{}}
+	mockRepository := mock.MockRepository{Users: []domain.User{}}
 	us := NewUserService(&mockRepository)
 
 	t.Run("should return users", func(t *testing.T) {

@@ -129,6 +129,7 @@ func (s *mockBuilder) build() {
 	fileGenerator([]string{"user-service-interface"}, s.project)
 	fileGenerator([]string{"user-service"}, s.project)
 	fileGenerator([]string{"user-service-test"}, s.project)
+	goGetPackages(s.project.Path, []string{"github.com/google/uuid"})
 }
 
 type databaseBuilderFactory func(p *Project) boilerplateBuilder

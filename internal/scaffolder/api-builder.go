@@ -7,22 +7,22 @@ type echoBuilder struct {
 }
 
 func (b *echoBuilder) build() {
-	env := []string{"api-echo-env"}
-	readme := []string{"api-echo-readme"}
-	makefile := []string{"api-echo-makefile"}
+	env := []string{"env", "api-env"}
+	readme := []string{"readme"}
+	makefile := []string{"makefile"}
 
 	if b.project.Database == "" {
 		b.project.Database = "mock"
-		dbSelector(b.project)
 		fileGenerator([]string{"api-main"}, b.project)
+		readme = append(readme, "api-readme")
 	} else {
 		fileGenerator([]string{"api-main-with-db"}, b.project)
-		readme = append(readme, b.project.Database+"-readme")
+		readme = append(readme, b.project.Database+"-readme", "api-readme-with-db")
 		makefile = append(makefile, b.project.Database+"-makefile")
 		env = append(env, b.project.Database+"-env")
-		dbSelector(b.project)
 	}
 
+	dbSelector(b.project)
 	fileGenerator(env, b.project)
 	fileGenerator(readme, b.project)
 	fileGenerator(makefile, b.project)
@@ -30,7 +30,7 @@ func (b *echoBuilder) build() {
 	fileGenerator([]string{"configs-test"}, b.project)
 	fileGenerator([]string{"tools"}, b.project)
 	fileGenerator([]string{"tools-test"}, b.project)
-	fileGenerator([]string{"server"}, b.project)
+	fileGenerator([]string{"api-server"}, b.project)
 	fileGenerator([]string{"api-echo-routes"}, b.project)
 	fileGenerator([]string{"api-echo-users"}, b.project)
 	fileGenerator([]string{"api-errors"}, b.project)
@@ -47,22 +47,22 @@ type chiBuilder struct {
 }
 
 func (b *chiBuilder) build() {
-	env := []string{"api-chi-env"}
-	readme := []string{"api-chi-readme"}
-	makefile := []string{"api-chi-makefile"}
+	env := []string{"env", "api-env"}
+	readme := []string{"readme"}
+	makefile := []string{"makefile"}
 
 	if b.project.Database == "" {
 		b.project.Database = "mock"
-		dbSelector(b.project)
 		fileGenerator([]string{"api-main"}, b.project)
+		readme = append(readme, "api-readme")
 	} else {
 		fileGenerator([]string{"api-main-with-db"}, b.project)
-		readme = append(readme, b.project.Database+"-readme")
+		readme = append(readme, b.project.Database+"-readme", "api-readme-with-db")
 		makefile = append(makefile, b.project.Database+"-makefile")
 		env = append(env, b.project.Database+"-env")
-		dbSelector(b.project)
 	}
 
+	dbSelector(b.project)
 	fileGenerator(env, b.project)
 	fileGenerator(readme, b.project)
 	fileGenerator(makefile, b.project)
@@ -70,7 +70,7 @@ func (b *chiBuilder) build() {
 	fileGenerator([]string{"configs-test"}, b.project)
 	fileGenerator([]string{"tools"}, b.project)
 	fileGenerator([]string{"tools-test"}, b.project)
-	fileGenerator([]string{"server"}, b.project)
+	fileGenerator([]string{"api-server"}, b.project)
 	fileGenerator([]string{"api-chi-routes"}, b.project)
 	fileGenerator([]string{"api-chi-users"}, b.project)
 	fileGenerator([]string{"api-errors"}, b.project)
@@ -87,22 +87,22 @@ type ginBuilder struct {
 }
 
 func (b *ginBuilder) build() {
-	env := []string{"api-gin-env"}
-	readme := []string{"api-gin-readme"}
-	makefile := []string{"api-gin-makefile"}
+	env := []string{"env", "api-env"}
+	readme := []string{"readme"}
+	makefile := []string{"makefile"}
 
 	if b.project.Database == "" {
 		b.project.Database = "mock"
-		dbSelector(b.project)
 		fileGenerator([]string{"api-main"}, b.project)
+		readme = append(readme, "api-readme")
 	} else {
 		fileGenerator([]string{"api-main-with-db"}, b.project)
-		readme = append(readme, b.project.Database+"-readme")
+		readme = append(readme, b.project.Database+"-readme", "api-readme-with-db")
 		makefile = append(makefile, b.project.Database+"-makefile")
 		env = append(env, b.project.Database+"-env")
-		dbSelector(b.project)
 	}
 
+	dbSelector(b.project)
 	fileGenerator(env, b.project)
 	fileGenerator(readme, b.project)
 	fileGenerator(makefile, b.project)
@@ -110,7 +110,7 @@ func (b *ginBuilder) build() {
 	fileGenerator([]string{"configs-test"}, b.project)
 	fileGenerator([]string{"tools"}, b.project)
 	fileGenerator([]string{"tools-test"}, b.project)
-	fileGenerator([]string{"server"}, b.project)
+	fileGenerator([]string{"api-server"}, b.project)
 	fileGenerator([]string{"api-gin-routes"}, b.project)
 	fileGenerator([]string{"api-gin-users"}, b.project)
 	fileGenerator([]string{"api-errors"}, b.project)
@@ -127,22 +127,22 @@ type httprouterBuilder struct {
 }
 
 func (b *httprouterBuilder) build() {
-	env := []string{"api-httprouter-env"}
-	readme := []string{"api-httprouter-readme"}
-	makefile := []string{"api-httprouter-makefile"}
+	env := []string{"env", "api-env"}
+	readme := []string{"readme"}
+	makefile := []string{"makefile"}
 
 	if b.project.Database == "" {
 		b.project.Database = "mock"
-		dbSelector(b.project)
 		fileGenerator([]string{"api-main"}, b.project)
+		readme = append(readme, "api-readme")
 	} else {
 		fileGenerator([]string{"api-main-with-db"}, b.project)
-		readme = append(readme, b.project.Database+"-readme")
+		readme = append(readme, b.project.Database+"-readme", "api-readme-with-db")
 		makefile = append(makefile, b.project.Database+"-makefile")
 		env = append(env, b.project.Database+"-env")
-		dbSelector(b.project)
 	}
 
+	dbSelector(b.project)
 	fileGenerator(env, b.project)
 	fileGenerator(readme, b.project)
 	fileGenerator(makefile, b.project)
@@ -150,7 +150,7 @@ func (b *httprouterBuilder) build() {
 	fileGenerator([]string{"configs-test"}, b.project)
 	fileGenerator([]string{"tools"}, b.project)
 	fileGenerator([]string{"tools-test"}, b.project)
-	fileGenerator([]string{"server"}, b.project)
+	fileGenerator([]string{"api-server"}, b.project)
 	fileGenerator([]string{"api-httprouter-routes"}, b.project)
 	fileGenerator([]string{"api-httprouter-users"}, b.project)
 	fileGenerator([]string{"api-errors"}, b.project)
@@ -167,22 +167,22 @@ type gorillaBuilder struct {
 }
 
 func (b *gorillaBuilder) build() {
-	env := []string{"api-gorilla-env"}
-	readme := []string{"api-gorilla-readme"}
-	makefile := []string{"api-gorilla-makefile"}
+	env := []string{"env", "api-env"}
+	readme := []string{"readme"}
+	makefile := []string{"makefile"}
 
 	if b.project.Database == "" {
 		b.project.Database = "mock"
-		dbSelector(b.project)
 		fileGenerator([]string{"api-main"}, b.project)
+		readme = append(readme, "api-readme")
 	} else {
 		fileGenerator([]string{"api-main-with-db"}, b.project)
-		readme = append(readme, b.project.Database+"-readme")
+		readme = append(readme, b.project.Database+"-readme", "api-readme-with-db")
 		makefile = append(makefile, b.project.Database+"-makefile")
 		env = append(env, b.project.Database+"-env")
-		dbSelector(b.project)
 	}
 
+	dbSelector(b.project)
 	fileGenerator(env, b.project)
 	fileGenerator(readme, b.project)
 	fileGenerator(makefile, b.project)
@@ -190,7 +190,7 @@ func (b *gorillaBuilder) build() {
 	fileGenerator([]string{"configs-test"}, b.project)
 	fileGenerator([]string{"tools"}, b.project)
 	fileGenerator([]string{"tools-test"}, b.project)
-	fileGenerator([]string{"server"}, b.project)
+	fileGenerator([]string{"api-server"}, b.project)
 	fileGenerator([]string{"api-gorilla-routes"}, b.project)
 	fileGenerator([]string{"api-gorilla-users"}, b.project)
 	fileGenerator([]string{"api-errors"}, b.project)
@@ -207,22 +207,22 @@ type httpBuilder struct {
 }
 
 func (b *httpBuilder) build() {
-	env := []string{"api-http-env"}
-	readme := []string{"api-http-readme"}
-	makefile := []string{"api-http-makefile"}
+	env := []string{"env", "api-env"}
+	readme := []string{"readme"}
+	makefile := []string{"makefile"}
 
 	if b.project.Database == "" {
 		b.project.Database = "mock"
-		dbSelector(b.project)
 		fileGenerator([]string{"api-main"}, b.project)
+		readme = append(readme, "api-readme")
 	} else {
 		fileGenerator([]string{"api-main-with-db"}, b.project)
-		readme = append(readme, b.project.Database+"-readme")
+		readme = append(readme, b.project.Database+"-readme", "api-readme-with-db")
 		makefile = append(makefile, b.project.Database+"-makefile")
 		env = append(env, b.project.Database+"-env")
-		dbSelector(b.project)
 	}
 
+	dbSelector(b.project)
 	fileGenerator(env, b.project)
 	fileGenerator(readme, b.project)
 	fileGenerator(makefile, b.project)
@@ -230,7 +230,7 @@ func (b *httpBuilder) build() {
 	fileGenerator([]string{"configs-test"}, b.project)
 	fileGenerator([]string{"tools"}, b.project)
 	fileGenerator([]string{"tools-test"}, b.project)
-	fileGenerator([]string{"server"}, b.project)
+	fileGenerator([]string{"api-server"}, b.project)
 	fileGenerator([]string{"api-http-routes"}, b.project)
 	fileGenerator([]string{"api-http-users"}, b.project)
 	fileGenerator([]string{"api-errors"}, b.project)

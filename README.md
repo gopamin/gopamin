@@ -25,7 +25,7 @@ All boilerplates created by Gopamin are based on [The Clean Architecture](https:
 The minimum required tools for using the Gopamin CLI tool is Golang which can be downloaded from [Go All Releases](https://go.dev/dl). To have full development setup though, other tools are also recommended to be installed on your local machine:
 
 -   **[Git](https://git-scm.com/)**: By default each new project created by this tool initializes a Git repo; that's why you need to make sure Git is installed on your machine.
--   **[Docker](https://www.docker.com)**: A `Dockerfile` is included in each new project for containerization purposes. If you choose to create a new project with database integration, a `docker-compose.yml` will be included in the root of the project for running the database of your choice.
+-   **[Docker](https://www.docker.com)**: If you choose to create a new project with database integration, a `docker-compose.yml` will be included in the root of the project for running the database of your choice.
 -   **[GNU Make](https://www.gnu.org/software/make)**: This a tool which controls the generation of executables and other types of files. By default, each new project includes a `Makefile` for running some most-used commands like running an application (This tool is installed by default on Mac and some distributions of Linux). To check whether this tool is installed on your machine, open terminal and run `make --version` (If you do not have this tool installed on your machine though, still you can use this tools without any limitations).
 
 ## Supported Application Types

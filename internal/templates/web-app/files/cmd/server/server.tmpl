@@ -1,0 +1,28 @@
+package server
+
+import (
+	"{{.Name}}/internal/core/ports"
+	"fmt"
+	"net/http"
+	"os"
+	"strconv"
+	"time"
+)
+
+func Serve(handlers ports.RouterInterface) {
+	port, _ := strconv.Atoi(os.Getenv("PORT"))
+	fmt.Printf("The web server is accessible at http://localhost:%d/users\n", port)
+
+	server := &http.Server{
+		Addr:         fmt.Sprintf(":%d", port),
+		Handler:      handlers.Register(),
+		IdleTimeout:  time.Minute,
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 30 * time.Second,
+	}
+
+	err := server.ListenAndServe()
+	if err != nil {
+		panic(fmt.Sprintf("cannot start server: %s", err))
+	}
+}

@@ -7,9 +7,9 @@ type helloWorldProjectBuilder struct {
 }
 
 func (b *helloWorldProjectBuilder) build() {
-	readme := []string{"hello-world-readme"}
-	makefile := []string{"hello-world-makefile"}
-	env := []string{"hello-world-env"}
+	readme := []string{"readme"}
+	makefile := []string{"makefile"}
+	env := []string{"env"}
 
 	if b.project.Database == "" {
 		fileGenerator([]string{"hello-world-main"}, b.project)
@@ -21,6 +21,7 @@ func (b *helloWorldProjectBuilder) build() {
 		env = append(env, b.project.Database+"-env")
 		dbSelector(b.project)
 	}
+	readme = append(readme, "hello-world-readme")
 
 	fileGenerator(env, b.project)
 	fileGenerator(readme, b.project)

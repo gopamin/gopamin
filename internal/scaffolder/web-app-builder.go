@@ -7,22 +7,22 @@ type webAppHttpBuilder struct {
 }
 
 func (b *webAppHttpBuilder) build() {
-	env := []string{"web-app-env"}
-	readme := []string{"web-app-readme"}
-	makefile := []string{"web-app-makefile"}
+	env := []string{"env", "web-app-env"}
+	readme := []string{"readme"}
+	makefile := []string{"makefile"}
 
 	if b.project.Database == "" {
 		b.project.Database = "mock"
-		dbSelector(b.project)
 		fileGenerator([]string{"web-app-main"}, b.project)
+		readme = append(readme, "web-app-readme")
 	} else {
 		fileGenerator([]string{"web-app-main-with-db"}, b.project)
-		readme = append(readme, b.project.Database+"-readme")
+		readme = append(readme, b.project.Database+"-readme", "web-app-readme-with-db")
 		makefile = append(makefile, b.project.Database+"-makefile")
 		env = append(env, b.project.Database+"-env")
-		dbSelector(b.project)
 	}
 
+	dbSelector(b.project)
 	fileGenerator(env, b.project)
 	fileGenerator(readme, b.project)
 	fileGenerator(makefile, b.project)
@@ -30,7 +30,7 @@ func (b *webAppHttpBuilder) build() {
 	fileGenerator([]string{"configs-test"}, b.project)
 	fileGenerator([]string{"tools"}, b.project)
 	fileGenerator([]string{"tools-test"}, b.project)
-	fileGenerator([]string{"server"}, b.project)
+	fileGenerator([]string{"web-app-server"}, b.project)
 	fileGenerator([]string{"web-app-http-routes"}, b.project)
 	fileGenerator([]string{"web-app-http-users"}, b.project)
 	fileGenerator([]string{"router-inferface"}, b.project)
@@ -46,22 +46,22 @@ type webAppChiBuilder struct {
 }
 
 func (b *webAppChiBuilder) build() {
-	env := []string{"web-app-env"}
-	readme := []string{"web-app-readme"}
-	makefile := []string{"web-app-makefile"}
+	env := []string{"env", "web-app-env"}
+	readme := []string{"readme"}
+	makefile := []string{"makefile"}
 
 	if b.project.Database == "" {
 		b.project.Database = "mock"
-		dbSelector(b.project)
 		fileGenerator([]string{"web-app-main"}, b.project)
+		readme = append(readme, "web-app-readme")
 	} else {
 		fileGenerator([]string{"web-app-main-with-db"}, b.project)
-		readme = append(readme, b.project.Database+"-readme")
+		readme = append(readme, b.project.Database+"-readme", "web-app-readme-with-db")
 		makefile = append(makefile, b.project.Database+"-makefile")
 		env = append(env, b.project.Database+"-env")
-		dbSelector(b.project)
 	}
 
+	dbSelector(b.project)
 	fileGenerator(env, b.project)
 	fileGenerator(readme, b.project)
 	fileGenerator(makefile, b.project)
@@ -69,7 +69,7 @@ func (b *webAppChiBuilder) build() {
 	fileGenerator([]string{"configs-test"}, b.project)
 	fileGenerator([]string{"tools"}, b.project)
 	fileGenerator([]string{"tools-test"}, b.project)
-	fileGenerator([]string{"server"}, b.project)
+	fileGenerator([]string{"web-app-server"}, b.project)
 	fileGenerator([]string{"web-app-chi-routes"}, b.project)
 	fileGenerator([]string{"web-app-chi-users"}, b.project)
 	fileGenerator([]string{"router-inferface"}, b.project)
@@ -87,22 +87,22 @@ type webAppEchoBuilder struct {
 }
 
 func (b *webAppEchoBuilder) build() {
-	env := []string{"web-app-env"}
-	readme := []string{"web-app-readme"}
-	makefile := []string{"web-app-makefile"}
+	env := []string{"env", "web-app-env"}
+	readme := []string{"readme"}
+	makefile := []string{"makefile"}
 
 	if b.project.Database == "" {
 		b.project.Database = "mock"
-		dbSelector(b.project)
 		fileGenerator([]string{"web-app-main"}, b.project)
+		readme = append(readme, "web-app-readme")
 	} else {
 		fileGenerator([]string{"web-app-main-with-db"}, b.project)
-		readme = append(readme, b.project.Database+"-readme")
+		readme = append(readme, b.project.Database+"-readme", "web-app-readme-with-db")
 		makefile = append(makefile, b.project.Database+"-makefile")
 		env = append(env, b.project.Database+"-env")
-		dbSelector(b.project)
 	}
 
+	dbSelector(b.project)
 	fileGenerator(env, b.project)
 	fileGenerator(readme, b.project)
 	fileGenerator(makefile, b.project)
@@ -110,7 +110,7 @@ func (b *webAppEchoBuilder) build() {
 	fileGenerator([]string{"configs-test"}, b.project)
 	fileGenerator([]string{"tools"}, b.project)
 	fileGenerator([]string{"tools-test"}, b.project)
-	fileGenerator([]string{"server"}, b.project)
+	fileGenerator([]string{"web-app-server"}, b.project)
 	fileGenerator([]string{"web-app-echo-routes"}, b.project)
 	fileGenerator([]string{"web-app-echo-users"}, b.project)
 	fileGenerator([]string{"router-inferface"}, b.project)
@@ -128,22 +128,22 @@ type webAppGinBuilder struct {
 }
 
 func (b *webAppGinBuilder) build() {
-	env := []string{"web-app-env"}
-	readme := []string{"web-app-readme"}
-	makefile := []string{"web-app-makefile"}
+	env := []string{"env", "web-app-env"}
+	readme := []string{"readme"}
+	makefile := []string{"makefile"}
 
 	if b.project.Database == "" {
 		b.project.Database = "mock"
-		dbSelector(b.project)
 		fileGenerator([]string{"web-app-main"}, b.project)
+		readme = append(readme, "web-app-readme")
 	} else {
 		fileGenerator([]string{"web-app-main-with-db"}, b.project)
-		readme = append(readme, b.project.Database+"-readme")
+		readme = append(readme, b.project.Database+"-readme", "web-app-readme-with-db")
 		makefile = append(makefile, b.project.Database+"-makefile")
 		env = append(env, b.project.Database+"-env")
-		dbSelector(b.project)
 	}
 
+	dbSelector(b.project)
 	fileGenerator(env, b.project)
 	fileGenerator(readme, b.project)
 	fileGenerator(makefile, b.project)
@@ -151,7 +151,7 @@ func (b *webAppGinBuilder) build() {
 	fileGenerator([]string{"configs-test"}, b.project)
 	fileGenerator([]string{"tools"}, b.project)
 	fileGenerator([]string{"tools-test"}, b.project)
-	fileGenerator([]string{"server"}, b.project)
+	fileGenerator([]string{"web-app-server"}, b.project)
 	fileGenerator([]string{"web-app-gin-routes"}, b.project)
 	fileGenerator([]string{"web-app-gin-users"}, b.project)
 	fileGenerator([]string{"router-inferface"}, b.project)
@@ -169,22 +169,22 @@ type webAppGorillaBuilder struct {
 }
 
 func (b *webAppGorillaBuilder) build() {
-	env := []string{"web-app-env"}
-	readme := []string{"web-app-readme"}
-	makefile := []string{"web-app-makefile"}
+	env := []string{"env", "web-app-env"}
+	readme := []string{"readme"}
+	makefile := []string{"makefile"}
 
 	if b.project.Database == "" {
 		b.project.Database = "mock"
-		dbSelector(b.project)
 		fileGenerator([]string{"web-app-main"}, b.project)
+		readme = append(readme, "web-app-readme")
 	} else {
 		fileGenerator([]string{"web-app-main-with-db"}, b.project)
-		readme = append(readme, b.project.Database+"-readme")
+		readme = append(readme, b.project.Database+"-readme", "web-app-readme-with-db")
 		makefile = append(makefile, b.project.Database+"-makefile")
 		env = append(env, b.project.Database+"-env")
-		dbSelector(b.project)
 	}
 
+	dbSelector(b.project)
 	fileGenerator(env, b.project)
 	fileGenerator(readme, b.project)
 	fileGenerator(makefile, b.project)
@@ -192,7 +192,7 @@ func (b *webAppGorillaBuilder) build() {
 	fileGenerator([]string{"configs-test"}, b.project)
 	fileGenerator([]string{"tools"}, b.project)
 	fileGenerator([]string{"tools-test"}, b.project)
-	fileGenerator([]string{"server"}, b.project)
+	fileGenerator([]string{"web-app-server"}, b.project)
 	fileGenerator([]string{"web-app-gorilla-routes"}, b.project)
 	fileGenerator([]string{"web-app-gorilla-users"}, b.project)
 	fileGenerator([]string{"router-inferface"}, b.project)
@@ -210,22 +210,22 @@ type webAppHttprouterBuilder struct {
 }
 
 func (b *webAppHttprouterBuilder) build() {
-	env := []string{"web-app-env"}
-	readme := []string{"web-app-readme"}
-	makefile := []string{"web-app-makefile"}
+	env := []string{"env", "web-app-env"}
+	readme := []string{"readme"}
+	makefile := []string{"makefile"}
 
 	if b.project.Database == "" {
 		b.project.Database = "mock"
-		dbSelector(b.project)
 		fileGenerator([]string{"web-app-main"}, b.project)
+		readme = append(readme, "web-app-readme")
 	} else {
 		fileGenerator([]string{"web-app-main-with-db"}, b.project)
-		readme = append(readme, b.project.Database+"-readme")
+		readme = append(readme, b.project.Database+"-readme", "web-app-readme-with-db")
 		makefile = append(makefile, b.project.Database+"-makefile")
 		env = append(env, b.project.Database+"-env")
-		dbSelector(b.project)
 	}
 
+	dbSelector(b.project)
 	fileGenerator(env, b.project)
 	fileGenerator(readme, b.project)
 	fileGenerator(makefile, b.project)
@@ -233,7 +233,7 @@ func (b *webAppHttprouterBuilder) build() {
 	fileGenerator([]string{"configs-test"}, b.project)
 	fileGenerator([]string{"tools"}, b.project)
 	fileGenerator([]string{"tools-test"}, b.project)
-	fileGenerator([]string{"server"}, b.project)
+	fileGenerator([]string{"web-app-server"}, b.project)
 	fileGenerator([]string{"web-app-httprouter-routes"}, b.project)
 	fileGenerator([]string{"web-app-httprouter-users"}, b.project)
 	fileGenerator([]string{"router-inferface"}, b.project)

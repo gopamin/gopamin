@@ -4,18 +4,25 @@ import (
 	_ "embed"
 )
 
-//go:embed files/dockerignore.tmpl
-var dockerIgnore []byte
+//go:embed files/env.tmpl
+var env []byte
 
-func DockerIgnoreTemplate() ([]byte, string) {
-	return dockerIgnore, ".dockerignore"
+func EnvTemplate() ([]byte, string) {
+	return env, ".env"
 }
 
-//go:embed files/dockerfile.tmpl
-var dockerFile []byte
+//go:embed files/makefile.tmpl
+var makefile []byte
 
-func DockerFileTemplate() ([]byte, string) {
-	return dockerFile, "Dockerfile"
+func MakefileTemplate() ([]byte, string) {
+	return makefile, "Makefile"
+}
+
+//go:embed files/readme.tmpl
+var readme []byte
+
+func ReadmeTemplate() ([]byte, string) {
+	return readme, "README.md"
 }
 
 //go:embed files/license.tmpl
@@ -116,83 +123,6 @@ func ConfigsTestTemplate() ([]byte, string) {
 	return configsTest, "configs/configs_test.go"
 }
 
-//go:embed files/cmd/server/server.tmpl
-var server []byte
-
-func ServerTemplate() ([]byte, string) {
-	return server, "cmd/server/server.go"
-}
-
-//go:embed files/cmd/main/api/main.tmpl
-var apiMain []byte
-
-func ApiMainTemplate() ([]byte, string) {
-	return apiMain, "cmd/main.go"
-}
-
-//go:embed files/cmd/main/api/main-with-db.tmpl
-var apiMainWithDb []byte
-
-func ApiMainWithDbTemplate() ([]byte, string) {
-	return apiMainWithDb, "cmd/main.go"
-}
-
-//go:embed files/cmd/main/web-app/main-with-db.tmpl
-var webAppMainWithDb []byte
-
-func WebAppMainWithDbTemplate() ([]byte, string) {
-	return webAppMainWithDb, "cmd/main.go"
-}
-
-//go:embed files/cmd/main/hello-world/main.tmpl
-var helloWorldMain []byte
-
-func HelloWorldMainTemplate() ([]byte, string) {
-	return helloWorldMain, "cmd/main.go"
-}
-
-//go:embed files/cmd/main/hello-world/main_test.tmpl
-var helloWorldMainTest []byte
-
-func HelloWorldMainTestTemplate() ([]byte, string) {
-	return helloWorldMainTest, "cmd/main_test.go"
-}
-
-//go:embed files/cmd/main/hello-world/main-with-db.tmpl
-var helloWorldMainWithDb []byte
-
-func HelloWorldMainWithDbTemplate() ([]byte, string) {
-	return helloWorldMainWithDb, "cmd/main.go"
-}
-
-//go:embed files/assets/users.tmpl
-var webAppUsersHtmlTemplate []byte
-
-func WebAppUsersHtmlTemplateTemplate() ([]byte, string) {
-	return webAppUsersHtmlTemplate, "assets/users.html"
-}
-
-//go:embed files/assets/user.tmpl
-var webAppUserHtmlTemplate []byte
-
-func WebAppUserHtmlTemplateTemplate() ([]byte, string) {
-	return webAppUserHtmlTemplate, "assets/user.html"
-}
-
-//go:embed files/assets/styles.tmpl
-var webAppStyles []byte
-
-func WebAppStylesTemplate() ([]byte, string) {
-	return webAppStyles, "assets/styles.css"
-}
-
-//go:embed files/cmd/main/web-app/main.tmpl
-var webAppMain []byte
-
-func WebAppMainTemplate() ([]byte, string) {
-	return webAppMain, "cmd/main.go"
-}
-
 //go:embed files/internal/core/domain/message.tmpl
 var message []byte
 
@@ -219,13 +149,6 @@ var brokerService []byte
 
 func BrokerServiceTemplate() ([]byte, string) {
 	return brokerService, "internal/core/services/broker.service.go"
-}
-
-//go:embed files/cmd/main/microservice/main.tmpl
-var microserviceMain []byte
-
-func MicroserviceMainTemplate() ([]byte, string) {
-	return microserviceMain, "cmd/main.go"
 }
 
 //go:embed files/tools/tools.tmpl
