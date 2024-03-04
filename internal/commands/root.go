@@ -36,11 +36,11 @@ func completionCommand() *cobra.Command {
 }
 
 func Execute() {
-	isValid, newVersion := versionChecker()
-	if !isValid {
-		fmt.Printf("The newest version of the Gopamin CLI is %v. To get the latest features and likely bugfixes, please first install the latest version by running 'go install github.com/gopamin/gopamin@%v'", newVersion, newVersion)
-		return
-	}
+	// isValid, newVersion := versionChecker()
+	// if !isValid {
+	// 	fmt.Printf("The newest version of the Gopamin CLI is %v. To get the latest features and likely bugfixes, please first install the latest version by running 'go install github.com/gopamin/gopamin@%v'", newVersion, newVersion)
+	// 	return
+	// }
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
