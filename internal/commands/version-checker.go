@@ -3,7 +3,6 @@ package commands
 import (
 	"io"
 	"net/http"
-	"os"
 	"strings"
 )
 
@@ -24,7 +23,7 @@ func versionChecker() (bool, string) {
 	}
 
 	newVersion := extractVersion(string(bytes))
-	if os.Getenv("VERSION") != newVersion {
+	if VERSION != newVersion {
 		return false, newVersion
 	}
 
