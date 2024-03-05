@@ -3,10 +3,10 @@ package commands
 import (
 	"io"
 	"net/http"
-	"strings"
+	"regexp"
 )
 
-const ENV_URL = "https://raw.githubusercontent.com/gopamin/gopamin/master/.env"
+const ENV_URL = "https://raw.githubusercontent.com/gopamin/gopamin/master/internal/commands/constants.go"
 
 func versionChecker() (bool, string) {
 	res, err := http.Get(ENV_URL)
@@ -31,10 +31,7 @@ func versionChecker() (bool, string) {
 }
 
 func extractVersion(input string) string {
-	parts := strings.Split(input, "=")
-	if len(parts) >= 2 {
-		return strings.TrimSpace(parts[1])
-	}
-
-	return ""
+	re := regexp.MustCompile(`VERSION\s*=\s*"v(\d+\.\d+\.\d+)"`)
+	matches := re.FindStringSubmatch(input)
+	return "v" + matches[1]
 }
