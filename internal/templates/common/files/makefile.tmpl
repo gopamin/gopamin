@@ -3,3 +3,6 @@ run:
 
 test:
 	@go test -v ./...
+
+test-cover:
+	@go test ./... -coverprofile test-coverage.txt && go tool cover -html=test-coverage.txt 
