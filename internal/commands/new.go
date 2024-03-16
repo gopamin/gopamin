@@ -63,6 +63,7 @@ Available values for the "microservice" type are:
  - mongodb
  - sqlite
  - dynamodb
+ - badgerdb
  - redis`)
 	rootCmd.AddCommand(newCmd)
 }

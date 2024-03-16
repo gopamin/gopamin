@@ -9,7 +9,6 @@
 -   [Update](#update)
 -   [Usage](#usage)
 -   [Guides](#guides)
--   [Inspirations](#inspirations)
 -   [Author](#author)
 -   [License](#license)
 
@@ -57,8 +56,9 @@ Based on the type of the project you want to scaffold, by passing the `-d` flag,
 -   SQLite
 -   DynamoDB
 -   Redis
+-   BadgerDB
 
-Based on the database type you choose, a `docker-compose.yml` file will be added as well to make running the database instance way easier for development purposes.
+Based on the database type you choose, a `docker-compose.yml` file will be added (if need be) as well to make running the database instance easier for development purposes.
 
 ## Installation
 
@@ -144,9 +144,6 @@ $ gopamin new -n my-web-app -t web-app -p http -d mysql
 
 Each new project includes a `README.md` file in the root path which provides you with some guides on how to use that specific project.
 
-## Inspirations
-
-To create this tool, I got inspirations from [Golang Blueprint](https://github.com/Melkeydev/go-blueprint) and some of its functionalities are used inside this tool.
 
 ## Author
 

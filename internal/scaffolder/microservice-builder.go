@@ -24,7 +24,7 @@ func (b *kafkaMicroserviceBuilder) build() {
 
 	goGetPackages(b.project.Path, []string{"github.com/segmentio/kafka-go"})
 
-	fmt.Printf("%v project created successfully", b.project.Name)
+	fmt.Printf("%v "+BUILD_SUCCESS_MESSAGE+"\n", b.project.Name)
 }
 
 type rabbitmqMicroserviceBuilder struct {
@@ -49,7 +49,7 @@ func (b *rabbitmqMicroserviceBuilder) build() {
 
 	goGetPackages(b.project.Path, []string{"github.com/streadway/amqp"})
 
-	fmt.Printf("%v project created successfully", b.project.Name)
+	fmt.Printf("%v "+BUILD_SUCCESS_MESSAGE+"\n", b.project.Name)
 }
 
 type redisMicroserviceBuilder struct {
@@ -74,7 +74,7 @@ func (b *redisMicroserviceBuilder) build() {
 
 	goGetPackages(b.project.Path, []string{"github.com/redis/go-redis/v9"})
 
-	fmt.Printf("%v project created successfully", b.project.Name)
+	fmt.Printf("%v "+BUILD_SUCCESS_MESSAGE+"\n", b.project.Name)
 }
 
 type microserviceBuilderFactory func(p *Project) boilerplateBuilder

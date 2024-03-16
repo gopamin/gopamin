@@ -88,6 +88,10 @@ func Mapper() map[string]func() ([]byte, string) {
 		"sqlite-repository":       database.SqliteRepositoryTemplate,
 		"sqlite-makefile":         database.SqliteMakefileTemplate,
 		"sqlite-readme":           database.SqliteReadmeTemplate,
+		"badgerdb-env":            database.BadgerdbEnvTemplate,
+		"badgerdb-repository":     database.BadgerdbRepositoryTemplate,
+		"badgerdb-makefile":       database.BadgerdbMakefileTemplate,
+		"badgerdb-readme":         database.BadgerdbReadmeTemplate,
 
 		"web-app-server":              webApp.WebAppServerTemplate,
 		"web-app-readme":              webApp.WebAppReadmeTemplate,

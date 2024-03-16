@@ -18,7 +18,7 @@ var rootCmd = &cobra.Command{
 	\____/\____/ .___/\__,_/_/ /_/ /_/_/_/ /_/
 	          /_/
 
-Use this tool to scaffold Go projects with a couple of commands`,
+The CLI tool to scaffold Go projects`,
 }
 
 func init() {

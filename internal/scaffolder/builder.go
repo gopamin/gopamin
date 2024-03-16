@@ -1,5 +1,7 @@
 package scaffolder
 
+const BUILD_SUCCESS_MESSAGE = "project has been successfully created. Please consult the README.md file for instructions and guidance."
+
 type boilerplateBuilder interface {
 	build()
 }

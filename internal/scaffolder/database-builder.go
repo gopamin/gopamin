@@ -100,6 +100,26 @@ func (r *redisBuilder) build() {
 	})
 }
 
+type badgerdbBuilder struct {
+	project *Project
+}
+
+func (r *badgerdbBuilder) build() {
+	fileGenerator([]string{"mock-repository"}, r.project)
+	fileGenerator([]string{"user-test"}, r.project)
+	fileGenerator([]string{"user"}, r.project)
+	fileGenerator([]string{"user-repository-interface"}, r.project)
+	fileGenerator([]string{"user-service-interface"}, r.project)
+	fileGenerator([]string{"user-service"}, r.project)
+	fileGenerator([]string{"user-service-test"}, r.project)
+
+	fileGenerator([]string{"badgerdb-repository"}, r.project)
+	goGetPackages(r.project.Path, []string{
+		"github.com/dgraph-io/badger/v4",
+		"github.com/google/uuid",
+	})
+}
+
 type sqliteBuilder struct {
 	project *Project
 }
@@ -152,6 +172,9 @@ var databaseBuilderMap = map[string]databaseBuilderFactory{
 	},
 	"sqlite": func(p *Project) boilerplateBuilder {
 		return &sqliteBuilder{p}
+	},
+	"badgerdb": func(p *Project) boilerplateBuilder {
+		return &badgerdbBuilder{p}
 	},
 	"mock": func(p *Project) boilerplateBuilder {
 		return &mockBuilder{p}

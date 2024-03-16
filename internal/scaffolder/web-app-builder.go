@@ -38,7 +38,7 @@ func (b *webAppHttpBuilder) build() {
 	fileGenerator([]string{"web-app-users-html-template"}, b.project)
 	fileGenerator([]string{"web-app-user-html-template"}, b.project)
 
-	fmt.Printf("%v project created successfully", b.project.Name)
+	fmt.Printf("%v "+BUILD_SUCCESS_MESSAGE+"\n", b.project.Name)
 }
 
 type webAppChiBuilder struct {
@@ -79,7 +79,7 @@ func (b *webAppChiBuilder) build() {
 
 	goGetPackages(b.project.Path, []string{"github.com/go-chi/chi/v5"})
 
-	fmt.Printf("%v project created successfully", b.project.Name)
+	fmt.Printf("%v "+BUILD_SUCCESS_MESSAGE+"\n", b.project.Name)
 }
 
 type webAppEchoBuilder struct {
@@ -120,7 +120,7 @@ func (b *webAppEchoBuilder) build() {
 
 	goGetPackages(b.project.Path, []string{"github.com/labstack/echo/v4"})
 
-	fmt.Printf("%v project created successfully", b.project.Name)
+	fmt.Printf("%v "+BUILD_SUCCESS_MESSAGE+"\n", b.project.Name)
 }
 
 type webAppGinBuilder struct {
@@ -161,7 +161,7 @@ func (b *webAppGinBuilder) build() {
 
 	goGetPackages(b.project.Path, []string{"github.com/gin-gonic/gin"})
 
-	fmt.Printf("%v project created successfully", b.project.Name)
+	fmt.Printf("%v "+BUILD_SUCCESS_MESSAGE+"\n", b.project.Name)
 }
 
 type webAppGorillaBuilder struct {
@@ -202,7 +202,7 @@ func (b *webAppGorillaBuilder) build() {
 
 	goGetPackages(b.project.Path, []string{"github.com/gorilla/mux"})
 
-	fmt.Printf("%v project created successfully", b.project.Name)
+	fmt.Printf("%v "+BUILD_SUCCESS_MESSAGE+"\n", b.project.Name)
 }
 
 type webAppHttprouterBuilder struct {
@@ -243,7 +243,7 @@ func (b *webAppHttprouterBuilder) build() {
 
 	goGetPackages(b.project.Path, []string{"github.com/julienschmidt/httprouter"})
 
-	fmt.Printf("%v project created successfully", b.project.Name)
+	fmt.Printf("%v "+BUILD_SUCCESS_MESSAGE+"\n", b.project.Name)
 }
 
 type webAppBuilderFactory func(p *Project) boilerplateBuilder

@@ -206,3 +206,31 @@ var sqliteRepository []byte
 func SqliteRepositoryTemplate() ([]byte, string) {
 	return sqliteRepository, "internal/adapters/repositories/sqlite/repository.go"
 }
+
+//go:embed files/env/env-badgerdb.tmpl
+var badgerdbEnv []byte
+
+func BadgerdbEnvTemplate() ([]byte, string) {
+	return badgerdbEnv, ".env"
+}
+
+//go:embed files/makefile/makefile-badgerdb.tmpl
+var badgerdbMakefile []byte
+
+func BadgerdbMakefileTemplate() ([]byte, string) {
+	return badgerdbMakefile, "Makefile"
+}
+
+//go:embed files/readme/readme-badgerdb.tmpl
+var badgerdbReadme []byte
+
+func BadgerdbReadmeTemplate() ([]byte, string) {
+	return badgerdbReadme, "README.md"
+}
+
+//go:embed files/internal/adapters/repositories/badgerdb/repository.tmpl
+var badgerdbRepository []byte
+
+func BadgerdbRepositoryTemplate() ([]byte, string) {
+	return badgerdbRepository, "internal/adapters/repositories/badgerdb/repository.go"
+}

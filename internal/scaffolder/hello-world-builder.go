@@ -31,7 +31,7 @@ func (b *helloWorldProjectBuilder) build() {
 	fileGenerator([]string{"tools"}, b.project)
 	fileGenerator([]string{"tools-test"}, b.project)
 
-	fmt.Printf("%v project created successfully", b.project.Name)
+	fmt.Printf("%v "+BUILD_SUCCESS_MESSAGE+"\n", b.project.Name)
 }
 
 type helloWorldBuilderFactory func(p *Project) boilerplateBuilder

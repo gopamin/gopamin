@@ -39,7 +39,7 @@ func (b *echoBuilder) build() {
 
 	goGetPackages(b.project.Path, []string{"github.com/labstack/echo/v4"})
 
-	fmt.Printf("%v project created successfully", b.project.Name)
+	fmt.Printf("%v "+BUILD_SUCCESS_MESSAGE+"\n", b.project.Name)
 }
 
 type chiBuilder struct {
@@ -79,7 +79,7 @@ func (b *chiBuilder) build() {
 
 	goGetPackages(b.project.Path, []string{"github.com/go-chi/chi/v5"})
 
-	fmt.Printf("%v project created successfully", b.project.Name)
+	fmt.Printf("%v "+BUILD_SUCCESS_MESSAGE+"\n", b.project.Name)
 }
 
 type ginBuilder struct {
@@ -119,7 +119,7 @@ func (b *ginBuilder) build() {
 
 	goGetPackages(b.project.Path, []string{"github.com/gin-gonic/gin"})
 
-	fmt.Printf("%v project created successfully", b.project.Name)
+	fmt.Printf("%v "+BUILD_SUCCESS_MESSAGE+"\n", b.project.Name)
 }
 
 type httprouterBuilder struct {
@@ -159,7 +159,7 @@ func (b *httprouterBuilder) build() {
 
 	goGetPackages(b.project.Path, []string{"github.com/julienschmidt/httprouter"})
 
-	fmt.Printf("%v project created successfully", b.project.Name)
+	fmt.Printf("%v "+BUILD_SUCCESS_MESSAGE+"\n", b.project.Name)
 }
 
 type gorillaBuilder struct {
@@ -199,7 +199,7 @@ func (b *gorillaBuilder) build() {
 
 	goGetPackages(b.project.Path, []string{"github.com/gorilla/mux"})
 
-	fmt.Printf("%v project created successfully", b.project.Name)
+	fmt.Printf("%v "+BUILD_SUCCESS_MESSAGE+"\n", b.project.Name)
 }
 
 type httpBuilder struct {
@@ -237,7 +237,7 @@ func (b *httpBuilder) build() {
 	fileGenerator([]string{"api-response"}, b.project)
 	fileGenerator([]string{"router-inferface"}, b.project)
 
-	fmt.Printf("%v project created successfully", b.project.Name)
+	fmt.Printf("%v "+BUILD_SUCCESS_MESSAGE+"\n", b.project.Name)
 }
 
 type apiBuilderFactory func(p *Project) boilerplateBuilder
