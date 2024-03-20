@@ -12,6 +12,9 @@ func argsValidator() bool {
 	case name == "":
 		fmt.Println(`The -n flag is required. For more help, type "gopamin new -h"`)
 		return false
+	case logger == "":
+		fmt.Println(`The -l flag is required. For more help, type "gopamin new -h"`)
+		return false
 	case projectType == "":
 		fmt.Println(`The -t flag is required. For more help, type "gopamin new -h"`)
 		return false
@@ -54,6 +57,11 @@ func argsValidator() bool {
 
 	if database != "" && !databaseValidator() {
 		fmt.Println(`The specified value for the -d flag is wrong. For more help, type "gopamin new -h"`)
+		return false
+	}
+
+	if logger != "" && !loggerValidator() {
+		fmt.Println(`The specified value for the -l flag is wrong. For more help, type "gopamin new -h"`)
 		return false
 	}
 
@@ -109,6 +117,17 @@ func databaseValidator() bool {
 		database == "dynamodb" ||
 		database == "badgerdb" ||
 		database == "redis" {
+		return true
+	}
+
+	return false
+}
+
+func loggerValidator() bool {
+	if logger == "log" ||
+		logger == "slog" ||
+		logger == "logrus" ||
+		logger == "zap" {
 		return true
 	}
 

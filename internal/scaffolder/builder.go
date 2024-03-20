@@ -41,3 +41,10 @@ func dbSelector(p *Project) {
 	director := &director{builder: builder}
 	director.construct()
 }
+
+func loggerSelector(p *Project) {
+	loggerBuilderFactory := loggerBuilderMap[p.Logger]
+	builder := loggerBuilderFactory(p)
+	director := &director{builder: builder}
+	director.construct()
+}

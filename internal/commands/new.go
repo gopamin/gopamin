@@ -10,6 +10,7 @@ var (
 	platform    string
 	name        string
 	projectType string
+	logger      string
 )
 
 var newCmd = &cobra.Command{
@@ -29,7 +30,7 @@ To create a Microservice using Kafka message broker, run the following command:
 	Short: "Create a new project",
 	Run: func(cmd *cobra.Command, args []string) {
 		if argsValidator() {
-			scaffolder.New(projectType, platform, name, database)
+			scaffolder.New(projectType, platform, name, database, logger)
 		}
 	},
 }
@@ -65,5 +66,12 @@ Available values for the "microservice" type are:
  - dynamodb
  - badgerdb
  - redis`)
+	rootCmd.AddCommand(newCmd)
+
+	newCmd.Flags().StringVarP(&logger, "logger", "l", "", `Type of the logger. Available values are:
+ - log
+ - slog
+ - logrus
+ - zap`)
 	rootCmd.AddCommand(newCmd)
 }

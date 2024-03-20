@@ -14,7 +14,7 @@ type redisBroker struct {
 	channel string
 }
 
-func New(channel string) ports.MessageBrokerInterface {
+func New(channel string, logger ports.Logger) ports.MessageBrokerInterface {
 	host := os.Getenv("REDIS_HOST")
 	port := os.Getenv("REDIS_PORT")
 
@@ -23,6 +23,8 @@ func New(channel string) ports.MessageBrokerInterface {
 		Password: "",
 		DB:       0,
 	})
+
+	logger.Info("Successfully connected to Redis")
 
 	c := &redisBroker{client: client, channel: channel}
 

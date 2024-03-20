@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"{{.Name}}/internal/core/ports"
-	"log"
 	"os"
 
 	"github.com/streadway/amqp"
@@ -17,25 +16,27 @@ type rabbitmqBroker struct {
 	channelName string
 }
 
-func New(channelName string) ports.MessageBrokerInterface {
+func New(channelName string, logger ports.Logger) ports.MessageBrokerInterface {
 	user := os.Getenv("RABBITMQ_USER")
 	password := os.Getenv("RABBITMQ_PASSWORD")
 	port := os.Getenv("RABBITMQ_PORT")
 
 	conn, err := amqp.Dial(fmt.Sprintf("amqp://%v:%v@localhost:%v/", user, password, port))
 	if err != nil {
-		log.Fatal(err)
+		logger.Fatal(err)
 	}
 
 	ch, err := conn.Channel()
 	if err != nil {
-		log.Fatal(err)
+		logger.Fatal(err)
 	}
 
 	q, err := ch.QueueDeclare(channelName, false, false, false, false, nil)
 	if err != nil {
-		log.Fatal(err)
+		logger.Fatal(err)
 	}
+
+	logger.Info("Successfully connected to RabbitMQ")
 
 	return &rabbitmqBroker{
 		connection:  conn,

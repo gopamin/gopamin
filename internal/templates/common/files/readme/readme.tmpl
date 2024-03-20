@@ -32,4 +32,5 @@ Running the following command will yield identical functionality:
 $ go test -v ./...
 ```
 
-The `-v` flag is used here in order to output test details while running the tests.
+The `-v` flag is used here in order to output test details while running the tests.  
+Another testing command is also added to the `Makefile` called `test-cover` which will create a text file called `test-coverage.txt` at the root path of the project then open up a new browser tab showing the test coverage results.

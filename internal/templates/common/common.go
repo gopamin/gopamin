@@ -18,11 +18,39 @@ func MakefileTemplate() ([]byte, string) {
 	return makefile, "Makefile"
 }
 
-//go:embed files/readme.tmpl
+//go:embed files/readme/readme.tmpl
 var readme []byte
 
 func ReadmeTemplate() ([]byte, string) {
 	return readme, "README.md"
+}
+
+//go:embed files/readme/readme-log.tmpl
+var readmeLog []byte
+
+func ReadmeLogTemplate() ([]byte, string) {
+	return readmeLog, "README.md"
+}
+
+//go:embed files/readme/readme-slog.tmpl
+var readmeSlog []byte
+
+func ReadmeSlogTemplate() ([]byte, string) {
+	return readmeSlog, "README.md"
+}
+
+//go:embed files/readme/readme-logrus.tmpl
+var readmeLogrus []byte
+
+func ReadmeLogrusTemplate() ([]byte, string) {
+	return readmeLogrus, "README.md"
+}
+
+//go:embed files/readme/readme-zap.tmpl
+var readmeZap []byte
+
+func ReadmeZapTemplate() ([]byte, string) {
+	return readmeZap, "README.md"
 }
 
 //go:embed files/license.tmpl
@@ -95,6 +123,13 @@ func RouterInterfaceTemplate() ([]byte, string) {
 	return routerInferface, "internal/core/ports/router.interface.go"
 }
 
+//go:embed files/internal/core/ports/logger.interface.tmpl
+var loggerInferface []byte
+
+func LoggerInterfaceTemplate() ([]byte, string) {
+	return loggerInferface, "internal/core/ports/logger.interface.go"
+}
+
 //go:embed files/internal/core/api/errors.tmpl
 var apiErrors []byte
 
@@ -163,4 +198,32 @@ var toolsTest []byte
 
 func ToolsTestTemplate() ([]byte, string) {
 	return toolsTest, "tools/tools_test.go"
+}
+
+//go:embed files/internal/adapters/loggers/log/logger.tmpl
+var logLogger []byte
+
+func LogLoggerTemplate() ([]byte, string) {
+	return logLogger, "internal/adapters/loggers/log/logger.go"
+}
+
+//go:embed files/internal/adapters/loggers/logrus/logger.tmpl
+var logrusLogger []byte
+
+func LogrusLoggerTemplate() ([]byte, string) {
+	return logrusLogger, "internal/adapters/loggers/logrus/logger.go"
+}
+
+//go:embed files/internal/adapters/loggers/slog/logger.tmpl
+var slogLogger []byte
+
+func SlogLoggerTemplate() ([]byte, string) {
+	return slogLogger, "internal/adapters/loggers/slog/logger.go"
+}
+
+//go:embed files/internal/adapters/loggers/zap/logger.tmpl
+var zapLogger []byte
+
+func ZapLoggerTemplate() ([]byte, string) {
+	return zapLogger, "internal/adapters/loggers/zap/logger.go"
 }

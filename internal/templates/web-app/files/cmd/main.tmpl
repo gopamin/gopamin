@@ -4,6 +4,7 @@ import (
 	"{{.Name}}/cmd/server"
 	"{{.Name}}/configs"
 	"{{.Name}}/internal/adapters/handlers/{{.Platform}}"
+	"{{.Name}}/internal/adapters/loggers/{{.Logger}}"
 	"{{.Name}}/internal/adapters/repositories/mock"
 	"{{.Name}}/internal/core/services"
 )
@@ -18,7 +19,8 @@ func init() {
 
 func main() {
 	db := &mock.MockRepository{}
+	logger := {{.Logger}}.New()
 	service := services.NewUserService(db)
 	handlers := {{.Platform}}.NewRouter(service)
-	server.Serve(handlers)
+	server.Serve(handlers, logger)
 }

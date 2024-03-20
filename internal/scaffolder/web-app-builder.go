@@ -8,7 +8,7 @@ type webAppHttpBuilder struct {
 
 func (b *webAppHttpBuilder) build() {
 	env := []string{"env", "web-app-env"}
-	readme := []string{"readme"}
+	readme := []string{"readme", b.project.Logger + "-readme"}
 	makefile := []string{"makefile"}
 
 	if b.project.Database == "" {
@@ -23,6 +23,7 @@ func (b *webAppHttpBuilder) build() {
 	}
 
 	dbSelector(b.project)
+	loggerSelector(b.project)
 	fileGenerator(env, b.project)
 	fileGenerator(readme, b.project)
 	fileGenerator(makefile, b.project)
@@ -47,7 +48,7 @@ type webAppChiBuilder struct {
 
 func (b *webAppChiBuilder) build() {
 	env := []string{"env", "web-app-env"}
-	readme := []string{"readme"}
+	readme := []string{"readme", b.project.Logger + "-readme"}
 	makefile := []string{"makefile"}
 
 	if b.project.Database == "" {
@@ -62,6 +63,7 @@ func (b *webAppChiBuilder) build() {
 	}
 
 	dbSelector(b.project)
+	loggerSelector(b.project)
 	fileGenerator(env, b.project)
 	fileGenerator(readme, b.project)
 	fileGenerator(makefile, b.project)
@@ -88,7 +90,7 @@ type webAppEchoBuilder struct {
 
 func (b *webAppEchoBuilder) build() {
 	env := []string{"env", "web-app-env"}
-	readme := []string{"readme"}
+	readme := []string{"readme", b.project.Logger + "-readme"}
 	makefile := []string{"makefile"}
 
 	if b.project.Database == "" {
@@ -103,6 +105,7 @@ func (b *webAppEchoBuilder) build() {
 	}
 
 	dbSelector(b.project)
+	loggerSelector(b.project)
 	fileGenerator(env, b.project)
 	fileGenerator(readme, b.project)
 	fileGenerator(makefile, b.project)
@@ -129,7 +132,7 @@ type webAppGinBuilder struct {
 
 func (b *webAppGinBuilder) build() {
 	env := []string{"env", "web-app-env"}
-	readme := []string{"readme"}
+	readme := []string{"readme", b.project.Logger + "-readme"}
 	makefile := []string{"makefile"}
 
 	if b.project.Database == "" {
@@ -144,6 +147,7 @@ func (b *webAppGinBuilder) build() {
 	}
 
 	dbSelector(b.project)
+	loggerSelector(b.project)
 	fileGenerator(env, b.project)
 	fileGenerator(readme, b.project)
 	fileGenerator(makefile, b.project)
@@ -170,7 +174,7 @@ type webAppGorillaBuilder struct {
 
 func (b *webAppGorillaBuilder) build() {
 	env := []string{"env", "web-app-env"}
-	readme := []string{"readme"}
+	readme := []string{"readme", b.project.Logger + "-readme"}
 	makefile := []string{"makefile"}
 
 	if b.project.Database == "" {
@@ -185,6 +189,7 @@ func (b *webAppGorillaBuilder) build() {
 	}
 
 	dbSelector(b.project)
+	loggerSelector(b.project)
 	fileGenerator(env, b.project)
 	fileGenerator(readme, b.project)
 	fileGenerator(makefile, b.project)
@@ -211,7 +216,7 @@ type webAppHttprouterBuilder struct {
 
 func (b *webAppHttprouterBuilder) build() {
 	env := []string{"env", "web-app-env"}
-	readme := []string{"readme"}
+	readme := []string{"readme", b.project.Logger + "-readme"}
 	makefile := []string{"makefile"}
 
 	if b.project.Database == "" {
@@ -226,6 +231,7 @@ func (b *webAppHttprouterBuilder) build() {
 	}
 
 	dbSelector(b.project)
+	loggerSelector(b.project)
 	fileGenerator(env, b.project)
 	fileGenerator(readme, b.project)
 	fileGenerator(makefile, b.project)

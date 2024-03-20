@@ -8,7 +8,7 @@ type echoBuilder struct {
 
 func (b *echoBuilder) build() {
 	env := []string{"env", "api-env"}
-	readme := []string{"readme"}
+	readme := []string{"readme", b.project.Logger + "-readme"}
 	makefile := []string{"makefile"}
 
 	if b.project.Database == "" {
@@ -23,6 +23,7 @@ func (b *echoBuilder) build() {
 	}
 
 	dbSelector(b.project)
+	loggerSelector(b.project)
 	fileGenerator(env, b.project)
 	fileGenerator(readme, b.project)
 	fileGenerator(makefile, b.project)
@@ -48,7 +49,7 @@ type chiBuilder struct {
 
 func (b *chiBuilder) build() {
 	env := []string{"env", "api-env"}
-	readme := []string{"readme"}
+	readme := []string{"readme", b.project.Logger + "-readme"}
 	makefile := []string{"makefile"}
 
 	if b.project.Database == "" {
@@ -63,6 +64,7 @@ func (b *chiBuilder) build() {
 	}
 
 	dbSelector(b.project)
+	loggerSelector(b.project)
 	fileGenerator(env, b.project)
 	fileGenerator(readme, b.project)
 	fileGenerator(makefile, b.project)
@@ -88,7 +90,7 @@ type ginBuilder struct {
 
 func (b *ginBuilder) build() {
 	env := []string{"env", "api-env"}
-	readme := []string{"readme"}
+	readme := []string{"readme", b.project.Logger + "-readme"}
 	makefile := []string{"makefile"}
 
 	if b.project.Database == "" {
@@ -103,6 +105,7 @@ func (b *ginBuilder) build() {
 	}
 
 	dbSelector(b.project)
+	loggerSelector(b.project)
 	fileGenerator(env, b.project)
 	fileGenerator(readme, b.project)
 	fileGenerator(makefile, b.project)
@@ -128,7 +131,7 @@ type httprouterBuilder struct {
 
 func (b *httprouterBuilder) build() {
 	env := []string{"env", "api-env"}
-	readme := []string{"readme"}
+	readme := []string{"readme", b.project.Logger + "-readme"}
 	makefile := []string{"makefile"}
 
 	if b.project.Database == "" {
@@ -143,6 +146,7 @@ func (b *httprouterBuilder) build() {
 	}
 
 	dbSelector(b.project)
+	loggerSelector(b.project)
 	fileGenerator(env, b.project)
 	fileGenerator(readme, b.project)
 	fileGenerator(makefile, b.project)
@@ -168,7 +172,7 @@ type gorillaBuilder struct {
 
 func (b *gorillaBuilder) build() {
 	env := []string{"env", "api-env"}
-	readme := []string{"readme"}
+	readme := []string{"readme", b.project.Logger + "-readme"}
 	makefile := []string{"makefile"}
 
 	if b.project.Database == "" {
@@ -183,6 +187,7 @@ func (b *gorillaBuilder) build() {
 	}
 
 	dbSelector(b.project)
+	loggerSelector(b.project)
 	fileGenerator(env, b.project)
 	fileGenerator(readme, b.project)
 	fileGenerator(makefile, b.project)
@@ -208,7 +213,7 @@ type httpBuilder struct {
 
 func (b *httpBuilder) build() {
 	env := []string{"env", "api-env"}
-	readme := []string{"readme"}
+	readme := []string{"readme", b.project.Logger + "-readme"}
 	makefile := []string{"makefile"}
 
 	if b.project.Database == "" {
@@ -223,6 +228,7 @@ func (b *httpBuilder) build() {
 	}
 
 	dbSelector(b.project)
+	loggerSelector(b.project)
 	fileGenerator(env, b.project)
 	fileGenerator(readme, b.project)
 	fileGenerator(makefile, b.project)

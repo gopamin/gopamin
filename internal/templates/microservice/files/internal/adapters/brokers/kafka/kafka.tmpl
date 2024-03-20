@@ -13,7 +13,7 @@ type kafkaBroker struct {
 	reader *kafka.Reader
 }
 
-func New(topic string) ports.MessageBrokerInterface {
+func New(topic string, logger ports.Logger) ports.MessageBrokerInterface {
 	broker := os.Getenv("KAFKA_BROKER")
 
 	writer := kafka.NewWriter(kafka.WriterConfig{
@@ -29,6 +29,8 @@ func New(topic string) ports.MessageBrokerInterface {
 		MinBytes:  10e3,
 		MaxBytes:  10e6,
 	})
+
+	logger.Info("Successfully connected to Kafka")
 
 	return &kafkaBroker{
 		writer: writer,

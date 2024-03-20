@@ -7,7 +7,8 @@ type kafkaMicroserviceBuilder struct {
 }
 
 func (b *kafkaMicroserviceBuilder) build() {
-	fileGenerator([]string{"readme", "kafka-microservice-readme"}, b.project)
+	loggerSelector(b.project)
+	fileGenerator([]string{"readme", b.project.Logger + "-readme", "kafka-microservice-readme"}, b.project)
 	fileGenerator([]string{"env", "kafka-microservice-env"}, b.project)
 	fileGenerator([]string{"makefile", "kafka-microservice-makefile"}, b.project)
 	fileGenerator([]string{"kafka-microservice-docker-compose"}, b.project)
@@ -32,7 +33,8 @@ type rabbitmqMicroserviceBuilder struct {
 }
 
 func (b *rabbitmqMicroserviceBuilder) build() {
-	fileGenerator([]string{"readme", "rabbitmq-microservice-readme"}, b.project)
+	loggerSelector(b.project)
+	fileGenerator([]string{"readme", b.project.Logger + "-readme", "rabbitmq-microservice-readme"}, b.project)
 	fileGenerator([]string{"env", "rabbitmq-microservice-env"}, b.project)
 	fileGenerator([]string{"makefile", "rabbitmq-microservice-makefile"}, b.project)
 	fileGenerator([]string{"rabbitmq-microservice-docker-compose"}, b.project)
@@ -57,7 +59,8 @@ type redisMicroserviceBuilder struct {
 }
 
 func (b *redisMicroserviceBuilder) build() {
-	fileGenerator([]string{"readme", "redis-microservice-readme"}, b.project)
+	loggerSelector(b.project)
+	fileGenerator([]string{"readme", b.project.Logger + "-readme", "redis-microservice-readme"}, b.project)
 	fileGenerator([]string{"env", "redis-microservice-env"}, b.project)
 	fileGenerator([]string{"makefile", "redis-microservice-makefile"}, b.project)
 	fileGenerator([]string{"redis-microservice-docker-compose"}, b.project)

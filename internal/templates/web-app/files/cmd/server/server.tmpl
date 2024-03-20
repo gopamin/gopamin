@@ -5,16 +5,15 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"strconv"
 	"time"
 )
 
-func Serve(handlers ports.RouterInterface) {
-	port, _ := strconv.Atoi(os.Getenv("PORT"))
-	fmt.Printf("The web server is accessible at http://localhost:%d/users\n", port)
+func Serve(handlers ports.RouterInterface, logger ports.Logger) {
+	port := os.Getenv("PORT")
+	logger.Info(fmt.Sprintf("The web server is accessible at http://localhost:%s/users", port))
 
 	server := &http.Server{
-		Addr:         fmt.Sprintf(":%d", port),
+		Addr:         fmt.Sprintf(":%s", port),
 		Handler:      handlers.Register(),
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  10 * time.Second,
@@ -23,6 +22,6 @@ func Serve(handlers ports.RouterInterface) {
 
 	err := server.ListenAndServe()
 	if err != nil {
-		panic(fmt.Sprintf("cannot start server: %s", err))
+		logger.Panic(err)
 	}
 }

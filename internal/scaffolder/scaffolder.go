@@ -19,9 +19,10 @@ type Project struct {
 	Name        string
 	Path        string
 	ProjectType string
+	Logger      string
 }
 
-func New(projectType, platform, name, database string) {
+func New(projectType, platform, name, database, logger string) {
 	lowerCaseName := strings.ToLower(name)
 	currentDir, err := os.Getwd()
 	if err != nil {
@@ -42,6 +43,7 @@ func New(projectType, platform, name, database string) {
 		Name:        lowerCaseName,
 		Path:        projectPath,
 		ProjectType: projectType,
+		Logger:      logger,
 	}
 
 	generateProjectAgnosticFiles(&p)

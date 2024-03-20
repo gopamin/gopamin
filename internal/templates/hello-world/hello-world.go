@@ -4,11 +4,11 @@ import (
 	_ "embed"
 )
 
-//go:embed files/readme.tmpl
-var helloWorldReadme []byte
+//go:embed files/readme/readme-with-db.tmpl
+var helloWorldReadmeWithDb []byte
 
-func HelloWorldReadmeTemplate() ([]byte, string) {
-	return helloWorldReadme, "README.md"
+func HelloWorldReadmeWithDbTemplate() ([]byte, string) {
+	return helloWorldReadmeWithDb, "README.md"
 }
 
 //go:embed files/cmd/main.tmpl

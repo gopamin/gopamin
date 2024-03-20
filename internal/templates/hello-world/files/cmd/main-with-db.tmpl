@@ -1,69 +1,68 @@
 package main
 
 import (
-	"fmt"
-	"log"
-
 	"{{.Name}}/configs"
+	"{{.Name}}/internal/adapters/loggers/{{.Logger}}"
 	"{{.Name}}/internal/adapters/repositories/{{.Database}}"
 	"{{.Name}}/internal/core/ports"
 	"{{.Name}}/internal/core/services"
+	"fmt"
 )
 
 func init() {
 	configs.LoadEnv()
 }
 
-func insert(us ports.UserServiceInterface, value string) {
+func insert(us ports.UserServiceInterface, logger ports.Logger, value string) {
 	lastInsertID, err := us.Create(value)
 	if err != nil {
-		log.Fatal(err)
+		logger.Fatal(err)
 	}
-	fmt.Println("last inserted ID:", lastInsertID)
+	logger.Info(fmt.Sprintf("last inserted ID: %v", lastInsertID))
 }
 
-func fetch(us ports.UserServiceInterface, id string) {
+func fetch(us ports.UserServiceInterface, logger ports.Logger, id string) {
 	user, err := us.Show(id)
 	if err != nil {
-		log.Fatal(err)
+		logger.Fatal(err)
 	}
 
 	json, err := user.ToJson()
 	if err != nil {
-		log.Fatal(err)
+		logger.Fatal(err)
 	}
 
-	fmt.Println(json)
+	logger.Info(json)
 }
 
-func update(us ports.UserServiceInterface, id string, newName string) {
+func update(us ports.UserServiceInterface, logger ports.Logger, id string, newName string) {
 	rowsAffected, err := us.Update(id, newName)
 	if err != nil {
-		log.Fatal(err)
+		logger.Fatal(err)
 	}
-	fmt.Println("rows effected:", rowsAffected)
+	logger.Info(fmt.Sprintf("rows effected: %v", rowsAffected))
 }
 
-func delete(us ports.UserServiceInterface, id string) {
+func delete(us ports.UserServiceInterface, logger ports.Logger, id string) {
 	rowsAffected, err := us.Delete(id)
 	if err != nil {
-		log.Fatal(err)
+		logger.Fatal(err)
 	}
-	fmt.Println("rows effected:", rowsAffected)
+	logger.Info(fmt.Sprintf("rows effected: %v", rowsAffected))
 }
 
-func fetchAll(us ports.UserServiceInterface) {
+func fetchAll(us ports.UserServiceInterface, logger ports.Logger) {
 	users, err := us.Index()
 	if err != nil {
-		log.Fatal(err)
+		logger.Fatal(err)
 	}
 
 	for _, user := range users {
 		json, err := user.ToJson()
 		if err != nil {
-			log.Fatal(err)
+			logger.Fatal(err)
 		}
-		fmt.Println(json)
+		logger.Info(json)
 	}
 }
 
@@ -74,18 +73,19 @@ func fetchAll(us ports.UserServiceInterface) {
 func main() {
 	db := {{.Database}}.New()
 	us := services.NewUserService(db)
+	logger := {{.Logger}}.New()
 
 	// Step 1) Uncomment the following line to add new values to the DB
-	// insert(us, "John Doe")
+	// insert(us, logger, "John Doe")
 
 	// Step 2) Uncomment the following line to fetch by ID
-	// fetch(us, "<record_id>")
+	// fetch(us, logger, "<record_id>")
 
 	// Step 3) Uncomment the following line to update
-	// update(us, "<record_id>", "Jane Doe")
+	// update(us, logger, "<record_id>", "Jane Doe")
 
 	// Step 4) Uncomment the following line to delete
-	// delete(us, "<record_id>")
+	// delete(us, logger, "<record_id>")
 
-	fetchAll(us)
+	fetchAll(us, logger)
 }
