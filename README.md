@@ -150,6 +150,14 @@ The `-d` flag which is short for `--database` should be used to add database int
 $ gopamin new -n my-web-app -t web-app -p http -d mysql
 ```
 
+### The `-l` Flag
+
+The `-l` flag which is short for `--logger` should be used to add logger type. Available values for this flag are `log`, `slog`, `logrus`, and `zap`. For example, to create a microservice with Logrus support we have:
+
+```text
+$ gopamin new -n my-microservice -t microservice -p rabbitmq -l logrus
+```
+
 ## Guides
 
 Each new project includes a `README.md` file in the root path which provides you with some guides on how to use that specific project.
