@@ -5,6 +5,7 @@
 -   [Prerequisites](#prerequisites)
 -   [Supported Application Types](#supported-application-types)
 -   [Supported Databases](#supported-databases)
+-   [Supported Logging Libraries](#supported-logging-libraries)
 -   [Installation](#installation)
 -   [Update](#update)
 -   [Usage](#usage)
@@ -59,6 +60,15 @@ Based on the type of the project you want to scaffold, by passing the `-d` flag,
 -   BadgerDB
 
 Based on the database type you choose, a `docker-compose.yml` file will be added (if need be) as well to make running the database instance easier for development purposes.
+
+## Supported Logging Libraries
+
+No matter what type of project you want to scaffold, the `-l` flag must be passed in order to choose the logger type. Supported loggers are as follows:
+
+-   Log
+-   Slog
+-   Logrus
+-   Zap
 
 ## Installation
 
@@ -143,7 +153,6 @@ $ gopamin new -n my-web-app -t web-app -p http -d mysql
 ## Guides
 
 Each new project includes a `README.md` file in the root path which provides you with some guides on how to use that specific project.
-
 
 ## Author
 
