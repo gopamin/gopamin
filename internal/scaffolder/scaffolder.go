@@ -176,5 +176,5 @@ func replaceNonAlphanumeric(input string, exclude ...string) string {
 	} else {
 		nonAlphanumericRegex = regexp.MustCompile("[^a-zA-Z0-9._]")
 	}
-	return nonAlphanumericRegex.ReplaceAllString(strings.TrimSpace(input), "-")
+	return nonAlphanumericRegex.ReplaceAllString(strings.TrimSpace(strings.ToLower(input)), "-")
 }
