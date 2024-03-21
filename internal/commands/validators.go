@@ -2,9 +2,8 @@ package commands
 
 import (
 	"fmt"
-	"log"
-	"os"
-	"strings"
+
+	"github.com/gopamin/gopamin/internal/scaffolder"
 )
 
 func argsValidator() bool {
@@ -30,7 +29,7 @@ func argsValidator() bool {
 		return false
 	}
 
-	if isProjectNameTaken() {
+	if scaffolder.IsProjectNameTaken(name) {
 		fmt.Println("This project name is already taken in the current directory")
 		return false
 	}
@@ -90,9 +89,9 @@ func httpServerValidator() bool {
 	if platform == "echo" ||
 		platform == "chi" ||
 		platform == "gin" ||
-		platform == "httprouter" ||
 		platform == "http" ||
-		platform == "gorilla" {
+		platform == "gorilla" ||
+		platform == "httprouter" {
 		return true
 	}
 
@@ -129,22 +128,6 @@ func loggerValidator() bool {
 		logger == "logrus" ||
 		logger == "zap" {
 		return true
-	}
-
-	return false
-}
-
-func isProjectNameTaken() bool {
-	name = strings.Replace(strings.TrimSpace(name), " ", "-", -1)
-
-	if _, err := os.Stat(name); err == nil {
-		dirEntries, err := os.ReadDir(name)
-		if err != nil {
-			log.Println("Could not read the directory")
-		}
-		if len(dirEntries) > 0 {
-			return true
-		}
 	}
 
 	return false

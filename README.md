@@ -113,17 +113,29 @@ The above command shows the help on how to use different flags to scaffold diffe
 The `-n` flag which is short for `--name` should be used for choosing a name for your project. For example:
 
 ```text
-$ gopamin new -n my-hello-world-app
+$ gopamin new -n my-hello-world-app -t hello-world -l log
 ```
 
-Of course the above command will not proceed because the flag for specifying the type is not provided.
+Only ASCII letters, digits, and the characters `.`, `-`, and `_` are accepted and any other character will be replaced by `-`. You can also pick your repository name as follows:
+
+```text
+$ gopamin new -n github.com/user-name/repo_name -t hello-world -l log
+```
+
+In this case, the project folder will be named `github.com-user-name-repo_name` but the name of the module inside the `go.mod` will be as follows:
+
+```text
+module github.com/user-name/repo_name
+
+go 1.22.0
+```
 
 ### The `-t` Flag
 
 The `-t` flag which is short for `--type` should be used for choosing the project type you want to scaffold. For example, to create a simple Hello World app we have:
 
 ```text
-$ gopamin -n my-hello-world-app -t hello-world
+$ gopamin -n my-hello-world-app -t hello-world -l log
 ```
 
 The supported values for the `-t` flag are `hello-world`, `web-app`, `api`, and `microservice`.
@@ -133,13 +145,13 @@ The supported values for the `-t` flag are `hello-world`, `web-app`, `api`, and 
 The `-p` flag which is short for `--platform` must be used for the projects of type `web-app`, `api`, and `microservice`. Supported values for projects of either `web-app` or `api` type are `echo`, `chi`, `gin`, `httprouter`, `gorilla`, and `http`. For example, to create an API which uses the Echo framework under the hood we have:
 
 ```text
-$ gopamin new -n my-rest-api -t api -p echo
+$ gopamin new -n my-rest-api -t api -p echo -l log
 ```
 
 Supported values for the `-p` flag for the projects of type `microservice` are `redis`, `kafka`, and `rabbitmq`. For example, to create a microservice with Kafka integration we have:
 
 ```text
-$ gopamin new -n my-kafka-microservice -t microservice -p kafka
+$ gopamin new -n my-kafka-microservice -t microservice -p kafka -l log
 ```
 
 ### The `-d` Flag
@@ -147,7 +159,7 @@ $ gopamin new -n my-kafka-microservice -t microservice -p kafka
 The `-d` flag which is short for `--database` should be used to add database integration. Available values for this flag are `mysql`, `postgres`, `mongodb`, `sqlite`, `dynamodb`, and `redis`. For example, to create a web application with MySQL integration we have:
 
 ```text
-$ gopamin new -n my-web-app -t web-app -p http -d mysql
+$ gopamin new -n my-web-app -t web-app -p http -d mysql -l log
 ```
 
 ### The `-l` Flag

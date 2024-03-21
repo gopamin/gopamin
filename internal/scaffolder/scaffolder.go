@@ -3,9 +3,11 @@ package scaffolder
 import (
 	"bytes"
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"text/template"
 
@@ -23,15 +25,16 @@ type Project struct {
 }
 
 func New(projectType, platform, name, database, logger string) {
-	lowerCaseName := strings.ToLower(name)
+	alphanumericName := replaceNonAlphanumeric(name)
+	moduleName := replaceNonAlphanumeric(name, "/")
 	currentDir, err := os.Getwd()
 	if err != nil {
 		fmt.Printf("Unable to get your current working directory")
 	}
 
-	projectPath := filepath.Join(currentDir, lowerCaseName)
+	projectPath := filepath.Join(currentDir, alphanumericName)
 
-	err = os.Mkdir(lowerCaseName, 0755)
+	err = os.Mkdir(alphanumericName, 0755)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -40,7 +43,7 @@ func New(projectType, platform, name, database, logger string) {
 	p := Project{
 		Database:    database,
 		Platform:    platform,
-		Name:        lowerCaseName,
+		Name:        moduleName,
 		Path:        projectPath,
 		ProjectType: projectType,
 		Logger:      logger,
@@ -52,6 +55,22 @@ func New(projectType, platform, name, database, logger string) {
 	builder := builderFactory(&p)
 	director := &director{builder: builder}
 	director.construct()
+}
+
+func IsProjectNameTaken(name string) bool {
+	name = replaceNonAlphanumeric(name)
+
+	if _, err := os.Stat(name); err == nil {
+		dirEntries, err := os.ReadDir(name)
+		if err != nil {
+			log.Println("Could not read the directory")
+		}
+		if len(dirEntries) > 0 {
+			return true
+		}
+	}
+
+	return false
 }
 
 func generateProjectAgnosticFiles(p *Project) {
@@ -148,4 +167,14 @@ func goGetPackages(appDir string, packages []string) error {
 	}
 
 	return nil
+}
+
+func replaceNonAlphanumeric(input string, exclude ...string) string {
+	var nonAlphanumericRegex *regexp.Regexp
+	if len(exclude) > 0 {
+		nonAlphanumericRegex = regexp.MustCompile("[^a-zA-Z0-9._" + exclude[0] + "]")
+	} else {
+		nonAlphanumericRegex = regexp.MustCompile("[^a-zA-Z0-9._]")
+	}
+	return nonAlphanumericRegex.ReplaceAllString(strings.TrimSpace(input), "-")
 }
