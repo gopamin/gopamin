@@ -3,7 +3,6 @@ package badgerdb
 import (
 	"{{.Name}}/internal/core/domain"
 	"{{.Name}}/internal/core/ports"
-	"log"
 
 	"github.com/dgraph-io/badger/v4"
 	"github.com/google/uuid"
@@ -11,16 +10,17 @@ import (
 
 type connection struct {
 	db *badger.DB
+	logger ports.Logger
 }
 
-func New() ports.UserRepositoryInterface {
+func New(logger ports.Logger) ports.UserRepositoryInterface {
 	options := badger.DefaultOptions("./badger")
 	options.Logger = nil
 	db, err := badger.Open(options)
 	if err != nil {
-		log.Fatal(err)
+		logger.Fatal(err)
 	}
-	c := &connection{db: db}
+	c := &connection{db: db, logger: logger}
 
 	return c
 }

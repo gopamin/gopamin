@@ -18,8 +18,8 @@ func init() {
 */
 
 func main() {
-	db := {{.Database}}.New()
 	logger := {{.Logger}}.New()
+	db := {{.Database}}.New(logger)
 	service := services.NewUserService(db)
 	handlers := {{.Platform}}.NewRouter(service)
 	server.Serve(handlers, logger)

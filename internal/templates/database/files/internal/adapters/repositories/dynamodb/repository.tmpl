@@ -3,7 +3,6 @@ package dynamodb
 import (
 	"context"
 	"fmt"
-	"log"
 	"{{.Name}}/internal/core/domain"
 	"{{.Name}}/internal/core/ports"
 	"os"
@@ -27,6 +26,7 @@ type dynamodbUser struct {
 
 type connection struct {
 	db *dynamodb.Client
+	logger ports.Logger
 }
 
 func mapDynamodbToUser(d dynamodbUser) domain.User {
@@ -36,7 +36,7 @@ func mapDynamodbToUser(d dynamodbUser) domain.User {
 	}
 }
 
-func New() ports.UserRepositoryInterface {
+func New(logger ports.Logger) ports.UserRepositoryInterface {
 	databaseAccessKeyID := os.Getenv("DYNAMODB_ACCESS_KEY_ID")
 	databaseSecretAccessKey := os.Getenv("DYNAMODB_SECRET_ACCESS_KEY")
 	databaseSessionToken := os.Getenv("DYNAMODB_SESSION_TOKEN")
@@ -44,7 +44,7 @@ func New() ports.UserRepositoryInterface {
 	databaseRegion := os.Getenv("DYNAMODB_REGION")
 	databasePort, err := strconv.Atoi(os.Getenv("DYNAMODB_PORT"))
 	if err != nil {
-		log.Fatal("Error converting DB_PORT to integer:", err)
+		logger.Fatal(err)
 	}
 
 	cfg, err := config.LoadDefaultConfig(context.TODO(),
@@ -60,10 +60,10 @@ func New() ports.UserRepositoryInterface {
 		}),
 	)
 	if err != nil {
-		panic(err)
+		logger.Panic(err)
 	}
 
-	c := &connection{db: dynamodb.NewFromConfig(cfg)}
+	c := &connection{db: dynamodb.NewFromConfig(cfg), logger: logger}
 	c.CreateTable()
 
 	return c

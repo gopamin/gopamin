@@ -55,7 +55,7 @@ func New(service ports.UserServiceInterface) graphql.Schema {
 		Name: "Mutation",
 		Fields: graphql.Fields{
 			"create": &graphql.Field{
-				Type:        userType,
+				Type:        graphql.String,
 				Description: "Create a new user",
 				Args: graphql.FieldConfigArgument{
 					"name": &graphql.ArgumentConfig{
@@ -67,8 +67,8 @@ func New(service ports.UserServiceInterface) graphql.Schema {
 				},
 			},
 			"update": &graphql.Field{
-				Type:        userType,
-				Description: "Update user by id",
+				Type:        graphql.String,
+				Description: "Update user by ID",
 				Args: graphql.FieldConfigArgument{
 					"id": &graphql.ArgumentConfig{
 						Type: graphql.NewNonNull(graphql.String),
@@ -85,8 +85,8 @@ func New(service ports.UserServiceInterface) graphql.Schema {
 				},
 			},
 			"delete": &graphql.Field{
-				Type:        userType,
-				Description: "Delete user by id",
+				Type:        graphql.String,
+				Description: "Delete user by ID",
 				Args: graphql.FieldConfigArgument{
 					"id": &graphql.ArgumentConfig{
 						Type: graphql.NewNonNull(graphql.String),

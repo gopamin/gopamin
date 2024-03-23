@@ -3,7 +3,6 @@ package postgres
 import (
 	"context"
 	"fmt"
-	"log"
 	"{{.Name}}/internal/core/domain"
 	"{{.Name}}/internal/core/ports"
 	"os"
@@ -16,16 +15,17 @@ const tableName = "users"
 
 type connection struct {
 	db *pgx.Conn
+	logger ports.Logger
 }
 
-func New() ports.UserRepositoryInterface {
+func New(logger ports.Logger) ports.UserRepositoryInterface {
 	databaseName := os.Getenv("POSTGRES_DATABASE")
 	databasePassword := os.Getenv("POSTGRES_PASSWORD")
 	databaseUsername := os.Getenv("POSTGRES_USERNAME")
 	databaseHost := os.Getenv("POSTGRES_HOST")
 	databasePort, err := strconv.Atoi(os.Getenv("POSTGRES_PORT"))
 	if err != nil {
-		log.Fatal("Error converting DB_PORT to integer:", err)
+		logger.Fatal(err)
 	}
 
 	db, err := pgx.Connect(
@@ -40,11 +40,11 @@ func New() ports.UserRepositoryInterface {
 		),
 	)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
+		logger.Error(fmt.Sprintf("Unable to connect to database: %v\n", err))
 		os.Exit(1)
 	}
 
-	c := &connection{db: db}
+	c := &connection{db: db, logger: logger}
 	c.CreateTable()
 
 	return c

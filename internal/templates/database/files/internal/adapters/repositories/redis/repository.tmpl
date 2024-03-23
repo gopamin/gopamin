@@ -16,9 +16,10 @@ const hashName = "users"
 
 type connection struct {
 	db *redis.Client
+	logger ports.Logger
 }
 
-func New() ports.UserRepositoryInterface {
+func New(logger ports.Logger) ports.UserRepositoryInterface {
 	databaseHost := os.Getenv("REDIS_HOST")
 	databasePort := os.Getenv("REDIS_PORT")
 
@@ -28,7 +29,7 @@ func New() ports.UserRepositoryInterface {
 		DB:       0,
 	})
 
-	c := &connection{db: db}
+	c := &connection{db: db, logger: logger}
 
 	return c
 }

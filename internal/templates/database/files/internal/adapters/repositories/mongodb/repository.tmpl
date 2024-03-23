@@ -3,7 +3,6 @@ package mongodb
 import (
 	"context"
 	"fmt"
-	"log"
 	"{{.Name}}/internal/core/domain"
 	"{{.Name}}/internal/core/ports"
 	"os"
@@ -24,6 +23,7 @@ type mongodbUser struct {
 
 type connection struct {
 	db *mongo.Client
+	logger ports.Logger
 }
 
 func mapMongodbToUser(m mongodbUser) domain.User {
@@ -33,7 +33,7 @@ func mapMongodbToUser(m mongodbUser) domain.User {
 	}
 }
 
-func New() ports.UserRepositoryInterface {
+func New(logger ports.Logger) ports.UserRepositoryInterface {
 	host := os.Getenv("MONGODB_HOST")
 	port := os.Getenv("MONGODB_PORT")
 	username := os.Getenv("MONGODB_USERNAME")
@@ -41,10 +41,11 @@ func New() ports.UserRepositoryInterface {
 
 	mongoClient, err := mongo.Connect(context.Background(), options.Client().ApplyURI(fmt.Sprintf("mongodb://%s:%s@%s:%s", username, password, host, port)))
 	if err != nil {
-		log.Fatalln("cannot connect to MongoDB")
+		logger.Error("cannot connect to MongoDB")
+		os.Exit(1)
 	}
 
-	c := &connection{db: mongoClient}
+	c := &connection{db: mongoClient, logger: logger}
 
 	return c
 }

@@ -143,10 +143,16 @@ The supported values for the `-t` flag are `hello-world`, `web-app`, `api`, and 
 
 ### The `-p` Flag
 
-The `-p` flag which is short for `--platform` must be used for the projects of type `web-app`, `api`, and `microservice`. Supported values for projects of either `web-app` or `api` type are `echo`, `chi`, `gin`, `httprouter`, `gorilla`, and `http`. For example, to create an API which uses the Echo framework under the hood we have:
+The `-p` flag which is short for `--platform` must be used for the projects of type `web-app`, `api`, and `microservice`. Supported values for projects of the `web-app` type are `echo`, `chi`, `gin`, `httprouter`, `gorilla`, and `http`. Also supported values for the `-p` flag for the projects of type `api` are `echo`, `chi`, `gin`, `httprouter`, `gorilla`, `http`, and `graphql`. For example, to create an API which uses the Echo framework under the hood we have:
 
 ```text
 $ gopamin new -n my-rest-api -t api -p echo -l log
+```
+
+Or in order to create a GraphQL API with MySQL integration we have:
+
+```text
+$ gopamin new -n my-graphql-api -t api -p graphql -d mysql -l log
 ```
 
 Supported values for the `-p` flag for the projects of type `microservice` are `redis`, `kafka`, and `rabbitmq`. For example, to create a microservice with Kafka integration we have:

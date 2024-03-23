@@ -3,7 +3,6 @@ package mysql
 import (
 	"database/sql"
 	"fmt"
-	"log"
 	"{{.Name}}/internal/core/domain"
 	"{{.Name}}/internal/core/ports"
 	"os"
@@ -16,9 +15,10 @@ const tableName = "users"
 
 type connection struct {
 	db *sql.DB
+	logger ports.Logger
 }
 
-func New() ports.UserRepositoryInterface {
+func New(logger ports.Logger) ports.UserRepositoryInterface {
 	databaseName := os.Getenv("MYSQL_DATABASE")
 	databasePassword := os.Getenv("MYSQL_PASSWORD")
 	databaseUsername := os.Getenv("MYSQL_USERNAME")
@@ -37,13 +37,13 @@ func New() ports.UserRepositoryInterface {
 		),
 	)
 	if err != nil {
-		log.Fatal(err)
+		logger.Fatal(err)
 	}
 	db.SetConnMaxLifetime(0)
 	db.SetMaxIdleConns(50)
 	db.SetMaxOpenConns(50)
 
-	c := &connection{db: db}
+	c := &connection{db: db, logger: logger}
 	c.CreateTable()
 
 	return c

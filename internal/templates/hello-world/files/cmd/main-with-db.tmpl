@@ -71,9 +71,9 @@ func fetchAll(us ports.UserServiceInterface, logger ports.Logger) {
 */
 
 func main() {
-	db := {{.Database}}.New()
-	us := services.NewUserService(db)
 	logger := {{.Logger}}.New()
+	db := {{.Database}}.New(logger)
+	us := services.NewUserService(db)
 
 	// Step 1) Uncomment the following line to add new values to the DB
 	// insert(us, logger, "John Doe")
