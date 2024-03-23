@@ -39,12 +39,12 @@ func argsValidator() bool {
 		return false
 	}
 
-	if projectType == "web-app" && !httpServerValidator() {
+	if projectType == "web-app" && !webAppTypeValidator() {
 		fmt.Println(`The specified value for the -p flag for "web-app" type of apps is wrong. For more help, type "gopamin new -h"`)
 		return false
 	}
 
-	if projectType == "api" && !httpServerValidator() {
+	if projectType == "api" && !apiTypeValidator() {
 		fmt.Println(`The specified value for the -p flag for "api" type of apps is wrong. For more help, type "gopamin new -h"`)
 		return false
 	}
@@ -85,12 +85,26 @@ func validateType() bool {
 	return false
 }
 
-func httpServerValidator() bool {
+func webAppTypeValidator() bool {
 	if platform == "echo" ||
 		platform == "chi" ||
 		platform == "gin" ||
 		platform == "http" ||
 		platform == "gorilla" ||
+		platform == "httprouter" {
+		return true
+	}
+
+	return false
+}
+
+func apiTypeValidator() bool {
+	if platform == "echo" ||
+		platform == "chi" ||
+		platform == "gin" ||
+		platform == "http" ||
+		platform == "gorilla" ||
+		platform == "graphql" ||
 		platform == "httprouter" {
 		return true
 	}

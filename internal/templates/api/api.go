@@ -11,39 +11,74 @@ func ApiEnvTemplate() ([]byte, string) {
 	return apiEnv, ".env"
 }
 
-//go:embed files/readme/readme.tmpl
+//go:embed files/readme/rest-readme.tmpl
 var apiReadme []byte
 
 func ApiReadmeTemplate() ([]byte, string) {
 	return apiReadme, "README.md"
 }
 
-//go:embed files/readme/readme-with-db.tmpl
+//go:embed files/readme/rest-readme-with-db.tmpl
 var apiReadmeWithDb []byte
 
 func ApiReadmeWithDbTemplate() ([]byte, string) {
 	return apiReadmeWithDb, "README.md"
 }
 
-//go:embed files/cmd/main.tmpl
+//go:embed files/readme/graphql-readme.tmpl
+var graphqlReadme []byte
+
+func GraphqlReadmeTemplate() ([]byte, string) {
+	return graphqlReadme, "README.md"
+}
+
+//go:embed files/readme/graphql-readme-with-db.tmpl
+var graphqlReadmeWithDb []byte
+
+func GraphqlReadmeWithDbTemplate() ([]byte, string) {
+	return graphqlReadmeWithDb, "README.md"
+}
+
+//go:embed files/cmd/server/rest.tmpl
+var apiServer []byte
+
+func ApiServerTemplate() ([]byte, string) {
+	return apiServer, "cmd/server/server.go"
+}
+
+//go:embed files/cmd/server/graphql.tmpl
+var graphqlServer []byte
+
+func GraphqlServerTemplate() ([]byte, string) {
+	return graphqlServer, "cmd/server/server.go"
+}
+
+//go:embed files/cmd/rest-main.tmpl
 var apiMain []byte
 
 func ApiMainTemplate() ([]byte, string) {
 	return apiMain, "cmd/main.go"
 }
 
-//go:embed files/cmd/server/server.tmpl
-var apiAppServer []byte
-
-func ApiAppServerTemplate() ([]byte, string) {
-	return apiAppServer, "cmd/server/server.go"
-}
-
-//go:embed files/cmd/main-with-db.tmpl
+//go:embed files/cmd/rest-main-with-db.tmpl
 var apiMainWithDb []byte
 
 func ApiMainWithDbTemplate() ([]byte, string) {
 	return apiMainWithDb, "cmd/main.go"
+}
+
+//go:embed files/cmd/graphql-main.tmpl
+var graphqlMain []byte
+
+func GraphqlMainTemplate() ([]byte, string) {
+	return graphqlMain, "cmd/main.go"
+}
+
+//go:embed files/cmd/graphql-main-with-db.tmpl
+var graphqlMainWithDb []byte
+
+func GraphqlMainWithDbTemplate() ([]byte, string) {
+	return graphqlMainWithDb, "cmd/main.go"
 }
 
 //go:embed files/internal/adapters/handlers/chi/routes.tmpl
@@ -128,4 +163,11 @@ var apiHttprouterUsers []byte
 
 func ApiHttprouterUsersTemplate() ([]byte, string) {
 	return apiHttprouterUsers, "internal/adapters/handlers/httprouter/users.go"
+}
+
+//go:embed files/internal/adapters/handlers/graphql/graphql.tmpl
+var graphqlSchema []byte
+
+func GraphqlSchemaTemplate() ([]byte, string) {
+	return graphqlSchema, "internal/adapters/handlers/graphql/graphql.go"
 }

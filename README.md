@@ -23,7 +23,7 @@ All boilerplates created by Gopamin are based on [The Clean Architecture](https:
 
 ## Prerequisites
 
-The minimum required tools for using the Gopamin CLI tool is Golang which can be downloaded from [Go All Releases](https://go.dev/dl). To have full development setup though, other tools are also recommended to be installed on your local machine:
+The minimum required tools for using the Gopamin CLI tool is Golang v1.22.0 or higher which can be downloaded from [Go All Releases](https://go.dev/dl). To have full development setup though, other tools are also recommended to be installed on your local machine:
 
 -   **[Git](https://git-scm.com/)**: By default each new project created by this tool initializes a Git repo; that's why you need to make sure Git is installed on your machine.
 -   **[Docker](https://www.docker.com)**: If you choose to create a new project with database integration, a `docker-compose.yml` will be included in the root of the project for running the database of your choice.
@@ -42,6 +42,7 @@ You can create a range of different Golang applications using the Gopamin tool; 
     -   Httprouter
     -   Gorilla
     -   HTTP (The build-in HTTP package will be used)
+-   GraphQL API
 -   Microservices
     -   Redis
     -   Kafka

@@ -2,6 +2,43 @@ package scaffolder
 
 import "fmt"
 
+type graphqlBuilder struct {
+	project *Project
+}
+
+func (b *graphqlBuilder) build() {
+	env := []string{"env", "api-env"}
+	readme := []string{"readme", b.project.Logger + "-readme"}
+	makefile := []string{"makefile"}
+
+	if b.project.Database == "" {
+		b.project.Database = "mock"
+		fileGenerator([]string{"graphql-main"}, b.project)
+		readme = append(readme, "graphql-readme")
+	} else {
+		fileGenerator([]string{"graphql-main-with-db"}, b.project)
+		readme = append(readme, b.project.Database+"-readme", "graphql-readme-with-db")
+		makefile = append(makefile, b.project.Database+"-makefile")
+		env = append(env, b.project.Database+"-env")
+	}
+
+	dbSelector(b.project)
+	loggerSelector(b.project)
+	fileGenerator(env, b.project)
+	fileGenerator(readme, b.project)
+	fileGenerator(makefile, b.project)
+	fileGenerator([]string{"configs"}, b.project)
+	fileGenerator([]string{"configs-test"}, b.project)
+	fileGenerator([]string{"tools"}, b.project)
+	fileGenerator([]string{"tools-test"}, b.project)
+	fileGenerator([]string{"graphql-server"}, b.project)
+	fileGenerator([]string{"graphql-schema"}, b.project)
+
+	goGetPackages(b.project.Path, []string{"github.com/graphql-go/graphql", "github.com/graphql-go/handler"})
+
+	fmt.Printf("%v "+BUILD_SUCCESS_MESSAGE+"\n", b.project.Name)
+}
+
 type echoBuilder struct {
 	project *Project
 }
@@ -266,5 +303,8 @@ var apiBuilderMap = map[string]apiBuilderFactory{
 	},
 	"http": func(p *Project) boilerplateBuilder {
 		return &httpBuilder{p}
+	},
+	"graphql": func(p *Project) boilerplateBuilder {
+		return &graphqlBuilder{p}
 	},
 }

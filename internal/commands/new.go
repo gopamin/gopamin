@@ -46,7 +46,15 @@ If you want to use space-separated words, place them inside double quotes like "
  - api (If chosen, you must also add the "-p" flag to specify the type of the third-party platform you want to use).`)
 
 	newCmd.Flags().StringVarP(&platform, "platform", "p", "", `If the chosen "-t" is "api", "web-app", or "microservice", you must also add the "-p" flag to specify the underlying third-party platform.
-Available values for the "api" and "web-app" type are:
+Available values for the "api" type are:
+ - echo
+ - chi
+ - gin
+ - httprouter
+ - gorilla
+ - http (The build-in HTTP package will be used)
+ - graphql
+Available values for the "web-app" type are:
  - echo
  - chi
  - gin
@@ -66,12 +74,12 @@ Available values for the "microservice" type are:
  - dynamodb
  - badgerdb
  - redis`)
-	rootCmd.AddCommand(newCmd)
 
 	newCmd.Flags().StringVarP(&logger, "logger", "l", "", `Type of the logger. Available values are:
  - log
  - slog
  - logrus
  - zap`)
+
 	rootCmd.AddCommand(newCmd)
 }

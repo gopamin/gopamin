@@ -15,7 +15,7 @@ func (m *mysqlBuilder) build() {
 
 	fileGenerator([]string{"mysql-repository"}, m.project)
 	fileGenerator([]string{"mysql-docker-compose"}, m.project)
-	goGetPackages(m.project.Path, []string{"github.com/go-sql-driver/mysql"})
+	goGetPackages(m.project.Path, []string{"github.com/go-sql-driver/mysql", "github.com/google/uuid"})
 }
 
 type postgresBuilder struct {
@@ -33,7 +33,7 @@ func (p *postgresBuilder) build() {
 
 	fileGenerator([]string{"postgres-repository"}, p.project)
 	fileGenerator([]string{"postgres-docker-compose"}, p.project)
-	goGetPackages(p.project.Path, []string{"github.com/jackc/pgx/v5"})
+	goGetPackages(p.project.Path, []string{"github.com/jackc/pgx/v5", "github.com/google/uuid"})
 }
 
 type mongodbBuilder struct {
@@ -51,7 +51,7 @@ func (m *mongodbBuilder) build() {
 
 	fileGenerator([]string{"mongodb-repository"}, m.project)
 	fileGenerator([]string{"mongodb-docker-compose"}, m.project)
-	goGetPackages(m.project.Path, []string{"go.mongodb.org/mongo-driver/mongo"})
+	goGetPackages(m.project.Path, []string{"go.mongodb.org/mongo-driver/mongo", "github.com/google/uuid"})
 }
 
 type dynamodbBuilder struct {
@@ -134,7 +134,7 @@ func (s *sqliteBuilder) build() {
 	fileGenerator([]string{"user-service-test"}, s.project)
 
 	fileGenerator([]string{"sqlite-repository"}, s.project)
-	goGetPackages(s.project.Path, []string{"github.com/mattn/go-sqlite3"})
+	goGetPackages(s.project.Path, []string{"github.com/mattn/go-sqlite3", "github.com/google/uuid"})
 }
 
 type mockBuilder struct {
