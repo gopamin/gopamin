@@ -18,6 +18,24 @@ func (m *mysqlBuilder) build() {
 	goGetPackages(m.project.Path, []string{"github.com/go-sql-driver/mysql", "github.com/google/uuid"})
 }
 
+type mariadbBuilder struct {
+	project *Project
+}
+
+func (m *mariadbBuilder) build() {
+	fileGenerator([]string{"mock-repository"}, m.project)
+	fileGenerator([]string{"user-test"}, m.project)
+	fileGenerator([]string{"user"}, m.project)
+	fileGenerator([]string{"user-repository-interface"}, m.project)
+	fileGenerator([]string{"user-service-interface"}, m.project)
+	fileGenerator([]string{"user-service"}, m.project)
+	fileGenerator([]string{"user-service-test"}, m.project)
+
+	fileGenerator([]string{"mariadb-repository"}, m.project)
+	fileGenerator([]string{"mariadb-docker-compose"}, m.project)
+	goGetPackages(m.project.Path, []string{"github.com/go-sql-driver/mysql", "github.com/google/uuid"})
+}
+
 type postgresBuilder struct {
 	project *Project
 }
@@ -157,6 +175,9 @@ type databaseBuilderFactory func(p *Project) boilerplateBuilder
 var databaseBuilderMap = map[string]databaseBuilderFactory{
 	"mysql": func(p *Project) boilerplateBuilder {
 		return &mysqlBuilder{p}
+	},
+	"mariadb": func(p *Project) boilerplateBuilder {
+		return &mariadbBuilder{p}
 	},
 	"postgres": func(p *Project) boilerplateBuilder {
 		return &postgresBuilder{p}

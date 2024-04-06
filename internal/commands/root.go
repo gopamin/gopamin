@@ -38,7 +38,7 @@ func completionCommand() *cobra.Command {
 func Execute() {
 	isValid, newVersion := versionChecker()
 	if !isValid {
-		fmt.Printf("The newest version of the Gopamin CLI is %v but the installed version on your system is %v. To get the latest features and likely bugfixes, please first install the latest version by running 'go install github.com/gopamin/gopamin@%v'", newVersion, VERSION, newVersion)
+		fmt.Printf("The newest version of the Gopamin CLI is %v but the installed version on your system is %v. To get the latest features and likely bugfixes, please first install the latest version by running 'go install github.com/gopamin/gopamin@%v' then use it.\n", newVersion, VERSION, newVersion)
 		return
 	}
 

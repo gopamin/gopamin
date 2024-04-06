@@ -234,3 +234,38 @@ var badgerdbRepository []byte
 func BadgerdbRepositoryTemplate() ([]byte, string) {
 	return badgerdbRepository, "internal/adapters/repositories/badgerdb/repository.go"
 }
+
+//go:embed files/env/env-mariadb.tmpl
+var mariadbEnv []byte
+
+func MariadbEnvTemplate() ([]byte, string) {
+	return mariadbEnv, ".env"
+}
+
+//go:embed files/makefile/makefile-mariadb.tmpl
+var mariadbMakefile []byte
+
+func MariadbMakefileTemplate() ([]byte, string) {
+	return mariadbMakefile, "Makefile"
+}
+
+//go:embed files/readme/readme-mariadb.tmpl
+var mariadbReadme []byte
+
+func MariadbReadmeTemplate() ([]byte, string) {
+	return mariadbReadme, "README.md"
+}
+
+//go:embed files/docker-compose/docker-compose-mariadb.tmpl
+var mariadbDockerCompose []byte
+
+func MariadbDockerComposeTemplate() ([]byte, string) {
+	return mariadbDockerCompose, "docker-compose.yml"
+}
+
+//go:embed files/internal/adapters/repositories/mariadb/repository.tmpl
+var mariadbRepository []byte
+
+func MariadbRepositoryTemplate() ([]byte, string) {
+	return mariadbRepository, "internal/adapters/repositories/mariadb/repository.go"
+}

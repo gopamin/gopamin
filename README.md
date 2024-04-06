@@ -53,6 +53,7 @@ You can create a range of different Golang applications using the Gopamin tool; 
 Based on the type of the project you want to scaffold, by passing the `-d` flag, you can also add database integration. Supported databases are as follows:
 
 -   MySQL
+-   MariaDB
 -   PostgreSQL
 -   MongoDB
 -   SQLite
@@ -92,7 +93,8 @@ If the installation process goes well, from now on you can run the `gopamin` com
 Since this tool is still in development, bugs are being identified and addressed while new features are continuously integrated. To ensure users benefit from these bug fixes and additions, it's essential to have the latest version installed. Hence, a version check mechanism has been implemented within the tool. This mechanism automatically compares the installed version on your device with the latest release whenever the tool is accessed. If a disparity is detected between the two versions, you'll receive a prompt to update to the latest version before proceeding. As an example we have:
 
 ```text
-The newest version of the Gopamin CLI is 1.0.13 but the installed version on your system is v1.0.10. To get the latest features and likely bugfixes, please first install the latest version by running 'go install github.com/gopamin/gopamin@1.0.13'
+The newest version of the Gopamin CLI is 1.0.13 but the installed version on your system is v1.0.10. 
+To get the latest features and likely bugfixes, please first install the latest version by running 'go install github.com/gopamin/gopamin@1.0.13'
 ```
 
 ## Usage
@@ -163,7 +165,7 @@ $ gopamin new -n my-kafka-microservice -t microservice -p kafka -l log
 
 ### The `-d` Flag
 
-The `-d` flag which is short for `--database` should be used to add database integration. Available values for this flag are `mysql`, `postgres`, `mongodb`, `sqlite`, `dynamodb`, and `redis`. For example, to create a web application with MySQL integration we have:
+The `-d` flag which is short for `--database` should be used to add database integration. Available values for this flag are `mysql`, `mariadb`, `postgres`, `mongodb`, `sqlite`, `dynamodb`, and `redis`. For example, to create a web application with MySQL integration we have:
 
 ```text
 $ gopamin new -n my-web-app -t web-app -p http -d mysql -l log

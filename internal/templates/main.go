@@ -107,6 +107,11 @@ func Mapper() map[string]func() ([]byte, string) {
 		"badgerdb-repository":     database.BadgerdbRepositoryTemplate,
 		"badgerdb-makefile":       database.BadgerdbMakefileTemplate,
 		"badgerdb-readme":         database.BadgerdbReadmeTemplate,
+		"mariadb-env":             database.MariadbEnvTemplate,
+		"mariadb-repository":      database.MariadbRepositoryTemplate,
+		"mariadb-readme":          database.MariadbReadmeTemplate,
+		"mariadb-makefile":        database.MariadbMakefileTemplate,
+		"mariadb-docker-compose":  database.MariadbDockerComposeTemplate,
 
 		"web-app-server":              webApp.WebAppServerTemplate,
 		"web-app-readme":              webApp.WebAppReadmeTemplate,
