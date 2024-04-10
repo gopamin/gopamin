@@ -18,6 +18,24 @@ func (m *mysqlBuilder) build() {
 	goGetPackages(m.project.Path, []string{"github.com/go-sql-driver/mysql", "github.com/google/uuid"})
 }
 
+type cassandraBuilder struct {
+	project *Project
+}
+
+func (m *cassandraBuilder) build() {
+	fileGenerator([]string{"mock-repository"}, m.project)
+	fileGenerator([]string{"user-test"}, m.project)
+	fileGenerator([]string{"user"}, m.project)
+	fileGenerator([]string{"user-repository-interface"}, m.project)
+	fileGenerator([]string{"user-service-interface"}, m.project)
+	fileGenerator([]string{"user-service"}, m.project)
+	fileGenerator([]string{"user-service-test"}, m.project)
+
+	fileGenerator([]string{"cassandra-repository"}, m.project)
+	fileGenerator([]string{"cassandra-docker-compose"}, m.project)
+	goGetPackages(m.project.Path, []string{"github.com/gocql/gocql", "github.com/google/uuid"})
+}
+
 type mariadbBuilder struct {
 	project *Project
 }
@@ -196,6 +214,9 @@ var databaseBuilderMap = map[string]databaseBuilderFactory{
 	},
 	"badgerdb": func(p *Project) boilerplateBuilder {
 		return &badgerdbBuilder{p}
+	},
+	"cassandra": func(p *Project) boilerplateBuilder {
+		return &cassandraBuilder{p}
 	},
 	"mock": func(p *Project) boilerplateBuilder {
 		return &mockBuilder{p}

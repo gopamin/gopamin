@@ -130,6 +130,7 @@ func databaseValidator() bool {
 		database == "dynamodb" ||
 		database == "badgerdb" ||
 		database == "mariadb" ||
+		database == "cassandra" ||
 		database == "redis" {
 		return true
 	}

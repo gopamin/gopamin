@@ -54,6 +54,7 @@ Based on the type of the project you want to scaffold, by passing the `-d` flag,
 
 -   MySQL
 -   MariaDB
+-   Cassandra
 -   PostgreSQL
 -   MongoDB
 -   SQLite
@@ -165,7 +166,7 @@ $ gopamin new -n my-kafka-microservice -t microservice -p kafka -l log
 
 ### The `-d` Flag
 
-The `-d` flag which is short for `--database` should be used to add database integration. Available values for this flag are `mysql`, `mariadb`, `postgres`, `mongodb`, `sqlite`, `dynamodb`, and `redis`. For example, to create a web application with MySQL integration we have:
+The `-d` flag which is short for `--database` should be used to add database integration. Available values for this flag are `mysql`, `cassandra`, `mariadb`, `postgres`, `mongodb`, `sqlite`, `dynamodb`, and `redis`. For example, to create a web application with MySQL integration we have:
 
 ```text
 $ gopamin new -n my-web-app -t web-app -p http -d mysql -l log

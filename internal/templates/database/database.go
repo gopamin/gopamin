@@ -269,3 +269,38 @@ var mariadbRepository []byte
 func MariadbRepositoryTemplate() ([]byte, string) {
 	return mariadbRepository, "internal/adapters/repositories/mariadb/repository.go"
 }
+
+//go:embed files/env/env-cassandra.tmpl
+var cassandraEnv []byte
+
+func CassandraEnvTemplate() ([]byte, string) {
+	return cassandraEnv, ".env"
+}
+
+//go:embed files/makefile/makefile-cassandra.tmpl
+var cassandraMakefile []byte
+
+func CassandraMakefileTemplate() ([]byte, string) {
+	return cassandraMakefile, "Makefile"
+}
+
+//go:embed files/readme/readme-cassandra.tmpl
+var cassandraReadme []byte
+
+func CassandraReadmeTemplate() ([]byte, string) {
+	return cassandraReadme, "README.md"
+}
+
+//go:embed files/docker-compose/docker-compose-cassandra.tmpl
+var cassandraDockerCompose []byte
+
+func CassandraDockerComposeTemplate() ([]byte, string) {
+	return cassandraDockerCompose, "docker-compose.yml"
+}
+
+//go:embed files/internal/adapters/repositories/cassandra/repository.tmpl
+var cassandraRepository []byte
+
+func CassandraRepositoryTemplate() ([]byte, string) {
+	return cassandraRepository, "internal/adapters/repositories/cassandra/repository.go"
+}

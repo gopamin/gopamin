@@ -69,6 +69,7 @@ Available values for the "microservice" type are:
 	newCmd.Flags().StringVarP(&database, "database", "d", "", `Type of the database. Available values are:
  - mysql
  - mariadb
+ - cassandra
  - postgres
  - mongodb
  - sqlite
