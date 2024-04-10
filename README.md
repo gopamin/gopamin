@@ -95,7 +95,7 @@ Since this tool is still in development, bugs are being identified and addressed
 
 ```text
 The newest version of the Gopamin CLI is 1.0.13 but the installed version on your system is v1.0.10. 
-To get the latest features and likely bugfixes, please first install the latest version by running 'go install github.com/gopamin/gopamin@1.0.13'
+To get the latest features and likely bugfixes, please install the latest version by running 'go install github.com/gopamin/gopamin@1.0.13'
 ```
 
 ## Usage
